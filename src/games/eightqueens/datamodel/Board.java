@@ -1,4 +1,4 @@
-package model;
+package games.eightqueens.datamodel;
 
 public final class Board {
 

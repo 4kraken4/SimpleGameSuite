@@ -1,23 +1,23 @@
 package util;
 
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Utilities {
 
-    public static BufferedImage resizePNG(File inputFile, int newWidth, int newHeight) throws IOException {
-        BufferedImage originalImage = ImageIO.read(inputFile);
-        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D g = resizedImage.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
-        g.dispose();
-
-        return resizedImage;
+    public static ImageIcon scaleIcon(ImageIcon icn, int maxWidth, int maxHeight) {
+        BufferedImage image = new BufferedImage(icn.getIconWidth(), icn.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+        g2d.drawImage(icn.getImage(), 0, 0, null);
+        g2d.dispose();
+        int originalWidth = image.getWidth();
+        int originalHeight = image.getHeight();
+        double scaleFactor = Math.min((double) maxWidth / originalWidth, (double) maxHeight / originalHeight);
+        int newWidth = (int) Math.round(originalWidth * scaleFactor);
+        int newHeight = (int) Math.round(originalHeight * scaleFactor);
+        Image scaledImage = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
     }
 }

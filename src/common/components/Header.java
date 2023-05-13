@@ -1,4 +1,4 @@
-package components.view;
+package common.components;
 
 public class Header extends javax.swing.JPanel {
 
@@ -28,7 +28,6 @@ public class Header extends javax.swing.JPanel {
         add(jLabel2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

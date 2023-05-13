@@ -1,4 +1,4 @@
-package components.models;
+package common.viewmodel;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -21,7 +21,7 @@ public class CustomButton extends JButton {
     public int getRoundness() {
         return roundness;
     }
-    
+
     public void setRoundness(int roundness) {
         this.roundness = roundness;
     }
@@ -46,6 +46,7 @@ public class CustomButton extends JButton {
         setContentAreaFilled(false);
         setBorder(new EmptyBorder(5, 0, 5, 0));
         setBackground(Color.WHITE);
+        setForeground(Color.BLACK);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
         addMouseListener(new MouseAdapter() {
             @Override
@@ -91,6 +92,6 @@ public class CustomButton extends JButton {
         grphcs.drawImage(img, 0, 0, null);
         super.paintComponent(grphcs);
     }
-    
+
     private int roundness;
 }

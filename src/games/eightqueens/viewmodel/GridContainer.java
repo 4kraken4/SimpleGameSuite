@@ -1,4 +1,4 @@
-package components.models;
+package games.eightqueens.viewmodel;
 
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -10,7 +10,7 @@ import javax.swing.TransferHandler;
 public class GridContainer extends javax.swing.JPanel {
 
     public GridContainer() {
-        initComponents(); 
+        initComponents();
         dragMe.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 JComponent comp = (JComponent) e.getSource();
@@ -44,20 +44,19 @@ public class GridContainer extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(289, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(252, 252, 252)
                 .addComponent(dragMe)
-                .addGap(243, 243, 243))
+                .addContainerGap(280, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(239, 239, 239)
+                .addGap(263, 263, 263)
                 .addComponent(dragMe)
-                .addContainerGap(299, Short.MAX_VALUE))
+                .addContainerGap(275, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton dragMe;

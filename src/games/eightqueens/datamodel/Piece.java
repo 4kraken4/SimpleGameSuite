@@ -1,4 +1,4 @@
-package model;
+package games.eightqueens.datamodel;
 
 public class Piece {
 

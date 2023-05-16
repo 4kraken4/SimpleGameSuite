@@ -1,20 +1,17 @@
 package games.eightqueens.viewmodel;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import javax.swing.JPanel;
 
 public class Cell extends JPanel {
 
     public Cell() {
-        setOpaque(false);
+        setOpaque(true);
         setBackground(new Color(0, 0, 0, 0));
     }
     
     public Cell(int row, int col) {
-        setOpaque(false);
+        setOpaque(true);
         setBackground(new Color(0, 0, 0, 0));
         adaptToPosition(row, col);
     }

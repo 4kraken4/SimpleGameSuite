@@ -35,18 +35,32 @@ public class MainWindow extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        gameMenu1 = new common.components.GameMenu();
+        jPanel2 = new javax.swing.JPanel();
+        gameMenu2 = new common.components.GameMenu();
+        sidePanel1 = new common.components.SidePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridBagLayout());
-        getContentPane().add(gameMenu1, new java.awt.GridBagConstraints());
 
-        setSize(new java.awt.Dimension(465, 464));
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(182, 6, 120, 4);
+        jPanel2.add(gameMenu2, gridBagConstraints);
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
+        getContentPane().add(sidePanel1, java.awt.BorderLayout.WEST);
+
+        setSize(new java.awt.Dimension(807, 728));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private common.components.GameMenu gameMenu1;
+    private common.components.GameMenu gameMenu2;
+    private javax.swing.JPanel jPanel2;
+    private common.components.SidePanel sidePanel1;
     // End of variables declaration//GEN-END:variables
 }

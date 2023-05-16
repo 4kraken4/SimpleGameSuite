@@ -45,7 +45,7 @@ public final class Board {
     public void renderBOard() {
         for (int i = 0; i < getXDimension(); i++) {
             for (int j = 0; j < getYDimension(); j++) {
-
+                
             }
         }
     }

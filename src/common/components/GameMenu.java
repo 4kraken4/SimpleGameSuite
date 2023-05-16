@@ -1,6 +1,8 @@
 package common.components;
 
-public class GameMenu extends javax.swing.JPanel {
+import common.events.MenuItemSelected;
+
+public class GameMenu extends javax.swing.JPanel implements MenuItemSelected {
 
     public GameMenu() {
         initComponents();
@@ -59,4 +61,9 @@ public class GameMenu extends javax.swing.JPanel {
     private common.viewmodel.CustomButton customButton5;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void itemSelected(int itemIndex) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

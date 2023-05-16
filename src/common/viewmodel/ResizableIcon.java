@@ -30,6 +30,9 @@ public class ResizableIcon extends JLabel {
     public ResizableIcon() {
         setBackground(new Color(0, 0, 0, 0));
         setOpaque(false);
+//        setHorizontalAlignment(JLabel.CENTER);
+//        setVerticalAlignment(JLabel.CENTER);
+//        setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         iconSize = new Dimension(64, 64);
         addComponentListener(new ComponentAdapter() {
             @Override

@@ -1,6 +1,7 @@
 package common.components;
 
 import common.events.MenuItemSelected;
+import games.tictactoe.TicTacToe;
 
 public class GameMenu extends javax.swing.JPanel implements MenuItemSelected {
 
@@ -31,7 +32,15 @@ public class GameMenu extends javax.swing.JPanel implements MenuItemSelected {
         customButton1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 36)); // NOI18N
         jPanel1.add(customButton1);
 
-        customButton2.setText("customButton2");
+        customButton2.setBackground(new java.awt.Color(36, 49, 54));
+        customButton2.setForeground(new java.awt.Color(255, 255, 255));
+        customButton2.setText("TicTacToe");
+        customButton2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 36)); // NOI18N
+        customButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customButton2ActionPerformed(evt);
+            }
+        });
         jPanel1.add(customButton2);
 
         customButton3.setText("customButton3");
@@ -52,6 +61,10 @@ public class GameMenu extends javax.swing.JPanel implements MenuItemSelected {
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         add(jPanel1, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void customButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customButton2ActionPerformed
+        TicTacToe tictactoe = new TicTacToe();
+    }//GEN-LAST:event_customButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private common.viewmodel.CustomButton customButton1;

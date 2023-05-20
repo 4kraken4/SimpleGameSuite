@@ -1,6 +1,8 @@
 package games.eightqueens.viewmodel;
 
+import common.viewmodel.CustomLabel;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -8,17 +10,14 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -28,7 +27,7 @@ public class GameBoard extends JPanel {
     private int boardSize;
     private Icon icn;
     private int[] queens;
-    private JLabel[][] squares;
+    private CustomLabel[][] squares;
     private Timer blinkTimer;
     private int blinkCount;
 
@@ -63,11 +62,13 @@ public class GameBoard extends JPanel {
             queens[i] = -1;
         }
         this.setLayout(new GridLayout(boardSize, boardSize));
-        squares = new JLabel[boardSize][boardSize];
+        squares = new CustomLabel[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                squares[i][j] = new JLabel();
+                squares[i][j] = new CustomLabel();
                 squares[i][j].setOpaque(true);
+                squares[i][j].setIconSize(new Dimension(50, 50));
+                squares[i][j].setOverlayOpacity(32);
                 if ((i + j) % 2 == 0) {
                     squares[i][j].setBackground(Color.decode("#404258"));
                 } else {
@@ -97,7 +98,7 @@ public class GameBoard extends JPanel {
             if (squares[row][col].getIcon() == null) {
                 squares[row][col].setIcon(icn);
                 queens[col] = row;
-//                highLightPaths(new Point(row, col));
+                highLightPaths(new Point(row, col));
             } else {
                 squares[row][col].setIcon(null);
                 queens[col] = -1;
@@ -112,13 +113,9 @@ public class GameBoard extends JPanel {
                 for (int i = 0; i < squares.length; i++) {
                     for (int j = 0; j < squares[i].length; j++) {
                         if (i == current.x || j == current.y) {
-                            squares[i][j].setBackground(Color.RED);
+                            squares[i][j].setIsHighlighted(true);
                         } else {
-                            if ((i + j) % 2 == 0) {
-                                squares[i][j].setBackground(Color.decode("#404258"));
-                            } else {
-                                squares[i][j].setBackground(Color.decode("#F1F6F9"));
-                            }
+                            squares[i][j].setIsHighlighted(false);
                         }
                     }
                 }

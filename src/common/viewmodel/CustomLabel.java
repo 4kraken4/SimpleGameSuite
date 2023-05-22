@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class CustomLabel extends JLabel {
@@ -18,11 +17,11 @@ public class CustomLabel extends JLabel {
     private int overlayOpacity;
     private Color overlayColor;
     private Dimension iconSize;
-    private Icon iconOrg;
+    private ImageIcon iconOrg;
 
     @Override
     public void setIcon(Icon icon) {
-        iconOrg = icon;
+        iconOrg = (ImageIcon) icon;
         if (icon != null) {
             ImageIcon scaleIcon = scaleIcon((ImageIcon) iconOrg, iconSize.width, iconSize.width);
             icon = scaleIcon;
@@ -44,7 +43,7 @@ public class CustomLabel extends JLabel {
 
     public void setIconSize(Dimension iconSize) {
         this.iconSize = iconSize;
-        setIcon(iconOrg);
+        this.setIcon(iconOrg);
     }
 
     public Color getOverlayColor() {

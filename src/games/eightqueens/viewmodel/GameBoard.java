@@ -1,36 +1,34 @@
 package games.eightqueens.viewmodel;
 
+import common.viewmodel.CustomLabel;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.Timer;
 
 public class GameBoard extends JPanel {
 
     private int boardSize;
     private Icon icn;
     private int[] queens;
-    private JLabel[][] squares;
-    private Timer blinkTimer;
-    private int blinkCount;
+    private CustomLabel[][] squares;
+    private Stack<Point> undo;
+    private Stack<Point> redo;
 
     public Icon getIcn() {
         return icn;
@@ -52,6 +50,8 @@ public class GameBoard extends JPanel {
     public GameBoard() {
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
+        undo = new Stack<>();
+        redo = new Stack<>();
         initBoard();
     }
 
@@ -63,11 +63,13 @@ public class GameBoard extends JPanel {
             queens[i] = -1;
         }
         this.setLayout(new GridLayout(boardSize, boardSize));
-        squares = new JLabel[boardSize][boardSize];
+        squares = new CustomLabel[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                squares[i][j] = new JLabel();
+                squares[i][j] = new CustomLabel();
                 squares[i][j].setOpaque(true);
+                squares[i][j].setIconSize(new Dimension(50, 50));
+                squares[i][j].setOverlayOpacity(128);
                 if ((i + j) % 2 == 0) {
                     squares[i][j].setBackground(Color.decode("#404258"));
                 } else {
@@ -97,7 +99,7 @@ public class GameBoard extends JPanel {
             if (squares[row][col].getIcon() == null) {
                 squares[row][col].setIcon(icn);
                 queens[col] = row;
-//                highLightPaths(new Point(row, col));
+                visualHints(new Point(row, col));
             } else {
                 squares[row][col].setIcon(null);
                 queens[col] = -1;
@@ -105,29 +107,51 @@ public class GameBoard extends JPanel {
         }
     }
 
-    public void highLightPaths(Point current) {
-        blinkCount = 0;
-        blinkTimer = new Timer(300, (ActionEvent e) -> {
-            if (blinkCount < 2) {
-                for (int i = 0; i < squares.length; i++) {
-                    for (int j = 0; j < squares[i].length; j++) {
-                        if (i == current.x || j == current.y) {
-                            squares[i][j].setBackground(Color.RED);
-                        } else {
-                            if ((i + j) % 2 == 0) {
-                                squares[i][j].setBackground(Color.decode("#404258"));
-                            } else {
-                                squares[i][j].setBackground(Color.decode("#F1F6F9"));
-                            }
-                        }
-                    }
-                }
-                blinkCount++;
-            } else {
-                blinkTimer.stop();
+    public void visualHints(Point current) {
+        for (int i = 0; i < squares.length; i++) {
+            for (int j = 0; j < squares[i].length; j++) {
+                markCollisions(new Point(i, j), current);
+//                highlightMovables(new Point(i, j), current);
             }
-        });
-        blinkTimer.start();
+        }
+    }
+
+    public void markCollisions(Point p, Point current) {
+        int i = p.x;
+        int j = p.y;
+        boolean horizonal = i == current.x || j == current.y;
+        boolean diagonal = Math.abs(i - current.x) == Math.abs(j - current.y);
+        if (horizonal || diagonal) {
+            if (!p.equals(current)) {
+                int preOpacity = squares[i][j].getOverlayOpacity();
+                if (queens[j] == i) {
+                    squares[i][j].setOverlayOpacity(150);
+                    squares[i][j].setIsHighlighted(true);
+                } else {
+                    squares[i][j].setIsHighlighted(false);
+                    squares[i][j].setOverlayOpacity(preOpacity);
+                }
+            } else {
+                squares[i][j].setIsHighlighted(false);
+            }
+        } else {
+            squares[i][j].setIsHighlighted(false);
+        }
+    }
+
+    public void highlightMovables(Point p, Point current) {
+        int i = p.x;
+        int j = p.y;
+        boolean horizonal = i == current.x || j == current.y;
+        boolean diagonal = Math.abs(i - current.x) == Math.abs(j - current.y);
+        if (horizonal || diagonal) {
+            squares[i][j].setIsHighlighted(true);
+            if (p.equals(current)) {
+                squares[i][j].setIsHighlighted(false);
+            }
+        } else {
+            squares[i][j].setIsHighlighted(false);
+        }
     }
 
     private void setQueenIcon() {

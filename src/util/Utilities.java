@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 public class Utilities {
 
@@ -19,5 +20,12 @@ public class Utilities {
         int newHeight = (int) Math.round(originalHeight * scaleFactor);
         Image scaledImage = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImage);
+    }
+
+    public static void setUI(JPanel container, JPanel panel) {
+        container.removeAll();
+        container.add(panel);
+        container.repaint();
+        container.revalidate();
     }
 }

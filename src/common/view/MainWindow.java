@@ -1,19 +1,59 @@
 package common.view;
 
+import common.events.MenuItemSelected;
+import games.eightqueens.view.EQBoard;
+import games.eightqueens.viewmodel.GameBoard;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import util.Utilities;
 
 public class MainWindow extends javax.swing.JFrame {
-
+    
     public MainWindow() {
         initComponents();
         setUpCursor();
+        setMenuActions();
+    }
+
+    private void setMenuActions() {
+        var mis = (MenuItemSelected) (ActionEvent evt) -> {
+            String acmd = evt.getActionCommand();
+            switch (acmd) {
+                case "8 Queens" -> {
+                    EQBoard eqb = new EQBoard();
+                    setEQueenBtnActions(eqb);
+                    Utilities.setUI(mainContainer, eqb);
+                }
+                case "Tic Tac Toe" -> {
+                    GameBoard eq = new GameBoard();
+                    Utilities.setUI(mainContainer, eq);
+                }
+                default ->
+                    throw new AssertionError();
+            }
+        };
+        gameMenu.setMis(mis);
+    }
+
+    private void setEQueenBtnActions(EQBoard eqb) {
+        var mis = (MenuItemSelected) (ActionEvent evt) -> {
+            String acmd = evt.getActionCommand();
+            switch (acmd) {
+                case "close" -> {
+                    Utilities.setUI(mainContainer, gameMenu);
+                }
+                default ->
+                    throw new AssertionError();
+            }
+        };
+        eqb.setMis(mis);
     }
 
     private void setUpCursor() {
@@ -35,32 +75,28 @@ public class MainWindow extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel2 = new javax.swing.JPanel();
-        gameMenu2 = new common.components.GameMenu();
+        mainContainer = new javax.swing.JPanel();
+        gameMenu = new common.components.GameMenu();
         sidePanel1 = new common.components.SidePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1200, 730));
+        setResizable(false);
 
-        jPanel2.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(182, 6, 120, 4);
-        jPanel2.add(gameMenu2, gridBagConstraints);
+        mainContainer.setLayout(new java.awt.BorderLayout());
+        mainContainer.add(gameMenu, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
+        getContentPane().add(mainContainer, java.awt.BorderLayout.CENTER);
         getContentPane().add(sidePanel1, java.awt.BorderLayout.WEST);
 
-        setSize(new java.awt.Dimension(807, 728));
+        setSize(new java.awt.Dimension(1216, 738));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private common.components.GameMenu gameMenu2;
-    private javax.swing.JPanel jPanel2;
+    private common.components.GameMenu gameMenu;
+    private javax.swing.JPanel mainContainer;
     private common.components.SidePanel sidePanel1;
     // End of variables declaration//GEN-END:variables
 }

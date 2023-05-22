@@ -1,40 +1,60 @@
 package test;
 
-import javax.swing.*;
-import java.awt.*;
+import java.util.EventListener;
+import java.util.HashSet;
+import java.util.Set;
 
-class CustomLabel extends JLabel {
+// Step 1: Define the custom event class
+class CustomEvent extends java.util.EventObject {
+    public CustomEvent(Object source) {
+        super(source);
+    }
+}
+
+// Step 2: Declare the listener interface
+interface CustomEventListener extends EventListener {
+    void handleCustomEvent(CustomEvent event);
+}
+
+// Step 3: Implement the listener interface
+class CustomListener implements CustomEventListener {
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setColor(new Color(255, 0, 0, 128));
-        g2.fillRect(0, 0, getWidth(), getHeight());
-        g2.dispose();
+    public void handleCustomEvent(CustomEvent event) {
+        System.out.println("Custom event handled!");
+    }
+}
+
+// Step 4: Fire the event
+class EventProducer {
+    private Set<CustomEventListener> listeners = new HashSet<>();
+
+    public void addCustomEventListener(CustomEventListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeCustomEventListener(CustomEventListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void fireEvent() {
+        CustomEvent event = new CustomEvent(this);
+        for (CustomEventListener listener : listeners) {
+            listener.handleCustomEvent(event);
+        }
     }
 }
 
 public class Demo {
     public static void main(String[] args) {
-        // Create a JFrame
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 200);
-        
-        // Create a CustomLabel (subclass of JLabel)
-        CustomLabel label = new CustomLabel();
-        label.setText("Hello, world!");
-        label.setFont(new Font("Serif", Font.BOLD, 24));
-        label.setForeground(Color.WHITE); // Set the foreground color to white
-        
-        // Set the black background color
-        label.setOpaque(true);
-        label.setBackground(Color.decode("#404258"));
-        
-        // Add the label to the frame
-        frame.getContentPane().add(label);
-        
-        // Display the frame
-        frame.setVisible(true);
+        // Step 5: Register and use the listener
+        EventProducer producer = new EventProducer();
+        CustomListener listener = new CustomListener();
+        producer.addCustomEventListener(listener);
+
+        // Fire the custom event
+        producer.fireEvent();
+
+        // Unregister the listener
+        producer.removeCustomEventListener(listener);
     }
 }

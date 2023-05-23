@@ -1,8 +1,10 @@
 package common.view;
 
 import common.events.MenuItemSelected;
-import games.eightqueens.view.EQBoard;
-import games.eightqueens.model.GameBoard;
+import games.eightqueens.view.EqBoardPanel;
+import games.eightqueens.model.EqBoardModel;
+import games.ttt.model.TttBoardModel;
+import games.ttt.view.TttBoardPanel;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -15,7 +17,7 @@ import javax.imageio.ImageIO;
 import util.Utilities;
 
 public class MainWindow extends javax.swing.JFrame {
-    
+
     public MainWindow() {
         initComponents();
         setUpCursor();
@@ -27,13 +29,14 @@ public class MainWindow extends javax.swing.JFrame {
             String acmd = evt.getActionCommand();
             switch (acmd) {
                 case "8 Queens" -> {
-                    EQBoard eqb = new EQBoard();
+                    EqBoardPanel eqb = new EqBoardPanel();
                     setEQueenBtnActions(eqb);
                     Utilities.setUI(mainContainer, eqb);
                 }
                 case "Tic Tac Toe" -> {
-                    GameBoard eq = new GameBoard();
-                    Utilities.setUI(mainContainer, eq);
+                    TttBoardPanel tbp = new TttBoardPanel();
+                    setTttBtnActions(tbp);
+                    Utilities.setUI(mainContainer, tbp);
                 }
                 default ->
                     throw new AssertionError();
@@ -42,7 +45,7 @@ public class MainWindow extends javax.swing.JFrame {
         gameMenu.setMis(mis);
     }
 
-    private void setEQueenBtnActions(EQBoard eqb) {
+    private void setEQueenBtnActions(EqBoardPanel eqb) {
         var mis = (MenuItemSelected) (ActionEvent evt) -> {
             String acmd = evt.getActionCommand();
             switch (acmd) {
@@ -58,6 +61,24 @@ public class MainWindow extends javax.swing.JFrame {
             }
         };
         eqb.setMis(mis);
+    }
+    
+    private void setTttBtnActions(TttBoardPanel tbp) {
+        var mis = (MenuItemSelected) (ActionEvent evt) -> {
+            String acmd = evt.getActionCommand();
+            switch (acmd) {
+                case "undo" -> {
+                }
+                case "redo" -> {
+                }
+                case "hint" -> {
+                }
+                case "close" -> {
+                    Utilities.setUI(mainContainer, gameMenu);
+                }
+            }
+        };
+        tbp.setMis(mis);
     }
 
     private void setUpCursor() {

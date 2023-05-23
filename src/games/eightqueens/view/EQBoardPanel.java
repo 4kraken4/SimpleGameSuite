@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.List;
 
-public class EQBoard extends javax.swing.JPanel {
+public class EqBoardPanel extends javax.swing.JPanel {
 
     private MenuItemSelected mis;
 
@@ -19,7 +19,7 @@ public class EQBoard extends javax.swing.JPanel {
         this.mis = mis;
     }
 
-    public EQBoard() {
+    public EqBoardPanel() {
         initComponents();
         setButttonActions();
     }
@@ -47,7 +47,7 @@ public class EQBoard extends javax.swing.JPanel {
         btnHint = new common.viewmodel.CustomButton();
         btnClose = new common.viewmodel.CustomButton();
         jPanel7 = new javax.swing.JPanel();
-        gameBoard1 = new games.eightqueens.model.GameBoard();
+        gameBoard1 = new games.eightqueens.model.EqBoardModel();
 
         setMaximumSize(new java.awt.Dimension(612, 709));
         setLayout(new java.awt.BorderLayout());
@@ -268,7 +268,7 @@ public class EQBoard extends javax.swing.JPanel {
     private common.viewmodel.CustomButton btnHint;
     private common.viewmodel.CustomButton btnRedo;
     private common.viewmodel.CustomButton btnUndo;
-    private games.eightqueens.model.GameBoard gameBoard1;
+    private games.eightqueens.model.EqBoardModel gameBoard1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -23,7 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class GameBoard extends JPanel {
+public class EqBoardModel extends JPanel {
 
     private int boardSize;
     private Icon icn;
@@ -68,7 +68,7 @@ public class GameBoard extends JPanel {
         this.boardSize = boardSize;
     }
 
-    public GameBoard() {
+    public EqBoardModel() {
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
         ubdoStepCount = 5;
@@ -286,7 +286,7 @@ public class GameBoard extends JPanel {
                 try {
                     bi = ImageIO.read(f);
                 } catch (IOException ex) {
-                    Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(EqBoardModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

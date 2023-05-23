@@ -21,7 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class GameBoard extends JPanel {
+public class EQBoardModel extends JPanel {
 
     private int boardSize;
     private Icon icn;
@@ -47,7 +47,7 @@ public class GameBoard extends JPanel {
         this.boardSize = boardSize;
     }
 
-    public GameBoard() {
+    public EQBoardModel() {
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
         undo = new Stack<>();
@@ -167,7 +167,7 @@ public class GameBoard extends JPanel {
                 try {
                     bi = ImageIO.read(f);
                 } catch (IOException ex) {
-                    Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(EQBoardModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

@@ -1,8 +1,8 @@
 package common.view;
 
 import common.events.MenuItemSelected;
-import games.eightqueens.view.EQBoard;
-import games.eightqueens.model.GameBoard;
+import games.eightqueens.view.EQBoardPanel;
+import games.eightqueens.model.EQBoardModel;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -27,12 +27,12 @@ public class MainWindow extends javax.swing.JFrame {
             String acmd = evt.getActionCommand();
             switch (acmd) {
                 case "8 Queens" -> {
-                    EQBoard eqb = new EQBoard();
+                    EQBoardPanel eqb = new EQBoardPanel();
                     setEQueenBtnActions(eqb);
                     Utilities.setUI(mainContainer, eqb);
                 }
                 case "Tic Tac Toe" -> {
-                    GameBoard eq = new GameBoard();
+                    EQBoardModel eq = new EQBoardModel();
                     Utilities.setUI(mainContainer, eq);
                 }
                 default ->
@@ -42,7 +42,7 @@ public class MainWindow extends javax.swing.JFrame {
         gameMenu.setMis(mis);
     }
 
-    private void setEQueenBtnActions(EQBoard eqb) {
+    private void setEQueenBtnActions(EQBoardPanel eqb) {
         var mis = (MenuItemSelected) (ActionEvent evt) -> {
             String acmd = evt.getActionCommand();
             switch (acmd) {

@@ -18,6 +18,7 @@ public class CustomLabel extends JLabel {
     private Color overlayColor;
     private Dimension iconSize;
     private ImageIcon iconOrg;
+    public static Color COLOR_COLLISION = Color.RED, COLOR_SOLVED = Color.GREEN;
 
     @Override
     public void setIcon(Icon icon) {

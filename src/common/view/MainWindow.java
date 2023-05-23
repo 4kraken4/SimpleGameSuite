@@ -2,7 +2,7 @@ package common.view;
 
 import common.events.MenuItemSelected;
 import games.eightqueens.view.EQBoard;
-import games.eightqueens.viewmodel.GameBoard;
+import games.eightqueens.model.GameBoard;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -46,11 +46,15 @@ public class MainWindow extends javax.swing.JFrame {
         var mis = (MenuItemSelected) (ActionEvent evt) -> {
             String acmd = evt.getActionCommand();
             switch (acmd) {
+                case "undo" -> {
+                }
+                case "redo" -> {
+                }
+                case "hint" -> {
+                }
                 case "close" -> {
                     Utilities.setUI(mainContainer, gameMenu);
                 }
-                default ->
-                    throw new AssertionError();
             }
         };
         eqb.setMis(mis);

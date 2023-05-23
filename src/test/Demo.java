@@ -1,60 +1,68 @@
 package test;
 
-import java.util.EventListener;
-import java.util.HashSet;
-import java.util.Set;
+public class Demo {
+    private static int[][] board;
+    private static int boardSize;
 
-// Step 1: Define the custom event class
-class CustomEvent extends java.util.EventObject {
-    public CustomEvent(Object source) {
-        super(source);
-    }
-}
-
-// Step 2: Declare the listener interface
-interface CustomEventListener extends EventListener {
-    void handleCustomEvent(CustomEvent event);
-}
-
-// Step 3: Implement the listener interface
-class CustomListener implements CustomEventListener {
-    @Override
-    public void handleCustomEvent(CustomEvent event) {
-        System.out.println("Custom event handled!");
-    }
-}
-
-// Step 4: Fire the event
-class EventProducer {
-    private Set<CustomEventListener> listeners = new HashSet<>();
-
-    public void addCustomEventListener(CustomEventListener listener) {
-        listeners.add(listener);
+    public static void main(String[] args) {
+        int n = 8;
+        solveNQueens(n);
+        printBoard();
     }
 
-    public void removeCustomEventListener(CustomEventListener listener) {
-        listeners.remove(listener);
-    }
+    private static void solveNQueens(int n) {
+        boardSize = n;
+        board = new int[boardSize][boardSize];
 
-    public void fireEvent() {
-        CustomEvent event = new CustomEvent(this);
-        for (CustomEventListener listener : listeners) {
-            listener.handleCustomEvent(event);
+        if (placeQueens(0)) {
+            System.out.println("Queens successfully placed!");
+        } else {
+            System.out.println("No solution exists for the given board size.");
         }
     }
-}
 
-public class Demo {
-    public static void main(String[] args) {
-        // Step 5: Register and use the listener
-        EventProducer producer = new EventProducer();
-        CustomListener listener = new CustomListener();
-        producer.addCustomEventListener(listener);
+    private static boolean placeQueens(int column) {
+        if (column >= boardSize) {
+            return true;
+        }
+        for (int row = 0; row < boardSize; row++) {
+            if (isSafe(row, column)) {
+                board[row][column] = 1;
 
-        // Fire the custom event
-        producer.fireEvent();
+                if (placeQueens(column + 1)) {
+                    return true;
+                }
+                board[row][column] = 0;
+            }
+        }
+        return false;
+    }
 
-        // Unregister the listener
-        producer.removeCustomEventListener(listener);
+    private static boolean isSafe(int row, int column) {
+        for (int i = 0; i < column; i++) {
+            if (board[row][i] == 1) {
+                return false;
+            }
+        }
+        for (int i = row, j = column; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j] == 1) {
+                return false;
+            }
+        }
+        for (int i = row, j = column; i < boardSize && j >= 0; i++, j--) {
+            if (board[i][j] == 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static void printBoard() {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }

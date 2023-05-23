@@ -36,7 +36,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="games.eightqueens.model.EqBoardModel" name="gameBoard1">
+    <Component class="games.eq.model.EqBoardModel" name="gameBoard1">
       <Properties>
         <Property name="icn" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="0" name="null"/>

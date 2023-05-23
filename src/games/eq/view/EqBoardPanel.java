@@ -1,4 +1,4 @@
-package games.eightqueens.view;
+package games.eq.view;
 
 import common.events.MenuItemSelected;
 import common.viewmodel.CustomButton;
@@ -47,14 +47,13 @@ public class EqBoardPanel extends javax.swing.JPanel {
         btnHint = new common.viewmodel.CustomButton();
         btnClose = new common.viewmodel.CustomButton();
         jPanel7 = new javax.swing.JPanel();
-        gameBoard1 = new games.eightqueens.model.EqBoardModel();
+        gameBoard1 = new games.eq.model.EqBoardModel();
 
         setMaximumSize(new java.awt.Dimension(612, 709));
         setLayout(new java.awt.BorderLayout());
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        btnRedo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/common/icons/redo-black.png"))); // NOI18N
         btnRedo.setActionCommand("redo");
         btnRedo.setIconSize(new java.awt.Dimension(24, 24));
         btnRedo.setMaximumSize(new java.awt.Dimension(30, 30));
@@ -68,7 +67,6 @@ public class EqBoardPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(21, 18, 22, 16);
         jPanel2.add(btnRedo, gridBagConstraints);
 
-        btnUndo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/common/icons/undo-black.png"))); // NOI18N
         btnUndo.setActionCommand("undo");
         btnUndo.setIconSize(new java.awt.Dimension(24, 24));
         btnUndo.setMaximumSize(new java.awt.Dimension(30, 30));
@@ -163,7 +161,6 @@ public class EqBoardPanel extends javax.swing.JPanel {
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        btnHint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/common/icons/lightbulb-line.png"))); // NOI18N
         btnHint.setActionCommand("hint");
         btnHint.setIconSize(new java.awt.Dimension(24, 24));
         btnHint.setMaximumSize(new java.awt.Dimension(50, 30));
@@ -177,7 +174,6 @@ public class EqBoardPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(28, 6, 17, 0);
         jPanel4.add(btnHint, gridBagConstraints);
 
-        btnClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/common/icons/cancel-line.png"))); // NOI18N
         btnClose.setActionCommand("close");
         btnClose.setIconSize(new java.awt.Dimension(24, 24));
         btnClose.setMaximumSize(new java.awt.Dimension(30, 30));
@@ -268,7 +264,7 @@ public class EqBoardPanel extends javax.swing.JPanel {
     private common.viewmodel.CustomButton btnHint;
     private common.viewmodel.CustomButton btnRedo;
     private common.viewmodel.CustomButton btnUndo;
-    private games.eightqueens.model.EqBoardModel gameBoard1;
+    private games.eq.model.EqBoardModel gameBoard1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

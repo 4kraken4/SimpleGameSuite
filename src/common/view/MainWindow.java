@@ -1,8 +1,8 @@
 package common.view;
 
 import common.events.MenuItemSelected;
-import games.eightqueens.view.EqBoardPanel;
-import games.eightqueens.model.EqBoardModel;
+import games.eq.view.EqBoardPanel;
+import games.eq.model.EqBoardModel;
 import games.ttt.model.TttBoardModel;
 import games.ttt.view.TttBoardPanel;
 import java.awt.Cursor;

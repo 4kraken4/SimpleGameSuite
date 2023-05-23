@@ -36,9 +36,6 @@
           <SubComponents>
             <Component class="common.viewmodel.CustomButton" name="btnRedo">
               <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/common/icons/redo-black.png"/>
-                </Property>
                 <Property name="actionCommand" type="java.lang.String" value="redo"/>
                 <Property name="iconSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[24, 24]"/>
@@ -62,9 +59,6 @@
             </Component>
             <Component class="common.viewmodel.CustomButton" name="btnUndo">
               <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/common/icons/undo-black.png"/>
-                </Property>
                 <Property name="actionCommand" type="java.lang.String" value="undo"/>
                 <Property name="iconSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[24, 24]"/>
@@ -231,9 +225,6 @@
           <SubComponents>
             <Component class="common.viewmodel.CustomButton" name="btnHint">
               <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/common/icons/lightbulb-line.png"/>
-                </Property>
                 <Property name="actionCommand" type="java.lang.String" value="hint"/>
                 <Property name="iconSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[24, 24]"/>
@@ -257,9 +248,6 @@
             </Component>
             <Component class="common.viewmodel.CustomButton" name="btnClose">
               <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/common/icons/cancel-line.png"/>
-                </Property>
                 <Property name="actionCommand" type="java.lang.String" value="close"/>
                 <Property name="iconSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[24, 24]"/>
@@ -294,7 +282,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
-        <Component class="games.eightqueens.model.EqBoardModel" name="gameBoard1">
+        <Component class="games.eq.model.EqBoardModel" name="gameBoard1">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">

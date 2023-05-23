@@ -1,4 +1,4 @@
-package games.eightqueens.model;
+package games.eq.model;
 
 import common.events.MenuItemSelected;
 import common.viewmodel.CustomLabel;

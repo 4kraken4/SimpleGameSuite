@@ -1,4 +1,4 @@
-package games.eightqueens.viewmodel;
+package games.eightqueens.model;
 
 import common.viewmodel.CustomLabel;
 import java.awt.Color;

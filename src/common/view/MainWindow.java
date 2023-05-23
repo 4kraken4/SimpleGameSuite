@@ -2,7 +2,7 @@ package common.view;
 
 import common.events.MenuItemSelected;
 import games.eightqueens.view.EQBoard;
-import games.eightqueens.viewmodel.GameBoard;
+import games.eightqueens.model.GameBoard;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;

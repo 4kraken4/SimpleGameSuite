@@ -10,7 +10,7 @@ public class Test extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        gameBoard1 = new games.eightqueens.viewmodel.GameBoard();
+        gameBoard1 = new games.eightqueens.model.GameBoard();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(550, 550));
@@ -38,6 +38,6 @@ public class Test extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private games.eightqueens.viewmodel.GameBoard gameBoard1;
+    private games.eightqueens.model.GameBoard gameBoard1;
     // End of variables declaration//GEN-END:variables
 }

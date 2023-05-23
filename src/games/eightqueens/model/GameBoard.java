@@ -1,5 +1,6 @@
-package games.eightqueens.viewmodel;
+package games.eightqueens.model;
 
+import common.events.MenuItemSelected;
 import common.viewmodel.CustomLabel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +31,25 @@ public class GameBoard extends JPanel {
     private CustomLabel[][] squares;
     private Stack<Point> undo;
     private Stack<Point> redo;
+    private int ubdoStepCount;
+    private MenuItemSelected mis;
+    private boolean isPathHighlighted;
+
+    public boolean isPathHighlighted() {
+        return isPathHighlighted;
+    }
+
+    public void setPathHighlighted(boolean isPathHighlighted) {
+        this.isPathHighlighted = isPathHighlighted;
+    }
+
+    public MenuItemSelected getMis() {
+        return mis;
+    }
+
+    public void setMis(MenuItemSelected mis) {
+        this.mis = mis;
+    }
 
     public Icon getIcn() {
         return icn;
@@ -50,6 +71,8 @@ public class GameBoard extends JPanel {
     public GameBoard() {
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
+        ubdoStepCount = 5;
+        isPathHighlighted = false;
         undo = new Stack<>();
         redo = new Stack<>();
         initBoard();
@@ -91,32 +114,78 @@ public class GameBoard extends JPanel {
     }
 
     private void moveQueen(int row, int col) {
+        Point p = new Point(row, col);
         if (queens != null) {
-            if (queens[col] != -1) {
-                squares[queens[col]][col].setIcon(null);
-                queens[col] = -1;
+            if (queens[p.y] != -1) {
+                squares[queens[p.y]][p.y].setIcon(null);
+                queens[p.y] = -1;
             }
-            if (squares[row][col].getIcon() == null) {
-                squares[row][col].setIcon(icn);
-                queens[col] = row;
-                visualHints(new Point(row, col));
+            if (squares[p.x][p.y].getIcon() == null) {
+                squares[p.x][p.y].setIcon(icn);
+                queens[p.y] = row;
+                stackMovesToUndo(p);
+                visualHints(p);
+                setUiForSolved();
             } else {
-                squares[row][col].setIcon(null);
-                queens[col] = -1;
+                squares[p.x][p.y].setIcon(null);
+                queens[p.y] = -1;
             }
+        }
+    }
+
+    private void setUiForSolved() {
+        if (Arrays.stream(queens).filter(i -> i == -1).count() <= 0) {
+            if (isSolved()) {
+                for (int i = 0; i < queens.length; i++) {
+                    squares[queens[i]][i].setOverlayColor(CustomLabel.COLOR_SOLVED);
+                    squares[queens[i]][i].setIsHighlighted(true);
+                }
+            } else {
+                for (CustomLabel[] labels : squares) {
+                    for (CustomLabel label : labels) {
+                        label.setOverlayColor(CustomLabel.COLOR_COLLISION);
+                    }
+                }
+            }
+        }
+    }
+
+    private void stackMovesToUndo(Point p) {
+        if (undo.size() >= ubdoStepCount) {
+            undo.remove(undo.firstElement());
+        }
+        undo.push(p);
+        redo.clear();
+    }
+
+    public void undo() {
+        if (!undo.empty() && redo.size() < ubdoStepCount) {
+            Point pop = undo.pop();
+            moveQueen(pop.x, pop.y);
+            redo.push(pop);
+        }
+    }
+
+    public void redo() {
+        if (!redo.empty() && undo.size() < ubdoStepCount) {
+            Point pop = redo.pop();
+            moveQueen(pop.x, pop.y);
+            undo.push(pop);
         }
     }
 
     public void visualHints(Point current) {
-        for (int i = 0; i < squares.length; i++) {
-            for (int j = 0; j < squares[i].length; j++) {
-                markCollisions(new Point(i, j), current);
-//                highlightMovables(new Point(i, j), current);
+        for (int row = 0; row < squares.length; row++) {
+            for (int col = 0; col < squares[row].length; col++) {
+                markCollisions(new Point(row, col), current);
+                if (isPathHighlighted) {
+                    highlightMovables(new Point(row, col), current);
+                }
             }
         }
     }
 
-    public void markCollisions(Point p, Point current) {
+    private void markCollisions(Point p, Point current) {
         int i = p.x;
         int j = p.y;
         boolean horizonal = i == current.x || j == current.y;
@@ -139,7 +208,7 @@ public class GameBoard extends JPanel {
         }
     }
 
-    public void highlightMovables(Point p, Point current) {
+    private void highlightMovables(Point p, Point current) {
         int i = p.x;
         int j = p.y;
         boolean horizonal = i == current.x || j == current.y;
@@ -152,6 +221,56 @@ public class GameBoard extends JPanel {
         } else {
             squares[i][j].setIsHighlighted(false);
         }
+    }
+
+    private boolean isSolved() {
+        int[][] qns = new int[squares.length][squares[0].length];
+        for (int col = 0; col < queens.length; col++) {
+            qns[queens[col]][col] = 1;
+        }
+        for (int i = 0; i < qns.length; i++) {
+            for (int j = 0; j < qns[i].length; j++) {
+                if (qns[i][j] == 1) {
+                    if (!isSafe(qns, i, j)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isSafe(int[][] qns, int row, int col) {
+        int BOARD_SIZE = qns.length;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            if (qns[row][i] == 1 && i != col) {
+                return false;
+            }
+            if (qns[i][col] == 1 && i != row) {
+                return false;
+            }
+        }
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+            if (qns[i][j] == 1) {
+                return false;
+            }
+        }
+        for (int i = row - 1, j = col + 1; i >= 0 && j < BOARD_SIZE; i--, j++) {
+            if (qns[i][j] == 1) {
+                return false;
+            }
+        }
+        for (int i = row + 1, j = col - 1; i < BOARD_SIZE && j >= 0; i++, j--) {
+            if (qns[i][j] == 1) {
+                return false;
+            }
+        }
+        for (int i = row + 1, j = col + 1; i < BOARD_SIZE && j < BOARD_SIZE; i++, j++) {
+            if (qns[i][j] == 1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void setQueenIcon() {

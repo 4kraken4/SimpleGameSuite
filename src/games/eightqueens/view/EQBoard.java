@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.ImageIcon;
 
 public class EQBoard extends javax.swing.JPanel {
 
@@ -48,7 +47,7 @@ public class EQBoard extends javax.swing.JPanel {
         btnHint = new common.viewmodel.CustomButton();
         btnClose = new common.viewmodel.CustomButton();
         jPanel7 = new javax.swing.JPanel();
-        gameBoard1 = new games.eightqueens.viewmodel.GameBoard();
+        gameBoard1 = new games.eightqueens.model.GameBoard();
 
         setMaximumSize(new java.awt.Dimension(612, 709));
         setLayout(new java.awt.BorderLayout());
@@ -215,27 +214,36 @@ public class EQBoard extends javax.swing.JPanel {
     private void setButttonActions() {
         List<CustomButton> btns = Arrays.asList(btnUndo, btnRedo, btnHint, btnClose);
         btns.forEach(btn -> {
-            btn.addActionListener((e) -> {
-                mis.itemSelected(e);
-            });
             String s1 = "";
             String s2 = "";
             switch (btn.getActionCommand()) {
                 case "undo" -> {
                     s1 = "/common/icons/undo-yellow.png";
                     s2 = "/common/icons/undo-black.png";
+                    btn.addActionListener((e) -> {
+                        gameBoard1.undo();
+                    });
                 }
                 case "redo" -> {
                     s1 = "/common/icons/redo-yellow.png";
                     s2 = "/common/icons/redo-black.png";
+                    btn.addActionListener((e) -> {
+                        gameBoard1.redo();
+                    });
                 }
                 case "hint" -> {
                     s1 = "/common/icons/lightbulb-fill.png";
                     s2 = "/common/icons/lightbulb-line.png";
+                    btn.addActionListener(e -> {
+                        gameBoard1.setPathHighlighted(!gameBoard1.isPathHighlighted());
+                    });
                 }
                 case "close" -> {
                     s1 = "/common/icons/cancel-fill.png";
                     s2 = "/common/icons/cancel-line.png";
+                    btn.addActionListener((e) -> {
+                        mis.itemSelected(e);
+                    });
                 }
             }
             final String me = s1;
@@ -250,7 +258,6 @@ public class EQBoard extends javax.swing.JPanel {
                 public void mouseExited(MouseEvent e) {
                     btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(ml)));
                 }
-
             });
         });
     }
@@ -261,7 +268,7 @@ public class EQBoard extends javax.swing.JPanel {
     private common.viewmodel.CustomButton btnHint;
     private common.viewmodel.CustomButton btnRedo;
     private common.viewmodel.CustomButton btnUndo;
-    private games.eightqueens.viewmodel.GameBoard gameBoard1;
+    private games.eightqueens.model.GameBoard gameBoard1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

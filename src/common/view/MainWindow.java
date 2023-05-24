@@ -73,7 +73,7 @@ public class MainWindow extends javax.swing.JFrame {
         };
         eqb.setMis(mis);
     }
-    
+
     private void setTttBtnActions(TttBoardPanel tbp) {
         var mis = (MenuItemSelected) (ActionEvent evt) -> {
             String acmd = evt.getActionCommand();

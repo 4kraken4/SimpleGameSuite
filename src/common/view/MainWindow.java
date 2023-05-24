@@ -2,8 +2,6 @@ package common.view;
 
 import common.events.MenuItemSelected;
 import games.eq.view.EqBoardPanel;
-import games.eq.model.EqBoardModel;
-import games.ttt.model.TttBoardModel;
 import games.ttt.view.TttBoardPanel;
 import java.awt.Cursor;
 import java.awt.Point;
@@ -38,8 +36,21 @@ public class MainWindow extends javax.swing.JFrame {
                     setTttBtnActions(tbp);
                     Utilities.setUI(mainContainer, tbp);
                 }
-                default ->
-                    throw new AssertionError();
+                case "Huff-Man Encrypt" -> {
+                    TttBoardPanel tbp = new TttBoardPanel();
+                    setTttBtnActions(tbp);
+                    Utilities.setUI(mainContainer, tbp);
+                }
+                case "Get Me Out" -> {
+                    TttBoardPanel tbp = new TttBoardPanel();
+                    setTttBtnActions(tbp);
+                    Utilities.setUI(mainContainer, tbp);
+                }
+                case "Uncle Prim" -> {
+                    TttBoardPanel tbp = new TttBoardPanel();
+                    setTttBtnActions(tbp);
+                    Utilities.setUI(mainContainer, tbp);
+                }
             }
         };
         gameMenu.setMis(mis);

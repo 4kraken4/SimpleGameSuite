@@ -1,5 +1,6 @@
 package common.view;
 
+import common.components.GameMenu;
 import common.events.MenuItemSelected;
 import games.eq.view.EqBoardPanel;
 import games.ttt.view.TttBoardPanel;
@@ -18,8 +19,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     public MainWindow() {
         initComponents();
-        setUpCursor();
-        setMenuActions();
+//        setUpCursor();
+//        setMenuActions();
     }
 
     private void setMenuActions() {
@@ -53,7 +54,7 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
         };
-        gameMenu.setMis(mis);
+//        gameMenu.setMis(mis);
     }
 
     private void setEQueenBtnActions(EqBoardPanel eqb) {
@@ -67,7 +68,7 @@ public class MainWindow extends javax.swing.JFrame {
                 case "hint" -> {
                 }
                 case "close" -> {
-                    Utilities.setUI(mainContainer, gameMenu);
+//                    Utilities.setUI(mainContainer, gameMenu);
                 }
             }
         };
@@ -85,7 +86,7 @@ public class MainWindow extends javax.swing.JFrame {
                 case "hint" -> {
                 }
                 case "close" -> {
-                    Utilities.setUI(mainContainer, gameMenu);
+//                    Utilities.setUI(mainContainer, gameMenu);
                 }
             }
         };
@@ -113,7 +114,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         mainContainer = new javax.swing.JPanel();
-        gameMenu = new common.components.GameMenu();
+        userDataPanel1 = new common.view.UserDataPanel();
         sidePanel1 = new common.components.SidePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -121,7 +122,7 @@ public class MainWindow extends javax.swing.JFrame {
         setResizable(false);
 
         mainContainer.setLayout(new java.awt.BorderLayout());
-        mainContainer.add(gameMenu, java.awt.BorderLayout.CENTER);
+        mainContainer.add(userDataPanel1, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(mainContainer, java.awt.BorderLayout.CENTER);
         getContentPane().add(sidePanel1, java.awt.BorderLayout.WEST);
@@ -130,9 +131,11 @@ public class MainWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private GameMenu menu;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private common.components.GameMenu gameMenu;
     private javax.swing.JPanel mainContainer;
     private common.components.SidePanel sidePanel1;
+    private common.view.UserDataPanel userDataPanel1;
     // End of variables declaration//GEN-END:variables
 }

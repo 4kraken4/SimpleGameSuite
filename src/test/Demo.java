@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class Demo extends JPanel {
+class Demo extends JPanel {
 
     private static final int WIDTH = 500;
     private static final int HEIGHT = 500;

@@ -1,114 +1,220 @@
 package test;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-class Demo extends JPanel {
+class MinimumSpanningTreeUI extends JFrame {
 
-    private static final int WIDTH = 500;
-    private static final int HEIGHT = 500;
-    private static final int VERTEX_RADIUS = 10;
-    private static final Color VERTEX_COLOR = Color.BLACK;
-    private static final Color LINE_COLOR = Color.RED;
-    private static final Color HOVER_COLOR = Color.BLUE;
-    private static final int TOTAL_VERTICES = 10;
-    private static final int MAX_ATTEMPTS = 10000;
+    private GraphPanel graphPanel;
+    private List<Integer> selectedEdges;
+    private JButton calculateButton;
 
-    private List<Point> vertices;
-    private List<Line> lines;
-    private Line hoveredLine;
-    private Random random;
+    public MinimumSpanningTreeUI() {
+        setTitle("Minimum Spanning Tree");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-    public Demo() {
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setBackground(Color.WHITE);
-
-        vertices = new ArrayList<>();
-        lines = new ArrayList<>();
-        hoveredLine = null;
-        random = new Random();
-
-        generateVertices();
-        generateLines();
-
-        addMouseMotionListener(new MouseAdapter() {
+        graphPanel = new GraphPanel();
+        graphPanel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseMoved(MouseEvent e) {
-                hoveredLine = getHoveredLine(e.getPoint());
-                repaint();
+            public void mouseClicked(MouseEvent e) {
+                int vertex = graphPanel.getVertexAt(e.getX(), e.getY());
+                if (vertex != -1) {
+                    graphPanel.toggleVertexSelection(vertex);
+                }
             }
         });
+
+        calculateButton = new JButton("Calculate MST");
+        calculateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateMST();
+            }
+        });
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(calculateButton);
+
+        add(graphPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+
+        selectedEdges = new ArrayList<>();
     }
 
-    private void generateVertices() {
-        for (int i = 0; i < TOTAL_VERTICES; i++) {
-            int x = random.nextInt(WIDTH - VERTEX_RADIUS) + VERTEX_RADIUS / 2;
-            int y = random.nextInt(HEIGHT - VERTEX_RADIUS) + VERTEX_RADIUS / 2;
-            vertices.add(new Point(x, y));
+    public void addVertex(int x, int y) {
+        graphPanel.addVertex(x, y);
+    }
+
+    public void addEdge(int source, int destination, int weight) {
+        graphPanel.addEdge(source, destination, weight);
+    }
+
+    public void generateRandomGraph(int numVertices, int numEdges, int maxWeight, int width, int height) {
+        Random random = new Random();
+        for (int i = 0; i < numVertices; i++) {
+            int x = random.nextInt(width);
+            int y = random.nextInt(height);
+            addVertex(x, y);
+        }
+
+        for (int i = 0; i < numEdges; i++) {
+            int source = random.nextInt(numVertices);
+            int destination = random.nextInt(numVertices);
+            int weight = random.nextInt(maxWeight) + 1;
+            addEdge(source, destination, weight);
         }
     }
 
-    private void generateLines() {
-        lines.clear();
-        List<Point> shuffledVertices = new ArrayList<>(vertices);
-        Collections.shuffle(shuffledVertices);
+    private void calculateMST() {
+        int[][] minimumSpanningTree = graphPanel.calculateMinimumSpanningTree();
+        graphPanel.setTree(minimumSpanningTree);
+        selectedEdges.clear();
+    }
 
-        int attempts = 0;
-        boolean validSolution = false;
-        while (!validSolution && attempts < MAX_ATTEMPTS) {
-            validSolution = true;
-            for (int i = 0; i < shuffledVertices.size() - 1; i++) {
-                Point start = shuffledVertices.get(i);
-                Point end = shuffledVertices.get(i + 1);
-                Line line = new Line(start, end);
-                if (checkIntersections(line, lines)) {
-                    validSolution = false;
-                    break;
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            FlatLaf.setup(new FlatLightLaf());
+            MinimumSpanningTreeUI ui = new MinimumSpanningTreeUI();
+            // Example usage:
+            ui.generateRandomGraph(10, 15, 100, 600, 400);
+        });
+    }
+}
+
+class GraphPanel extends JPanel {
+
+    private List<Point> vertices;
+    private List<Edge> edges;
+    private int[][] tree;
+    private List<Integer> selectedVertices;
+
+    public GraphPanel() {
+        vertices = new ArrayList<>();
+        edges = new ArrayList<>();
+        tree = new int[0][0];
+        selectedVertices = new ArrayList<>();
+
+        setPreferredSize(new Dimension(600, 400));
+        setBackground(Color.WHITE);
+    }
+
+    public void addVertex(int x, int y) {
+        vertices.add(new Point(x, y));
+        repaint();
+    }
+
+    public void addEdge(int source, int destination, int weight) {
+        edges.add(new Edge(source, destination, weight));
+        repaint();
+    }
+
+    public int[][] calculateMinimumSpanningTree() {
+        int numVertices = vertices.size();
+        int[][] adjacencyMatrix = new int[numVertices][numVertices];
+
+        for (Edge edge : edges) {
+            int source = edge.getSource();
+            int destination = edge.getDestination();
+            int weight = edge.getWeight();
+            adjacencyMatrix[source][destination] = weight;
+            adjacencyMatrix[destination][source] = weight;
+        }
+
+        int[][] minimumSpanningTree = new int[numVertices][numVertices];
+        boolean[] visited = new boolean[numVertices];
+        int[] parent = new int[numVertices];
+        int[] key = new int[numVertices];
+
+        // Initialize key values to infinity and visited array to false
+        for (int i = 0; i < numVertices; i++) {
+            key[i] = Integer.MAX_VALUE;
+            visited[i] = false;
+        }
+
+        // Start with the first vertex
+        key[0] = 0;
+        parent[0] = -1;
+
+        // Construct the minimum spanning tree
+        for (int i = 0; i < numVertices - 1; i++) {
+            int minKeyVertex = findMinKeyVertex(key, visited);
+            visited[minKeyVertex] = true;
+
+            for (int j = 0; j < numVertices; j++) {
+                if (adjacencyMatrix[minKeyVertex][j] != 0 && !visited[j] && adjacencyMatrix[minKeyVertex][j] < key[j]) {
+                    parent[j] = minKeyVertex;
+                    key[j] = adjacencyMatrix[minKeyVertex][j];
                 }
-                lines.add(line);
-            }
-            Point start = shuffledVertices.get(shuffledVertices.size() - 1);
-            Point end = shuffledVertices.get(0);
-            Line line = new Line(start, end);
-            if (checkIntersections(line, lines)) {
-                validSolution = false;
-            }
-            lines.add(line);
-
-            if (!validSolution) {
-                Collections.shuffle(shuffledVertices);
-                lines.clear();
-                attempts++;
             }
         }
 
-        if (!validSolution) {
-            System.out.println("Unable to find a valid solution. Please adjust the parameters or try again.");
+        // Populate the minimum spanning tree matrix
+        for (int i = 1; i < numVertices; i++) {
+            minimumSpanningTree[parent[i]][i] = 1;
+            minimumSpanningTree[i][parent[i]] = 1;
         }
+
+        return minimumSpanningTree;
     }
 
-    private boolean checkIntersections(Line newLine, List<Line> existingLines) {
-        for (Line line : existingLines) {
-            if (doLinesIntersect(newLine.start, newLine.end, line.start, line.end)) {
-                return true;
+    private int findMinKeyVertex(int[] key, boolean[] visited) {
+        int minKey = Integer.MAX_VALUE;
+        int minKeyVertex = -1;
+
+        for (int i = 0; i < key.length; i++) {
+            if (!visited[i] && key[i] < minKey) {
+                minKey = key[i];
+                minKeyVertex = i;
             }
         }
-        return false;
+
+        return minKeyVertex;
     }
 
-    private Line getHoveredLine(Point mousePoint) {
-        for (Line line : lines) {
-            if (line.isPointOnLine(mousePoint)) {
-                return line;
+    public void toggleVertexSelection(int vertex) {
+        if (selectedVertices.contains(vertex)) {
+            selectedVertices.remove(Integer.valueOf(vertex));
+        } else {
+            selectedVertices.add(vertex);
+        }
+        repaint();
+    }
+
+    public boolean isReadyToCalculateMST() {
+        return selectedVertices.size() >= 2;
+    }
+
+    public int getVertexAt(int x, int y) {
+        for (int i = 0; i < vertices.size(); i++) {
+            Point vertex = vertices.get(i);
+            if (Math.abs(vertex.getX() - x) <= 5 && Math.abs(vertex.getY() - y) <= 5) {
+                return i;
             }
         }
-        return null;
+        return -1;
+    }
+
+    public void setTree(int[][] tree) {
+        this.tree = tree;
+        repaint();
     }
 
     @Override
@@ -116,95 +222,99 @@ class Demo extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        // Enable anti-aliasing for smoother lines
+        // Enable anti-aliasing
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Draw vertices
-        g2d.setColor(VERTEX_COLOR);
-        for (Point vertex : vertices) {
-            int x = vertex.x - VERTEX_RADIUS / 2;
-            int y = vertex.y - VERTEX_RADIUS / 2;
-            g2d.fillOval(x, y, VERTEX_RADIUS, VERTEX_RADIUS);
-        }
+        // Draw edges as straight lines with distances on top
+        for (Edge edge : edges) {
+            int source = edge.getSource();
+            int destination = edge.getDestination();
+            int weight = edge.getWeight();
 
-        // Draw lines
-        for (Line line : lines) {
-            if (line == hoveredLine) {
-                g2d.setColor(HOVER_COLOR);
-            } else {
-                g2d.setColor(LINE_COLOR);
+            if (source < 0 || source >= vertices.size() || destination < 0 || destination >= vertices.size()) {
+                continue; // Skip invalid edges
             }
-            g2d.drawLine(line.start.x, line.start.y, line.end.x, line.end.y);
+
+            Point sourcePoint = vertices.get(source);
+            Point destinationPoint = vertices.get(destination);
+
+            g2d.setColor(Color.BLACK);
+            g2d.setStroke(new BasicStroke(2));
+
+            // Draw straight line
+            g2d.drawLine((int) sourcePoint.getX(), (int) sourcePoint.getY(), (int) destinationPoint.getX(), (int) destinationPoint.getY());
+
+            g2d.setColor(Color.RED);
+            double midX = (sourcePoint.getX() + destinationPoint.getX()) / 2;
+            double midY = (sourcePoint.getY() + destinationPoint.getY()) / 2;
+            g2d.drawString(String.valueOf(weight), (float) midX, (float) midY);
+        }
+
+        // Draw vertices as black dots
+        g2d.setColor(Color.BLACK);
+        for (Point vertex : vertices) {
+            double x = vertex.getX();
+            double y = vertex.getY();
+            Shape dot = new Ellipse2D.Double(x - 5, y - 5, 10, 10);
+            g2d.fill(dot);
+        }
+
+        // Draw selected vertices as blue dots
+        g2d.setColor(Color.BLUE);
+        for (int vertex : selectedVertices) {
+            if (vertex < 0 || vertex >= vertices.size()) {
+                continue; // Skip invalid vertices
+            }
+
+            Point point = vertices.get(vertex);
+            double x = point.getX();
+            double y = point.getY();
+            Shape dot = new Ellipse2D.Double(x - 5, y - 5, 10, 10);
+            g2d.fill(dot);
+        }
+
+        // Draw minimum spanning tree edges with thicker green lines
+        g2d.setColor(Color.GREEN);
+        g2d.setStroke(new BasicStroke(3));
+        for (int i = 0; i < tree.length; i++) {
+            for (int j = i + 1; j < tree.length; j++) {
+                if (i < 0 || i >= vertices.size() || j < 0 || j >= vertices.size()) {
+                    continue; // Skip invalid indices
+                }
+
+                if (tree[i][j] == 1) {
+                    Point sourcePoint = vertices.get(i);
+                    Point destinationPoint = vertices.get(j);
+
+                    // Draw straight line for minimum spanning tree edge
+                    g2d.drawLine((int) sourcePoint.getX(), (int) sourcePoint.getY(), (int) destinationPoint.getX(), (int) destinationPoint.getY());
+                }
+            }
         }
     }
+}
 
-    private static class Line {
+class Edge {
 
-        private Point start;
-        private Point end;
+    private int source;
+    private int destination;
+    private int weight;
 
-        public Line(Point start, Point end) {
-            this.start = start;
-            this.end = end;
-        }
-
-        public boolean isPointOnLine(Point point) {
-            double distance = Math.abs((end.y - start.y) * point.x - (end.x - start.x) * point.y
-                    + end.x * start.y - end.y * start.x) / start.distance(end);
-            return distance <= 2.0; // Adjust this value as needed for the hover effect
-        }
+    public Edge(int source, int destination, int weight) {
+        this.source = source;
+        this.destination = destination;
+        this.weight = weight;
     }
 
-    private static int orientation(Point p, Point q, Point r) {
-        double val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
-        if (val == 0) {
-            return 0;  // Collinear
-        }
-        return (val > 0) ? 1 : 2; // Clockwise or Counter-clockwise
+    public int getSource() {
+        return source;
     }
 
-    private static boolean onSegment(Point p, Point q, Point r) {
-        return q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x)
-                && q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y);
+    public int getDestination() {
+        return destination;
     }
 
-    private static boolean doLinesIntersect(Point p1, Point q1, Point p2, Point q2) {
-        int o1 = orientation(p1, q1, p2);
-        int o2 = orientation(p1, q1, q2);
-        int o3 = orientation(p2, q2, p1);
-        int o4 = orientation(p2, q2, q1);
-
-        if (o1 != o2 && o3 != o4) {
-            return true;
-        }
-
-        if (o1 == 0 && onSegment(p1, p2, q1)) {
-            return true;
-        }
-
-        if (o2 == 0 && onSegment(p1, q2, q1)) {
-            return true;
-        }
-
-        if (o3 == 0 && onSegment(p2, p1, q2)) {
-            return true;
-        }
-
-        if (o4 == 0 && onSegment(p2, q1, q2)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Demo");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(new Demo());
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
+    public int getWeight() {
+        return weight;
     }
 }

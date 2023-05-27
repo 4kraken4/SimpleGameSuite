@@ -1,32 +1,63 @@
 package util;
 
 import common.exception.PropertyNotFoundException;
+
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GameConfiguration {
 
-    private static final String CONFIG_FILE_PATH = "game-suite.properties";
+    private GameConfiguration() {
+        if (CONFIG_FILE_PATH_ABSOLUTE.isEmpty()) {
+            try {
+                findConfigFile();
+            } catch (FileNotFoundException ex) {
+//                logger.logError(GameConfiguration.class.getName(), ex);
+            }
+        }
+    }
 
-    public static String getProperty(String property) throws PropertyNotFoundException, IOException {
-        Properties properties = new Properties();
-        String configFile = CONFIG_FILE_PATH;
+    public static GameConfiguration getInstance() {
+        if (instance == null) {
+            synchronized (GameConfiguration.class) {
+                if (instance == null) {
+                    instance = new GameConfiguration();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private void findConfigFile() throws FileNotFoundException {
+        String baseDir = System.getProperty("user.dir");
+        File file = new File(baseDir, CONFIG_FILE_PATH_RELATIVE);
+        if (!file.exists()) {
+            throw new FileNotFoundException();
+        }
+        CONFIG_FILE_PATH_ABSOLUTE = file.getAbsolutePath();
+    }
+
+    public String getProperty(String property) {
         String propertyValue = "";
-        try ( FileInputStream fis = new FileInputStream(configFile)) {
+        try ( FileInputStream fis = new FileInputStream(CONFIG_FILE_PATH_ABSOLUTE)) {
+            Properties properties = new Properties();
             properties.load(fis);
-            // Check if key exists
             if (!properties.containsKey(property)) {
                 throw new PropertyNotFoundException();
             }
             propertyValue = properties.getProperty(property);
-        } catch (IOException e) {
-            Logger.getLogger(GameConfiguration.class.getName()).log(Level.SEVERE, null, e);
-            throw e;
+        } catch (IOException | PropertyNotFoundException ex) {
+//            logger.logError(GameConfiguration.class.getName(), ex);
         }
         return propertyValue;
     }
+
+    private static String CONFIG_FILE_PATH_ABSOLUTE = "";
+    private static final String CONFIG_FILE_PATH_RELATIVE = "config/application.properties";
+    private static volatile GameConfiguration instance;
+    private GameSuiteLogger logger;
 
 }

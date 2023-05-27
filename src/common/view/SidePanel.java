@@ -1,4 +1,4 @@
-package common.components;
+package common.view;
 
 public class SidePanel extends javax.swing.JPanel {
 

@@ -1,4 +1,4 @@
-package common.components;
+package common.view;
 
 import common.events.MenuItemSelected;
 import common.viewmodel.CustomButton;

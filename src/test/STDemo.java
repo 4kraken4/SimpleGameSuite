@@ -4,14 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
 
 class PolygonWithLabels extends JFrame {
 
     private JLabel[] pointLabels;
     private JLabel[] lineLabels;
-    private Point[] points;
+    private final Point[] points;
     private double[] lineDistances;
 
     public PolygonWithLabels() {

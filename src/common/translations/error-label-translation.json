@@ -1,0 +1,13 @@
+{
+  "ERRMSG_DBTITLE": "Oh no! It's a database error",
+  "ERRMSG_INPUTTITLE": "Oops! You just stepped on an error",
+  "ERRMSG_EMPTYUSERNAME": "User name is required. Please type in a fancy name.",
+  "ERRMSG_SHORTUSERNAME": "User name has to be atlteast %d charachters in length.",
+  "ERRMSG_LENGTHYUSERNAME": "Consider shortening the username as it requerires not more than %d charachters.",
+  "ERRMSG_SPACEDUSERNAME": "Spaces are not allowed in username, So please remove them and re-try.",
+  "ERRMSG_SPECHARUSERNAME": "Consider removing all the special charachters because they are not allowed.",
+  "ERRMSG_DUPLICATEUSER": "Oh no! It looks like this username has been already taken. Now hurry up and make sure you are unique.",
+  "ERRMSG_DBPERMISSIONDENIED": "Oops! It seems you don't have the necessary permissions to the Database.",
+  "ERRMSG_DBFAILEDUPDATE": "Hate to tell you but couldn't perform the operation due to a related entry in another %s table. Please ensure that the related data is updated or removed first.",
+  "ERRMSG_DBERRORDEFAULT": "Oops! An error occurred during the database operation. Please try again later or contact support for further assistance."
+}

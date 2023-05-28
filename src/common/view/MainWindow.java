@@ -138,17 +138,9 @@ public class MainWindow extends javax.swing.JFrame {
                 pum.setMessage(err);
                 GlassPanePopup.showPopup(pum);
             } else {
-                DatabaseManager db = new DatabaseManager() {
-                    @Override
-                    public String handleSQLException(SQLException e) {
-                        return handleSqlException(e);
-                    }
-                };
                 try {
-                    boolean checkDatabaseExists = db.checkDatabaseExists();
-                    if (!checkDatabaseExists) {
-                        db.createDatabaseIfNotExist();
-                    }
+                    db = DatabaseManager.getInstance();
+                    db.createDatabaseIfNotExist();
                     JsonObject params = new JsonObject();
                     params.addProperty("Username", username.toLowerCase());
                     int executeUpdate = db.executeUpdate("user", "CreateUser", params);
@@ -156,7 +148,7 @@ public class MainWindow extends javax.swing.JFrame {
                         setMenuActions();
                     }
                 } catch (SQLException ex) {
-                    String sqlErr = db.handleSQLException(ex);
+                    String sqlErr = handleSqlException(ex);
                     String popupTitle = translations
                             .getTranslation(
                                     TranslationHandler.SCHEMMA_ERROR_TRANSLATION, "ERRMSG_DBTITLE");
@@ -187,8 +179,6 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -210,6 +200,7 @@ public class MainWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private DatabaseManager db;
     private final GameConfiguration configuration;
     private final TranslationHandler translations;
     private final GameSuiteLogger logger;

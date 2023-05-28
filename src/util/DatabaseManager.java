@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class DatabaseManager {
+public class DatabaseManager {
 
     private static String DBURL;
     private static String DATABASE;
@@ -29,6 +29,7 @@ public abstract class DatabaseManager {
     private GameConfiguration configuration;
     private GameSuiteLogger logger;
     private QueryExecutionListener listener;
+    private static volatile DatabaseManager instance;
 
     public QueryExecutionListener getProgressListener() {
         return listener;
@@ -38,19 +39,25 @@ public abstract class DatabaseManager {
         this.listener = listener;
     }
 
-    public DatabaseManager() {
+    private DatabaseManager() {
         try {
             configuration = GameConfiguration.getInstance();
             logger = GameSuiteLogger.getInstance();
-            DATABASE = configuration.getProperty("DATABASE");
-            DBUSER = configuration.getProperty("DBUSER");
-            DBPASSWORD = configuration.getProperty("DBPASSWORD");
-            JSONQUERYPATH = configuration.getProperty("JSONQUERYPATH");
-            DBURL = configuration.getProperty("DBURL");
             connection = getConnection();
         } catch (SQLException e) {
             logger.logError(DatabaseManager.class.getName(), e);
         }
+    }
+
+    public static DatabaseManager getInstance() {
+        if (instance == null) {
+            synchronized (DatabaseManager.class) {
+                if (instance == null) {
+                    instance = new DatabaseManager();
+                }
+            }
+        }
+        return instance;
     }
 
     public void closeConnection() throws SQLException {
@@ -65,6 +72,11 @@ public abstract class DatabaseManager {
     }
 
     private Connection getConnection() throws SQLException {
+        DATABASE = configuration.getProperty("DATABASE");
+        DBUSER = configuration.getProperty("DBUSER");
+        DBPASSWORD = configuration.getProperty("DBPASSWORD");
+        DBURL = configuration.getProperty("DBURL");
+        JSONQUERYPATH = configuration.getProperty("JSONQUERYPATH");
         return DriverManager.getConnection(DBURL, DBUSER, DBPASSWORD);
     }
 
@@ -138,9 +150,6 @@ public abstract class DatabaseManager {
         while (resultSet.next()) {
             String existingDatabaseName = resultSet.getString(1);
             if (existingDatabaseName.equalsIgnoreCase(DATABASE)) {
-                String conString = DBURL + DATABASE;
-                DBURL = conString;
-                connection = getConnection();
                 return true;
             }
         }
@@ -217,8 +226,6 @@ public abstract class DatabaseManager {
         sqlFiles.sort(Comparator.comparingLong(File::lastModified).reversed());
         return sqlFiles.get(0);
     }
-
-    public abstract String handleSQLException(SQLException e);
 
     private List<String> refineQueryList(List<String> queris) {
         return queris

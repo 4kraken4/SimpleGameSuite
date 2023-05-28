@@ -15,7 +15,7 @@ public class GameConfiguration {
             try {
                 findConfigFile();
             } catch (FileNotFoundException ex) {
-//                logger.logError(GameConfiguration.class.getName(), ex);
+                logger.logError(GameConfiguration.class.getName(), ex);
             }
         }
     }
@@ -42,7 +42,7 @@ public class GameConfiguration {
 
     public String getProperty(String property) {
         String propertyValue = "";
-        try ( FileInputStream fis = new FileInputStream(CONFIG_FILE_PATH_ABSOLUTE)) {
+        try (FileInputStream fis = new FileInputStream(CONFIG_FILE_PATH_ABSOLUTE)) {
             Properties properties = new Properties();
             properties.load(fis);
             if (!properties.containsKey(property)) {
@@ -50,7 +50,7 @@ public class GameConfiguration {
             }
             propertyValue = properties.getProperty(property);
         } catch (IOException | PropertyNotFoundException ex) {
-//            logger.logError(GameConfiguration.class.getName(), ex);
+            // logger.logError(GameConfiguration.class.getName(), ex);
         }
         return propertyValue;
     }

@@ -144,9 +144,13 @@ public class MainWindow extends javax.swing.JFrame {
                         return handleSqlException(e);
                     }
                 };
-                JsonObject params = new JsonObject();
-                params.addProperty("Username", username.toLowerCase());
                 try {
+                    boolean checkDatabaseExists = db.checkDatabaseExists();
+                    if (!checkDatabaseExists) {
+                        db.createDatabaseIfNotExist();
+                    }
+                    JsonObject params = new JsonObject();
+                    params.addProperty("Username", username.toLowerCase());
                     int executeUpdate = db.executeUpdate("user", "CreateUser", params);
                     if (executeUpdate > 0) {
                         setMenuActions();

@@ -39,11 +39,8 @@ class MinimumSpanningTreeUI extends JFrame {
         });
 
         calculateButton = new JButton("Calculate MST");
-        calculateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                calculateMST();
-            }
+        calculateButton.addActionListener((ActionEvent e) -> {
+            calculateMST();
         });
 
         JPanel buttonPanel = new JPanel();

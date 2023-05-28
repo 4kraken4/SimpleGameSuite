@@ -122,9 +122,11 @@ public class ImcGraphModel {
         } 
        // System.out.println("Edge \tWeight");
         for (int i = 1; i < vertices; i++) {
-           // System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
-            correctEdges.add(i * numCities + parent[i]);
+           System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
+           correctEdges.add(i * numCities + parent[i]);
         }
+       
+        
     }
 
     private static int minKey(int[] key, boolean[] mstSet) {
@@ -138,7 +140,6 @@ public class ImcGraphModel {
                 minIndex = v;
             }
         }
-
         return minIndex;
     }
 

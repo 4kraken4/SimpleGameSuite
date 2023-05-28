@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package games.IMC.view;
+package games.SP.view;
 
-import games.IMC.model.ImcGraphModel;
+import games.SP.model.spGraphModel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,12 +19,12 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-public class ImcGraphView extends javax.swing.JPanel {
+public class spGraphView extends javax.swing.JPanel {
 
-    ImcGraphModel model;
+    spGraphModel model;
     private boolean viewCorrectAnswer = false;
 
-    public ImcGraphView(ImcGraphModel model) {
+    public spGraphView(spGraphModel model) {
         this.model = model;
         setPreferredSize(new Dimension(500, 500));
         initComponents();
@@ -34,6 +34,8 @@ public class ImcGraphView extends javax.swing.JPanel {
             public void mouseClicked(MouseEvent e) {
                 int clickedEdge = model.getClickedEdge(e.getX(), e.getY());
                 if (clickedEdge != -1) {
+//                 JOptionPane.showMessageDialog(null, " previousNode "+clickedEdge);
+//                 JOptionPane.showMessageDialog(null, " mirror Node "+(clickedEdge+model.getNumCities()-1));
                     if (model.getSelectedEdges().contains(clickedEdge)) {
                         model.getSelectedEdges().remove(Integer.valueOf(clickedEdge));
                     } else {
@@ -55,43 +57,48 @@ public class ImcGraphView extends javax.swing.JPanel {
             Color.CYAN, Color.RED, Color.PINK, Color.GRAY, Color.LIGHT_GRAY};
 
         g2d.setFont(new Font("Arial", Font.BOLD, 12));
-
+        var matrix = model.getMatrix();
         for (int r = 0; r < model.getNumCities(); r++) {
             for (int c = 0; c < r; c++) {
                 Point cityR = model.getCityPoints().get(r);
                 Point cityC = model.getCityPoints().get(c);
-                g2d.setColor(lineColors[r % lineColors.length]);
-                g2d.setStroke(new BasicStroke(3));
-                g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
-                var matrix = model.getMatrix();
-                String distanceText = String.valueOf(matrix[r][c]);
-                int textX = (cityR.x + cityC.x) / 2;
-                int textY = (cityR.y + cityC.y) / 2;
-
-                g2d.setColor(Color.WHITE);
-                g2d.fillRect(textX - 10, textY - 10, 20, 20);
-
-                g2d.setColor(lineColors[r % lineColors.length]);
-                g2d.drawString(distanceText, textX - 5, textY + 5);
-
-                if (model.getSelectedEdges().contains(r * model.getNumCities() + c)) {
-                    g2d.setColor(Color.YELLOW);
+                if (matrix[r][c] > 0) {
+                    g2d.setColor(lineColors[r % lineColors.length]);
+                    g2d.setStroke(new BasicStroke(3));
                     g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
-                }
-                if (viewCorrectAnswer) {
-                    if (model.getCorrectEdges().contains(r * model.getNumCities() + c)) {
-                        g2d.setColor(Color.BLACK);
-                        g2d.setStroke(new BasicStroke(5));
-                        g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
-                        // JOptionPane.showMessageDialog(null,"Correct ");
-                        distanceText = String.valueOf(matrix[r][c]);
-                        textX = (cityR.x + cityC.x) / 2;
-                        textY = (cityR.y + cityC.y) / 2;
 
-                        g2d.setColor(Color.WHITE);
-                        g2d.fillRect(textX - 10, textY - 10, 20, 20);
-                        g2d.setColor(Color.BLACK);
-                        g2d.drawString(distanceText, textX - 5, textY + 5);
+                    String distanceText = String.valueOf(matrix[r][c]);
+                    int textX = (cityR.x + cityC.x) / 2;
+                    int textY = (cityR.y + cityC.y) / 2;
+
+                    g2d.setColor(Color.WHITE);
+                    g2d.fillRect(textX - 10, textY - 10, 20, 20);
+
+                    g2d.setColor(lineColors[r % lineColors.length]);
+                    g2d.drawString(distanceText, textX - 5, textY + 5);
+
+                    if (model.getSelectedEdges().contains(r * model.getNumCities() + c)) {
+                        g2d.setColor(Color.YELLOW);
+                        g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
+                    }
+                    
+                    if (viewCorrectAnswer) {
+//                         JOptionPane.showMessageDialog(null,"Correct ");
+                        if (model.getCorrectEdges().contains(c * model.getNumCities() + r) ) {
+                            g2d.setColor(Color.BLACK);
+                            g2d.setStroke(new BasicStroke(5));
+                            g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
+//                            JOptionPane.showMessageDialog(null,"Correct ");
+                            distanceText = String.valueOf(matrix[r][c]);
+                            textX = (cityR.x + cityC.x) / 2;
+                            textY = (cityR.y + cityC.y) / 2;
+
+                            g2d.setColor(Color.WHITE);
+                            g2d.fillRect(textX - 10, textY - 10, 20, 20);
+
+                            g2d.setColor(lineColors[r % lineColors.length]);
+                            g2d.drawString(distanceText, textX - 5, textY + 5);
+                        }
                     }
                 }
             }
@@ -109,13 +116,13 @@ public class ImcGraphView extends javax.swing.JPanel {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Graph Panel");
+            JFrame frame = new JFrame("Sp Graph Panel");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            ImcGraphModel model = new ImcGraphModel();
+            spGraphModel model = new spGraphModel();
             model.setNumCities(5);
             model.generateMatrix();
             model.generateCityPoints();
-            frame.getContentPane().add(new ImcGraphView(model));
+            frame.getContentPane().add(new spGraphView(model));
             frame.pack();
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
@@ -166,24 +173,30 @@ public class ImcGraphView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
         model.getCorrectEdges().clear();
-        ImcGraphModel.primMST(model.getMatrix());
+        spGraphModel.getShortestPaths(model.getMatrix(),0);
+        
         Collections.sort(model.getCorrectEdges());
         Collections.sort(model.getSelectedEdges());
-        boolean match = model.getCorrectEdges().equals(model.getSelectedEdges());
+        //for(int a:model.getSelectedEdges()){System.out.print("\t"+a);}
+        boolean match = model.getCorrectEdges().equals( model.getSelectedEdges());
         repaint();
-        if (match && model.getCorrectEdges().size() == model.getSelectedEdges().size()) {
+        if (match && model.getCorrectEdges().size() ==  model.getSelectedEdges().size()) {
             JOptionPane.showMessageDialog(null, "Congratulations! You win!");
         } else {
              JOptionPane.showMessageDialog(null, "You lose. Please try again later.");
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         model.getCorrectEdges().clear();
-        viewCorrectAnswer = !viewCorrectAnswer;
-        ImcGraphModel.primMST(model.getMatrix());
-        //for(int a:model.getCorrectEdges()){ System.out.println(a);}
+        model.getMirrorSelectedEdges().clear();
+         
+         //for(int a:model.getSelectedEdges()){System.out.print("\t b"+a);}
+        viewCorrectAnswer = true;
+        spGraphModel.getShortestPaths(model.getMatrix(), 0);
         repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 

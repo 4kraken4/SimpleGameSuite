@@ -1,9 +1,10 @@
 package common.view;
 
-import com.google.gson.JsonObject;
 import common.components.GlassPanePopup;
+import common.controller.UserController;
 import common.events.MenuItemSelected;
 import common.events.UserActionPerformed;
+import common.model.User;
 import games.eq.view.EqBoardPanel;
 import games.ttt.view.TttBoardPanel;
 import java.awt.Cursor;
@@ -14,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.imageio.ImageIO;
-import util.DatabaseManager;
 import util.GameConfiguration;
 import util.GameSuiteLogger;
 import util.TranslationHandler;
@@ -80,7 +80,7 @@ public class MainWindow extends javax.swing.JFrame {
                 case "hint" -> {
                 }
                 case "close" -> {
-                    // Utilities.setUI(mainContainer, gameMenu);
+                     Utilities.setUI(mainContainer, menu);
                 }
             }
         };
@@ -98,7 +98,7 @@ public class MainWindow extends javax.swing.JFrame {
                 case "hint" -> {
                 }
                 case "close" -> {
-                    // Utilities.setUI(mainContainer, gameMenu);
+                     Utilities.setUI(mainContainer, menu);
                 }
             }
         };
@@ -138,44 +138,26 @@ public class MainWindow extends javax.swing.JFrame {
                 pum.setMessage(err);
                 GlassPanePopup.showPopup(pum);
             } else {
+                User user = new User(0, username.toLowerCase());
+                UserController uc = new UserController(user);
                 try {
-                    db = DatabaseManager.getInstance();
-                    db.createDatabaseIfNotExist();
-                    JsonObject params = new JsonObject();
-                    params.addProperty("Username", username.toLowerCase());
-                    int executeUpdate = db.executeUpdate("user", "CreateUser", params);
-                    if (executeUpdate > 0) {
+                    int saveUser = uc.saveUser();
+                    if (saveUser > 0) {
                         setMenuActions();
                     }
                 } catch (SQLException ex) {
-                    String sqlErr = handleSqlException(ex);
+                    String handleSqlExceptions = uc.handleSqlExceptions(ex);
                     String popupTitle = translations
                             .getTranslation(
                                     TranslationHandler.SCHEMMA_ERROR_TRANSLATION, "ERRMSG_DBTITLE");
                     pum.setTitle(popupTitle);
-                    pum.setMessage(sqlErr);
+                    pum.setMessage(handleSqlExceptions);
                     GlassPanePopup.showPopup(pum);
                     logger.logWarning(ex.getMessage());
                 }
             }
         };
         udp.setUap(uap);
-    }
-
-    private String handleSqlException(SQLException e) {
-        int errorCode = e.getErrorCode();
-        String errMsg = "";
-        switch (errorCode) {
-            case 1062 ->
-                errMsg = translations.getTranslation(TranslationHandler.SCHEMMA_ERROR_TRANSLATION, "ERRMSG_DUPLICATEUSER");
-            case 1451 ->
-                errMsg = translations.getTranslation(TranslationHandler.SCHEMMA_ERROR_TRANSLATION, "ERRMSG_DBPERMISSIONDENIED");
-            case 1045 ->
-                errMsg = translations.getTranslation(TranslationHandler.SCHEMMA_ERROR_TRANSLATION, "ERRMSG_DBFAILEDUPDATE");
-            default ->
-                errMsg = translations.getTranslation(TranslationHandler.SCHEMMA_ERROR_TRANSLATION, "ERRMSG_DBERRORDEFAULT");
-        }
-        return errMsg;
     }
 
     @SuppressWarnings("unchecked")
@@ -200,7 +182,6 @@ public class MainWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private DatabaseManager db;
     private final GameConfiguration configuration;
     private final TranslationHandler translations;
     private final GameSuiteLogger logger;

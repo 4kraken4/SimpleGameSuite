@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class DatabaseManager {
@@ -40,13 +42,14 @@ public class DatabaseManager {
     }
 
     private DatabaseManager() {
-        try {
-            configuration = GameConfiguration.getInstance();
-            logger = GameSuiteLogger.getInstance();
-            connection = getConnection();
-        } catch (SQLException e) {
-            logger.logError(DatabaseManager.class.getName(), e);
-        }
+        configuration = GameConfiguration.getInstance();
+        logger = GameSuiteLogger.getInstance();
+        DATABASE = configuration.getProperty("DATABASE");
+        DBUSER = configuration.getProperty("DBUSER");
+        DBPASSWORD = configuration.getProperty("DBPASSWORD");
+        DBURL = configuration.getProperty("DBURL");
+        JSONQUERYPATH = configuration.getProperty("JSONQUERYPATH");
+        createDatabaseIfNotExist();
     }
 
     public static DatabaseManager getInstance() {
@@ -60,23 +63,17 @@ public class DatabaseManager {
         return instance;
     }
 
-    public void closeConnection() throws SQLException {
+    public void closeConnection() {
         if (connection != null) {
             try {
                 connection.close();
             } catch (SQLException e) {
                 logger.logError(DatabaseManager.class.getName(), e);
-                throw e;
             }
         }
     }
 
     private Connection getConnection() throws SQLException {
-        DATABASE = configuration.getProperty("DATABASE");
-        DBUSER = configuration.getProperty("DBUSER");
-        DBPASSWORD = configuration.getProperty("DBPASSWORD");
-        DBURL = configuration.getProperty("DBURL");
-        JSONQUERYPATH = configuration.getProperty("JSONQUERYPATH");
         return DriverManager.getConnection(DBURL, DBUSER, DBPASSWORD);
     }
 
@@ -84,6 +81,7 @@ public class DatabaseManager {
             throws SQLException {
         String query;
         query = getStatementFromJSON(namespace, statementName);
+        connection = getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         if (params != null) {
             int idx = 0;
@@ -145,13 +143,20 @@ public class DatabaseManager {
         return query;
     }
 
-    public boolean checkDatabaseExists() throws SQLException {
-        ResultSet resultSet = connection.getMetaData().getCatalogs();
-        while (resultSet.next()) {
-            String existingDatabaseName = resultSet.getString(1);
-            if (existingDatabaseName.equalsIgnoreCase(DATABASE)) {
-                return true;
+    public final boolean checkDatabaseExists() {
+        try {
+            connection = getConnection();
+            ResultSet resultSet = connection.getMetaData().getCatalogs();
+            while (resultSet.next()) {
+                String existingDatabaseName = resultSet.getString(1);
+                if (existingDatabaseName.equalsIgnoreCase(DATABASE)) {
+                    return true;
+                }
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeConnection();
         }
         return false;
     }
@@ -175,8 +180,10 @@ public class DatabaseManager {
         return queries;
     }
 
-    private void executeDBCreation(List<String> queries) throws SQLException {
-        try ( Statement statement = connection.createStatement()) {
+    private void executeDBCreation(List<String> queries) {
+        try {
+            connection = getConnection();
+            Statement statement = connection.createStatement();
             int executedQueries = 0;
             for (String query : queries) {
                 statement.addBatch(query);
@@ -186,6 +193,10 @@ public class DatabaseManager {
             if (executeBatch.length > 0) {
                 logger.logInfo("Database created successfully.");
             }
+        } catch (SQLException ex) {
+            logger.logError(DatabaseManager.class.getName(), ex);
+        } finally {
+            closeConnection();
         }
     }
 
@@ -194,22 +205,26 @@ public class DatabaseManager {
         return query.startsWith("--") || query.startsWith("/*");
     }
 
-    public void createDatabaseIfNotExist() {
-        try {
-            boolean exists = checkDatabaseExists();
-            if (!exists) {
-                logger.logInfo("Staring to create the database because" + DATABASE + "does not exist.");
-                File latestSQLFile = getLatestSQLFile(JSONQUERYPATH);
-                if (latestSQLFile.canRead()) {
+    private void createDatabaseIfNotExist() {
+        boolean exists = checkDatabaseExists();
+        if (!exists) {
+            logger.logInfo("Staring to create the database because" + DATABASE + "does not exist.");
+            File latestSQLFile = getLatestSQLFile(JSONQUERYPATH);
+            if (latestSQLFile.canRead()) {
+                try {
                     String sql = readFile(latestSQLFile.getAbsolutePath());
                     List<String> queris = splitQueries(sql);
                     List<String> refineQueryList = refineQueryList(queris);
                     executeDBCreation(refineQueryList);
+                } catch (IOException ex) {
+                    logger.logError(DatabaseManager.class.getName(), ex);
                 }
             }
-        } catch (SQLException | IOException ex) {
-            logger.logError(DatabaseManager.class.getName(), ex);
+        } else {
+            String conString = DBURL + DATABASE;
+            DBURL = conString;
         }
+
     }
 
     private File getLatestSQLFile(String folderPath) {

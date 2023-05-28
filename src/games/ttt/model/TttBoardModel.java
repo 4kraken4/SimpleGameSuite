@@ -15,6 +15,7 @@ import javax.swing.UIManager;
 
 public class TttBoardModel extends JPanel implements ActionListener {
 
+    private boolean isdraw = true;
     private Random random;
     private JPanel pnlTitle, btnPanel, startButtonPanel;
     private JLabel textfield;
@@ -229,54 +230,56 @@ public class TttBoardModel extends JPanel implements ActionListener {
     }
 
     private void check() {
-        if (btns[0].getText().equals("X") && btns[1].getText().equals("X") && btns[2].getText().equals("X")) {
-            xWins(0, 1, 2);
-        }
-        if (btns[3].getText().equals("X") && btns[4].getText().equals("X") && btns[5].getText().equals("X")) {
-            xWins(3, 4, 5);
-        }
-        if (btns[6].getText().equals("X") && btns[7].getText().equals("X") && btns[8].getText().equals("X")) {
-            xWins(6, 7, 8);
-        }
-        if (btns[0].getText().equals("X") && btns[3].getText().equals("X") && btns[6].getText().equals("X")) {
-            xWins(0, 3, 6);
-        }
-        if (btns[1].getText().equals("X") && btns[4].getText().equals("X") && btns[7].getText().equals("X")) {
-            xWins(1, 4, 7);
-        }
-        if (btns[2].getText().equals("X") && btns[5].getText().equals("X") && btns[8].getText().equals("X")) {
-            xWins(2, 5, 8);
-        }
-        if (btns[0].getText().equals("X") && btns[4].getText().equals("X") && btns[8].getText().equals("X")) {
-            xWins(0, 4, 8);
-        }
-        if (btns[2].getText().equals("X") && btns[4].getText().equals("X") && btns[6].getText().equals("X")) {
-            xWins(2, 4, 6);
-        }
-        if (btns[0].getText().equals("O") && btns[1].getText().equals("O") && btns[2].getText().equals("O")) {
-            oWins(0, 1, 2);
-        }
-        if (btns[3].getText().equals("O") && btns[4].getText().equals("O") && btns[5].getText().equals("O")) {
-            oWins(3, 4, 5);
-        }
-        if (btns[6].getText().equals("O") && btns[7].getText().equals("O") && btns[8].getText().equals("O")) {
-            oWins(6, 7, 8);
-        }
-        if (btns[0].getText().equals("O") && btns[3].getText().equals("O") && btns[6].getText().equals("O")) {
-            oWins(0, 3, 6);
-        }
-        if (btns[1].getText().equals("O") && btns[4].getText().equals("O") && btns[7].getText().equals("O")) {
-            oWins(1, 4, 7);
-        }
-        if (btns[2].getText().equals("O") && btns[5].getText().equals("O") && btns[8].getText().equals("O")) {
-            oWins(2, 5, 8);
-        }
-        if (btns[0].getText().equals("O") && btns[4].getText().equals("O") && btns[8].getText().equals("O")) {
-            oWins(0, 4, 8);
-        }
-        if (btns[2].getText().equals("O") && btns[4].getText().equals("O") && btns[6].getText().equals("O")) {
-            oWins(2, 4, 6);
-        }
+       
+            if (btns[0].getText().equals("X") && btns[1].getText().equals("X") && btns[2].getText().equals("X")) {
+                isdraw = xWins(0, 1, 2);
+            }
+            if (btns[3].getText().equals("X") && btns[4].getText().equals("X") && btns[5].getText().equals("X")) {
+                isdraw = xWins(3, 4, 5);
+            }
+            if (btns[6].getText().equals("X") && btns[7].getText().equals("X") && btns[8].getText().equals("X")) {
+                isdraw = xWins(6, 7, 8);
+            }
+            if (btns[0].getText().equals("X") && btns[3].getText().equals("X") && btns[6].getText().equals("X")) {
+                isdraw = xWins(0, 3, 6);
+            }
+            if (btns[1].getText().equals("X") && btns[4].getText().equals("X") && btns[7].getText().equals("X")) {
+                isdraw = xWins(1, 4, 7);
+            }
+            if (btns[2].getText().equals("X") && btns[5].getText().equals("X") && btns[8].getText().equals("X")) {
+                isdraw = xWins(2, 5, 8);
+            }
+            if (btns[0].getText().equals("X") && btns[4].getText().equals("X") && btns[8].getText().equals("X")) {
+                isdraw = xWins(0, 4, 8);
+            }
+            if (btns[2].getText().equals("X") && btns[4].getText().equals("X") && btns[6].getText().equals("X")) {
+                isdraw = xWins(2, 4, 6);
+            }
+            if (btns[0].getText().equals("O") && btns[1].getText().equals("O") && btns[2].getText().equals("O")) {
+                isdraw = oWins(0, 1, 2);
+            }
+            if (btns[3].getText().equals("O") && btns[4].getText().equals("O") && btns[5].getText().equals("O")) {
+                isdraw = oWins(3, 4, 5);
+            }
+            if (btns[6].getText().equals("O") && btns[7].getText().equals("O") && btns[8].getText().equals("O")) {
+                isdraw = oWins(6, 7, 8);
+            }
+            if (btns[0].getText().equals("O") && btns[3].getText().equals("O") && btns[6].getText().equals("O")) {
+                oWins(0, 3, 6);
+            }
+            if (btns[1].getText().equals("O") && btns[4].getText().equals("O") && btns[7].getText().equals("O")) {
+                isdraw = oWins(1, 4, 7);
+            }
+            if (btns[2].getText().equals("O") && btns[5].getText().equals("O") && btns[8].getText().equals("O")) {
+                isdraw = oWins(2, 5, 8);
+            }
+            if (btns[0].getText().equals("O") && btns[4].getText().equals("O") && btns[8].getText().equals("O")) {
+                isdraw = oWins(0, 4, 8);
+            }
+            if (btns[2].getText().equals("O") && btns[4].getText().equals("O") && btns[6].getText().equals("O")) {
+                isdraw = oWins(2, 4, 6);
+            }
+        
         boolean draw = true;
         for (int i = 0; i < 9; i++) {
             if (btns[i].getText().equals("")) {
@@ -288,11 +291,13 @@ public class TttBoardModel extends JPanel implements ActionListener {
             for (int i = 0; i < 9; i++) {
                 btns[i].setEnabled(false);
             }
-            textfield.setText("It's a draw");
+            if (isdraw) {
+                textfield.setText("It's a draw");
+            }
         }
     }
 
-    private void xWins(int a, int b, int c) {
+    private boolean xWins(int a, int b, int c) {
         btns[a].setBackground(Color.GREEN);
         btns[b].setBackground(Color.GREEN);
         btns[c].setBackground(Color.GREEN);
@@ -300,9 +305,10 @@ public class TttBoardModel extends JPanel implements ActionListener {
             btns[i].setEnabled(false);
         }
         textfield.setText("X wins");
+        return false;
     }
 
-    private void oWins(int a, int b, int c) {
+    private boolean oWins(int a, int b, int c) {
         btns[a].setBackground(Color.GREEN);
         btns[b].setBackground(Color.GREEN);
         btns[c].setBackground(Color.GREEN);
@@ -310,6 +316,7 @@ public class TttBoardModel extends JPanel implements ActionListener {
             btns[i].setEnabled(false);
         }
         textfield.setText("O wins");
+        return false;
     }
 
     public void redo() {

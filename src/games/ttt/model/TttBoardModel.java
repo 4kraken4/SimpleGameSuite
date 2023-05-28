@@ -228,69 +228,132 @@ public class TttBoardModel extends JPanel implements ActionListener {
         }
     }
 
-    private void check() {
-        if (btns[0].getText().equals("X") && btns[1].getText().equals("X") && btns[2].getText().equals("X")) {
-            xWins(0, 1, 2);
+//    private void check() {
+//        if (btns[0].getText().equals("X") && btns[1].getText().equals("X") && btns[2].getText().equals("X")) {
+//            xWins(0, 1, 2);
+//        }
+//        if (btns[3].getText().equals("X") && btns[4].getText().equals("X") && btns[5].getText().equals("X")) {
+//            xWins(3, 4, 5);
+//        }
+//        if (btns[6].getText().equals("X") && btns[7].getText().equals("X") && btns[8].getText().equals("X")) {
+//            xWins(6, 7, 8);
+//        }
+//        if (btns[0].getText().equals("X") && btns[3].getText().equals("X") && btns[6].getText().equals("X")) {
+//            xWins(0, 3, 6);
+//        }
+//        if (btns[1].getText().equals("X") && btns[4].getText().equals("X") && btns[7].getText().equals("X")) {
+//            xWins(1, 4, 7);
+//        }
+//        if (btns[2].getText().equals("X") && btns[5].getText().equals("X") && btns[8].getText().equals("X")) {
+//            xWins(2, 5, 8);
+//        }
+//        if (btns[0].getText().equals("X") && btns[4].getText().equals("X") && btns[8].getText().equals("X")) {
+//            xWins(0, 4, 8);
+//        }
+//        if (btns[2].getText().equals("X") && btns[4].getText().equals("X") && btns[6].getText().equals("X")) {
+//            xWins(2, 4, 6);
+//        }
+//        if (btns[0].getText().equals("O") && btns[1].getText().equals("O") && btns[2].getText().equals("O")) {
+//            oWins(0, 1, 2);
+//        }
+//        if (btns[3].getText().equals("O") && btns[4].getText().equals("O") && btns[5].getText().equals("O")) {
+//            oWins(3, 4, 5);
+//        }
+//        if (btns[6].getText().equals("O") && btns[7].getText().equals("O") && btns[8].getText().equals("O")) {
+//            oWins(6, 7, 8);
+//        }
+//        if (btns[0].getText().equals("O") && btns[3].getText().equals("O") && btns[6].getText().equals("O")) {
+//            oWins(0, 3, 6);
+//        }
+//        if (btns[1].getText().equals("O") && btns[4].getText().equals("O") && btns[7].getText().equals("O")) {
+//            oWins(1, 4, 7);
+//        }
+//        if (btns[2].getText().equals("O") && btns[5].getText().equals("O") && btns[8].getText().equals("O")) {
+//            oWins(2, 5, 8);
+//        }
+//        if (btns[0].getText().equals("O") && btns[4].getText().equals("O") && btns[8].getText().equals("O")) {
+//            oWins(0, 4, 8);
+//        }
+//        if (btns[2].getText().equals("O") && btns[4].getText().equals("O") && btns[6].getText().equals("O")) {
+//            oWins(2, 4, 6);
+//        }
+//        boolean draw = true;
+//        for (int i = 0; i < 9; i++) {
+//            if (btns[i].getText().equals("")) {
+//                draw = false;
+//                break;
+//            }
+//        }
+//        if (draw) {
+//            for (int i = 0; i < 9; i++) {
+//                btns[i].setEnabled(false);
+//            }
+//            textfield.setText("It's a draw");
+//        }
+//    }
+private void check() {
+    String[][] board = new String[3][3];
+
+    // Copy button texts to the 2D array
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            board[i][j] = btns[i * 3 + j].getText(); 
         }
-        if (btns[3].getText().equals("X") && btns[4].getText().equals("X") && btns[5].getText().equals("X")) {
-            xWins(3, 4, 5);
+    }
+
+    // Define the winning conditions using indexes in the 2D array
+    int[][] winningConditions = {
+        {0, 1, 2}, // Rows
+        {3, 4, 5},
+        {6, 7, 8},
+        {0, 3, 6}, // Columns
+        {1, 4, 7},
+        {2, 5, 8},
+        {0, 4, 8}, // Diagonals
+        {2, 4, 6}
+    };
+
+    // Check for X wins
+    for (int[] condition : winningConditions) {
+        if (board[condition[0] / 3][condition[0] % 3].equals("X")
+                && board[condition[1] / 3][condition[1] % 3].equals("X")
+                && board[condition[2] / 3][condition[2] % 3].equals("X")) {
+            xWins(condition[0], condition[1], condition[2]);
+            return;
         }
-        if (btns[6].getText().equals("X") && btns[7].getText().equals("X") && btns[8].getText().equals("X")) {
-            xWins(6, 7, 8);
+    }
+
+    // Check for O wins
+    for (int[] condition : winningConditions) {
+        if (board[condition[0] / 3][condition[0] % 3].equals("O")
+                && board[condition[1] / 3][condition[1] % 3].equals("O")
+                && board[condition[2] / 3][condition[2] % 3].equals("O")) {
+            oWins(condition[0], condition[1], condition[2]);
+            return;
         }
-        if (btns[0].getText().equals("X") && btns[3].getText().equals("X") && btns[6].getText().equals("X")) {
-            xWins(0, 3, 6);
-        }
-        if (btns[1].getText().equals("X") && btns[4].getText().equals("X") && btns[7].getText().equals("X")) {
-            xWins(1, 4, 7);
-        }
-        if (btns[2].getText().equals("X") && btns[5].getText().equals("X") && btns[8].getText().equals("X")) {
-            xWins(2, 5, 8);
-        }
-        if (btns[0].getText().equals("X") && btns[4].getText().equals("X") && btns[8].getText().equals("X")) {
-            xWins(0, 4, 8);
-        }
-        if (btns[2].getText().equals("X") && btns[4].getText().equals("X") && btns[6].getText().equals("X")) {
-            xWins(2, 4, 6);
-        }
-        if (btns[0].getText().equals("O") && btns[1].getText().equals("O") && btns[2].getText().equals("O")) {
-            oWins(0, 1, 2);
-        }
-        if (btns[3].getText().equals("O") && btns[4].getText().equals("O") && btns[5].getText().equals("O")) {
-            oWins(3, 4, 5);
-        }
-        if (btns[6].getText().equals("O") && btns[7].getText().equals("O") && btns[8].getText().equals("O")) {
-            oWins(6, 7, 8);
-        }
-        if (btns[0].getText().equals("O") && btns[3].getText().equals("O") && btns[6].getText().equals("O")) {
-            oWins(0, 3, 6);
-        }
-        if (btns[1].getText().equals("O") && btns[4].getText().equals("O") && btns[7].getText().equals("O")) {
-            oWins(1, 4, 7);
-        }
-        if (btns[2].getText().equals("O") && btns[5].getText().equals("O") && btns[8].getText().equals("O")) {
-            oWins(2, 5, 8);
-        }
-        if (btns[0].getText().equals("O") && btns[4].getText().equals("O") && btns[8].getText().equals("O")) {
-            oWins(0, 4, 8);
-        }
-        if (btns[2].getText().equals("O") && btns[4].getText().equals("O") && btns[6].getText().equals("O")) {
-            oWins(2, 4, 6);
-        }
-        boolean draw = true;
-        for (int i = 0; i < 9; i++) {
-            if (btns[i].getText().equals("")) {
+    }
+
+    // Check for a draw
+    boolean draw = true;
+    for (String[] row : board) {
+        for (String cell : row) {
+            if (cell.equals("")) {
                 draw = false;
                 break;
             }
         }
-        if (draw) {
-            for (int i = 0; i < 9; i++) {
-                btns[i].setEnabled(false);
-            }
-            textfield.setText("It's a draw");
+        if (!draw) {
+            break;
         }
     }
+
+    if (draw) {
+        for (int i = 0; i < 9; i++) {
+            btns[i].setEnabled(false);
+        }
+        textfield.setText("It's a draw");
+    }
+}
 
     private void xWins(int a, int b, int c) {
         btns[a].setBackground(Color.GREEN);

@@ -192,6 +192,8 @@ public class DatabaseManager {
             int[] executeBatch = statement.executeBatch();
             if (executeBatch.length > 0) {
                 logger.logInfo("Database created successfully.");
+                String conString = DBURL + DATABASE;
+                DBURL = conString;
             }
         } catch (SQLException ex) {
             logger.logError(DatabaseManager.class.getName(), ex);

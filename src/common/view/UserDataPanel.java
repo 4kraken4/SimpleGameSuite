@@ -1,6 +1,7 @@
 package common.view;
 
 import common.events.UserActionPerformed;
+import javax.swing.JFrame;
 
 public class UserDataPanel extends javax.swing.JPanel {
 
@@ -14,6 +15,10 @@ public class UserDataPanel extends javax.swing.JPanel {
 
     public void setUap(UserActionPerformed uap) {
         this.uap = uap;
+    }
+    
+    public void setPlayAsDefaultButton(JFrame frame) {
+        frame.getRootPane().setDefaultButton(btnPlay);
     }
 
     @SuppressWarnings("unchecked")

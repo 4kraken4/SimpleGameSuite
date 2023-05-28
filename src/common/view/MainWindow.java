@@ -80,7 +80,7 @@ public class MainWindow extends javax.swing.JFrame {
                 case "hint" -> {
                 }
                 case "close" -> {
-                     Utilities.setUI(mainContainer, menu);
+                    Utilities.setUI(mainContainer, menu);
                 }
             }
         };
@@ -98,7 +98,7 @@ public class MainWindow extends javax.swing.JFrame {
                 case "hint" -> {
                 }
                 case "close" -> {
-                     Utilities.setUI(mainContainer, menu);
+                    Utilities.setUI(mainContainer, menu);
                 }
             }
         };
@@ -123,6 +123,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void setupUserDataPanel() {
         udp = new UserDataPanel();
         Utilities.setUI(mainContainer, udp);
+        udp.setPlayAsDefaultButton(this);
         var uap = (UserActionPerformed) (String username) -> {
             Validator v = new Validator();
             String err = v.validateUserName(username);

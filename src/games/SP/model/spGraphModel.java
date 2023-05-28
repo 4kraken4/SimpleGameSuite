@@ -105,7 +105,15 @@ public class spGraphModel {
                 Point cityC = cityPoints.get(c);
                 int distance = matrix[r][c];
                 if (isClickedOnLine(mouseX, mouseY, cityR.x, cityR.y, cityC.x, cityC.y) && distance != 0) {
-                    return r* numCities + c;
+                    if(mirrorSelectedEdges.contains(c* numCities + r))
+                    {
+                      mirrorSelectedEdges.remove(Integer.valueOf(c* numCities + r));
+                    }
+                    else{
+                     mirrorSelectedEdges.add(c* numCities + r);
+                    }
+                  
+                   return r* numCities + c;
                 }
             }
         }

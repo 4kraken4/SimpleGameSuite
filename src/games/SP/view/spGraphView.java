@@ -42,6 +42,7 @@ public class spGraphView extends javax.swing.JPanel {
                         model.getSelectedEdges().add(clickedEdge);
                     }
                     repaint();
+                   
                 }
             }
         });
@@ -83,19 +84,15 @@ public class spGraphView extends javax.swing.JPanel {
                     }
                     
                     if (viewCorrectAnswer) {
-//                         JOptionPane.showMessageDialog(null,"Correct ");
                         if (model.getCorrectEdges().contains(c * model.getNumCities() + r) ) {
                             g2d.setColor(Color.BLACK);
                             g2d.setStroke(new BasicStroke(5));
                             g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
-//                            JOptionPane.showMessageDialog(null,"Correct ");
                             distanceText = String.valueOf(matrix[r][c]);
                             textX = (cityR.x + cityC.x) / 2;
                             textY = (cityR.y + cityC.y) / 2;
-
                             g2d.setColor(Color.WHITE);
                             g2d.fillRect(textX - 10, textY - 10, 20, 20);
-
                             g2d.setColor(lineColors[r % lineColors.length]);
                             g2d.drawString(distanceText, textX - 5, textY + 5);
                         }
@@ -178,11 +175,11 @@ public class spGraphView extends javax.swing.JPanel {
         spGraphModel.getShortestPaths(model.getMatrix(),0);
         
         Collections.sort(model.getCorrectEdges());
-        Collections.sort(model.getSelectedEdges());
-        //for(int a:model.getSelectedEdges()){System.out.print("\t"+a);}
-        boolean match = model.getCorrectEdges().equals( model.getSelectedEdges());
+        Collections.sort(model.getMirrorSelectedEdges());
+        
+        boolean match = model.getCorrectEdges().equals( model.getMirrorSelectedEdges());
         repaint();
-        if (match && model.getCorrectEdges().size() ==  model.getSelectedEdges().size()) {
+        if (match && model.getCorrectEdges().size() ==  model.getMirrorSelectedEdges().size()) {
             JOptionPane.showMessageDialog(null, "Congratulations! You win!");
         } else {
              JOptionPane.showMessageDialog(null, "You lose. Please try again later.");
@@ -192,9 +189,6 @@ public class spGraphView extends javax.swing.JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         model.getCorrectEdges().clear();
-        model.getMirrorSelectedEdges().clear();
-         
-         //for(int a:model.getSelectedEdges()){System.out.print("\t b"+a);}
         viewCorrectAnswer = true;
         spGraphModel.getShortestPaths(model.getMatrix(), 0);
         repaint();

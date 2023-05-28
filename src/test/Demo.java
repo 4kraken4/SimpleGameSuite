@@ -36,11 +36,8 @@ class MinimumSpanningTreeUI extends JFrame {
         });
 
         calculateButton = new JButton("Calculate MST");
-        calculateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                calculateMST();
-            }
+        calculateButton.addActionListener((ActionEvent e) -> {
+            calculateMST();
         });
 
         JPanel buttonPanel = new JPanel();
@@ -91,7 +88,7 @@ class MinimumSpanningTreeUI extends JFrame {
             FlatLaf.setup(new FlatLightLaf());
             MinimumSpanningTreeUI ui = new MinimumSpanningTreeUI();
             // Example usage:
-            ui.generateRandomGraph(10, 15, 100, 600, 400);
+            ui.generateRandomGraph(3, 8, 100, 600, 400);
         });
     }
 }
@@ -134,25 +131,21 @@ class GraphPanel extends JPanel {
             adjacencyMatrix[source][destination] = weight;
             adjacencyMatrix[destination][source] = weight;
         }
-
         int[][] minimumSpanningTree = new int[numVertices][numVertices];
         boolean[] visited = new boolean[numVertices];
         int[] parent = new int[numVertices];
         int[] key = new int[numVertices];
-
-        // Initialize key values to infinity and visited array to false
         for (int i = 0; i < numVertices; i++) {
             key[i] = Integer.MAX_VALUE;
             visited[i] = false;
         }
-
-        // Start with the first vertex
         key[0] = 0;
         parent[0] = -1;
-
-        // Construct the minimum spanning tree
         for (int i = 0; i < numVertices - 1; i++) {
             int minKeyVertex = findMinKeyVertex(key, visited);
+            if (minKeyVertex < 0) {
+                continue;
+            }
             visited[minKeyVertex] = true;
 
             for (int j = 0; j < numVertices; j++) {

@@ -2,7 +2,7 @@
   "GetUsers": "SELECT * FROM USER",
   "GetUser": "SELECT * FROM USER WHERE GameId in (?) ORDER BY GameId ASC LIMIT 1",
   "GetUserWithHighestScoreForGame": "SELECT u.UserId, Username, s.GID, MAX(UserScore) As `MAX_SCORE`, LastUpdated From USER u INNER JOIN SCORE s ON u.UserId = s.UID WHERE s.GID = (SELECT GameId FROM GAME WHERE GameTitle IN (?))",
-  "CreateUser": "INSERT INTO USER (`Username`) VALUES (?)",
+  "SaveUser": "INSERT INTO USER (Username, LastPayedOn) VALUES (?, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE LastPayedOn = CURRENT_TIMESTAMP",
   "UpdateUser": "UPDATE USER SET Username = ? WHERE UserId = ?",
   "GetUserScore": "SELECT UserId, Username, UserScore, LastUpdated FROM SCORE s INNER JOIN USER WHERE u.Username in (?) AND u.UserId = s.UserId ORDER BY LastUpdated DESC LIMIT 1"
 }

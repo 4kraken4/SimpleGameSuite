@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.ImageIcon;
 
 public class EqBoardPanel extends javax.swing.JPanel {
 
@@ -21,7 +22,8 @@ public class EqBoardPanel extends javax.swing.JPanel {
 
     public EqBoardPanel() {
         initComponents();
-        setButttonActions();
+        setHeaderButtonIcons();
+        setHeaderButtonActions();
     }
 
     @SuppressWarnings("unchecked")
@@ -207,58 +209,69 @@ public class EqBoardPanel extends javax.swing.JPanel {
         add(jPanel7, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void setButttonActions() {
+    private void setHeaderButtonActions() {
+        btnUndo.addActionListener((e) -> {
+            gameBoard1.undo();
+        });
+        btnRedo.addActionListener((e) -> {
+            gameBoard1.redo();
+        });
+        btnHint.addActionListener(e -> {
+            gameBoard1.setPathHighlighted(!gameBoard1.isPathHighlighted());
+        });
+        btnClose.addActionListener((e) -> {
+            mis.itemSelected(e);
+        });
+    }
+
+    private void setHeaderButtonIcons() {
         List<CustomButton> btns = Arrays.asList(btnUndo, btnRedo, btnHint, btnClose);
         btns.forEach(btn -> {
             String s1 = "";
             String s2 = "";
             switch (btn.getActionCommand()) {
                 case "undo" -> {
-                    s1 = "/common/icons/undo-yellow.png";
-                    s2 = "/common/icons/undo-black.png";
-                    btn.addActionListener((e) -> {
-                        gameBoard1.undo();
-                    });
+                    s1 = iconUndoNormal;
+                    s2 = iconUndoHover;
                 }
                 case "redo" -> {
-                    s1 = "/common/icons/redo-yellow.png";
-                    s2 = "/common/icons/redo-black.png";
-                    btn.addActionListener((e) -> {
-                        gameBoard1.redo();
-                    });
+                    s1 = iconRedoNormal;
+                    s2 = iconRedoHover;
                 }
                 case "hint" -> {
-                    s1 = "/common/icons/lightbulb-fill.png";
-                    s2 = "/common/icons/lightbulb-line.png";
-                    btn.addActionListener(e -> {
-                        gameBoard1.setPathHighlighted(!gameBoard1.isPathHighlighted());
-                    });
+                    s1 = iconHintNormal;
+                    s2 = iconHintHover;
                 }
                 case "close" -> {
-                    s1 = "/common/icons/cancel-fill.png";
-                    s2 = "/common/icons/cancel-line.png";
-                    btn.addActionListener((e) -> {
-                        mis.itemSelected(e);
-                    });
+                    s1 = iconCloseNormal;
+                    s2 = iconCloseHover;
                 }
             }
+            btn.setIcon(new ImageIcon(getClass().getResource(s1)));
             final String me = s1;
             final String ml = s2;
             btn.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(me)));
+                    btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(ml)));
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(ml)));
+                    btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(me)));
                 }
             });
         });
     }
 
-
+    private final String iconUndoNormal = "/common/icons/undo-black.png";
+    private final String iconRedoNormal = "/common/icons/redo-black.png";
+    private final String iconHintNormal = "/common/icons/lightbulb-line.png";
+    private final String iconCloseNormal = "/common/icons/cancel-line.png";
+    private final String iconUndoHover = "/common/icons/undo-yellow.png";
+    private final String iconRedoHover = "/common/icons/redo-yellow.png";
+    private final String iconHintHover = "/common/icons/lightbulb-fill.png";
+    private final String iconCloseHover = "/common/icons/cancel-fill.png";
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private common.viewmodel.CustomButton btnClose;
     private common.viewmodel.CustomButton btnHint;

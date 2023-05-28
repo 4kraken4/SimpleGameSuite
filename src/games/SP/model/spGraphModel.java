@@ -81,6 +81,11 @@ public class spGraphModel {
         }
         matrix[numCities - 1][0] = 0;
         matrix[0][numCities - 1] = 0;
+        
+        int dis =(int) (Math.random() * 41) + 5;
+        
+        matrix[1][0] = dis;
+        matrix[0][1] = dis;
         setMatrix(matrix);
     }
 

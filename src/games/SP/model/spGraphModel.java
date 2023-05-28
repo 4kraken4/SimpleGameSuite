@@ -112,7 +112,6 @@ public class spGraphModel {
                     else{
                      mirrorSelectedEdges.add(c* numCities + r);
                     }
-                  
                    return r* numCities + c;
                 }
             }

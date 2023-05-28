@@ -78,8 +78,9 @@ public class ImcGraphView extends javax.swing.JPanel {
                     g2d.setColor(Color.YELLOW);
                     g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
                 }
+               
                 if (viewCorrectAnswer) {
-                    if (model.getCorrectEdges().contains(r * model.getNumCities() + c)) {
+                    if (model.getCorrectEdges().contains(r * model.getNumCities() + c)|| model.getCorrectEdges().contains(c * model.getNumCities() + r)) {
                         g2d.setColor(Color.BLACK);
                         g2d.setStroke(new BasicStroke(5));
                         g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);

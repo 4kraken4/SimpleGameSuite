@@ -93,7 +93,7 @@ public class ImcGraphModel {
         final int CLICK_TOLERANCE = 5;
         return getDistanceFromPointToLine(mouseX, mouseY, x1, y1, x2, y2) < CLICK_TOLERANCE;
     }
-
+    
     public double getDistanceFromPointToLine(int x, int y, int x1, int y1, int x2, int y2) {
         return Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
     }
@@ -119,7 +119,7 @@ public class ImcGraphModel {
                     key[v] = graph[u][v];
                 }
             }
-        }
+        } 
        // System.out.println("Edge \tWeight");
         for (int i = 1; i < vertices; i++) {
            // System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);

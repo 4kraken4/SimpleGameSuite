@@ -28,21 +28,17 @@ public class spGraphView extends javax.swing.JPanel {
         this.model = model;
         setPreferredSize(new Dimension(500, 500));
         initComponents();
-
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int clickedEdge = model.getClickedEdge(e.getX(), e.getY());
                 if (clickedEdge != -1) {
-//                 JOptionPane.showMessageDialog(null, " previousNode "+clickedEdge);
-//                 JOptionPane.showMessageDialog(null, " mirror Node "+(clickedEdge+model.getNumCities()-1));
                     if (model.getSelectedEdges().contains(clickedEdge)) {
                         model.getSelectedEdges().remove(Integer.valueOf(clickedEdge));
                     } else {
                         model.getSelectedEdges().add(clickedEdge);
                     }
                     repaint();
-                   
                 }
             }
         });
@@ -53,10 +49,8 @@ public class spGraphView extends javax.swing.JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setStroke(new BasicStroke(1));
-
         Color[] lineColors = new Color[]{Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.MAGENTA,
-            Color.CYAN, Color.RED, Color.PINK, Color.GRAY, Color.LIGHT_GRAY};
-
+        Color.CYAN, Color.RED, Color.PINK, Color.GRAY, Color.LIGHT_GRAY};
         g2d.setFont(new Font("Arial", Font.BOLD, 12));
         var matrix = model.getMatrix();
         for (int r = 0; r < model.getNumCities(); r++) {
@@ -67,22 +61,17 @@ public class spGraphView extends javax.swing.JPanel {
                     g2d.setColor(lineColors[r % lineColors.length]);
                     g2d.setStroke(new BasicStroke(3));
                     g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
-
                     String distanceText = String.valueOf(matrix[r][c]);
                     int textX = (cityR.x + cityC.x) / 2;
                     int textY = (cityR.y + cityC.y) / 2;
-
                     g2d.setColor(Color.WHITE);
                     g2d.fillRect(textX - 10, textY - 10, 20, 20);
-
                     g2d.setColor(lineColors[r % lineColors.length]);
                     g2d.drawString(distanceText, textX - 5, textY + 5);
-
                     if (model.getSelectedEdges().contains(r * model.getNumCities() + c)) {
                         g2d.setColor(Color.YELLOW);
                         g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
-                    }
-                    
+                    }   
                     if (viewCorrectAnswer) {
                         if (model.getCorrectEdges().contains(c * model.getNumCities() + r) ) {
                             g2d.setColor(Color.BLACK);
@@ -100,10 +89,8 @@ public class spGraphView extends javax.swing.JPanel {
                 }
             }
         }
-
         for (int i = 0; i < model.getNumCities(); i++) {
             Point city = model.getCityPoints().get(i);
-
             g2d.setColor(Color.BLACK);
             g2d.fillOval(city.x - 5, city.y - 5, 10, 10);
             String cityName = String.valueOf((char) ('A' + i));
@@ -173,10 +160,8 @@ public class spGraphView extends javax.swing.JPanel {
 
         model.getCorrectEdges().clear();
         spGraphModel.getShortestPaths(model.getMatrix(),0);
-        
         Collections.sort(model.getCorrectEdges());
         Collections.sort(model.getMirrorSelectedEdges());
-        
         boolean match = model.getCorrectEdges().equals( model.getMirrorSelectedEdges());
         repaint();
         if (match && model.getCorrectEdges().size() ==  model.getMirrorSelectedEdges().size()) {
@@ -184,7 +169,6 @@ public class spGraphView extends javax.swing.JPanel {
         } else {
              JOptionPane.showMessageDialog(null, "You lose. Please try again later.");
         }
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

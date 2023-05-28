@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class DatabaseManager {
@@ -28,8 +26,8 @@ public class DatabaseManager {
     private static String DBPASSWORD;
     private static String JSONQUERYPATH;
     private Connection connection;
-    private GameConfiguration configuration;
-    private GameSuiteLogger logger;
+    private final GameConfiguration configuration;
+    private final GameSuiteLogger logger;
     private QueryExecutionListener listener;
     private static volatile DatabaseManager instance;
 
@@ -154,7 +152,7 @@ public class DatabaseManager {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.logError(DatabaseManager.class.getName(), ex);
         } finally {
             closeConnection();
         }

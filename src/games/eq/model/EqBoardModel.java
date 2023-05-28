@@ -31,7 +31,7 @@ public class EqBoardModel extends JPanel {
     private CustomLabel[][] squares;
     private Stack<Point> undo;
     private Stack<Point> redo;
-    private int ubdoStepCount;
+    private int undoStepCount;
     private MenuItemSelected mis;
     private boolean isPathHighlighted;
 
@@ -71,7 +71,7 @@ public class EqBoardModel extends JPanel {
     public EqBoardModel() {
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
-        ubdoStepCount = 5;
+        undoStepCount = 5;
         isPathHighlighted = false;
         undo = new Stack<>();
         redo = new Stack<>();
@@ -151,7 +151,7 @@ public class EqBoardModel extends JPanel {
     }
 
     private void stackMovesToUndo(Point p) {
-        if (undo.size() >= ubdoStepCount) {
+        if (undo.size() >= undoStepCount) {
             undo.remove(undo.firstElement());
         }
         undo.push(p);
@@ -159,7 +159,7 @@ public class EqBoardModel extends JPanel {
     }
 
     public void undo() {
-        if (!undo.empty() && redo.size() < ubdoStepCount) {
+        if (!undo.empty() && redo.size() < undoStepCount) {
             Point pop = undo.pop();
             moveQueen(pop.x, pop.y);
             redo.push(pop);
@@ -167,7 +167,7 @@ public class EqBoardModel extends JPanel {
     }
 
     public void redo() {
-        if (!redo.empty() && undo.size() < ubdoStepCount) {
+        if (!redo.empty() && undo.size() < undoStepCount) {
             Point pop = redo.pop();
             moveQueen(pop.x, pop.y);
             undo.push(pop);

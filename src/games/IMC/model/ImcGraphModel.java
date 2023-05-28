@@ -95,8 +95,56 @@ public class ImcGraphModel {
         return Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
     }
 
+    public void designMST(int graphArray[][]) {
+        int countOfVertices = numCities;
 
-    private int numCities = 5;
+        int mstArray[] = new int[countOfVertices];
+        int keys[] = new int[countOfVertices];
+        Boolean setOfMST[] = new Boolean[countOfVertices];
+
+        for (int j = 0; j < countOfVertices; j++) {
+            keys[j] = Integer.MAX_VALUE;
+            setOfMST[j] = false;
+        }
+
+        keys[0] = 0;
+        mstArray[0] = -1;
+
+        for (int i = 0; i < countOfVertices - 1; i++) {
+            int edge = findMinKeyVertex(keys, setOfMST);
+            setOfMST[edge] = true;
+
+            for (int vertex = 0; vertex < countOfVertices; vertex++) {
+                if (graphArray[edge][vertex] != 0 && setOfMST[vertex] == false && graphArray[edge][vertex] < keys[vertex]) {
+                    mstArray[vertex] = edge;
+                    keys[vertex] = graphArray[edge][vertex];
+                }
+            }
+        }
+
+        showMinimumSpanningTree(mstArray, graphArray);
+    }
+
+    int findMinKeyVertex(int keys[], Boolean setOfMST[]) {
+        int minimum_index = -1;
+        int minimum_value = Integer.MAX_VALUE;
+        for (int vertex = 0; vertex < numCities; vertex++) {
+            if (setOfMST[vertex] == false && keys[vertex] < minimum_value) {
+                minimum_value = keys[vertex];
+                minimum_index = vertex;
+            }
+        }
+        return minimum_index;
+    }
+
+    void showMinimumSpanningTree(int mstArray[], int graphArray[][]) {
+        System.out.println("Edge \t\t Weight");
+        for (int j = 1; j < numCities; j++) {
+            System.out.println(mstArray[j] + " <-> " + j + "\t \t" + graphArray[j][mstArray[j]]);
+        }
+    }
+
+    private int numCities = 0;
     private int[][] matrix = new int[numCities][numCities];
     private List<Point> cityPoints = new ArrayList<>();
     private List<Integer> selectedEdges = new ArrayList<>();

@@ -177,7 +177,7 @@ class GraphPanel extends JPanel {
 
     private int findMinKeyVertex(int[] key, boolean[] visited) {
         int minKey = Integer.MAX_VALUE;
-        int minKeyVertex = -1;
+        int minKeyVertex = 0;
 
         for (int i = 0; i < key.length; i++) {
             if (!visited[i] && key[i] < minKey) {

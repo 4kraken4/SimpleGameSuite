@@ -2,7 +2,6 @@ package test;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,8 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -177,7 +174,7 @@ class GraphPanel extends JPanel {
 
     private int findMinKeyVertex(int[] key, boolean[] visited) {
         int minKey = Integer.MAX_VALUE;
-        int minKeyVertex = -1;
+        int minKeyVertex = 0;
 
         for (int i = 0; i < key.length; i++) {
             if (!visited[i] && key[i] < minKey) {

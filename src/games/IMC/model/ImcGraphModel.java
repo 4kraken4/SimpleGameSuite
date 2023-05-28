@@ -120,9 +120,9 @@ public class ImcGraphModel {
                 }
             }
         }
-        System.out.println("Edge \tWeight");
+       // System.out.println("Edge \tWeight");
         for (int i = 1; i < vertices; i++) {
-            System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
+           // System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
             correctEdges.add(i * numCities + parent[i]);
         }
     }

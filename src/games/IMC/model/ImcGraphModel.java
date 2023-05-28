@@ -2,6 +2,7 @@ package games.IMC.model;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ImcGraphModel {
@@ -46,15 +47,17 @@ public class ImcGraphModel {
         this.selectedEdges = selectedEdges;
     }
 
-    public void generateMatrix() {
-        this.matrix = new int[numCities][numCities];
-        for (int r = 0; r < numCities; r++) {
-            for (int c = 0; c < r; c++) {
-                matrix[r][c] = (int) (Math.random() * 91) + 10;
-            }
+   public void generateMatrix() {
+    this.matrix = new int[numCities][numCities];
+    for (int r = 0; r < numCities; r++) {
+        for (int c = 0; c < r; c++) {
+            int value = (int) (Math.random() * 91) + 10;
+            matrix[r][c] = value;
+            matrix[c][r] = value; 
         }
-        setMatrix(matrix);
     }
+    setMatrix(matrix);
+}
 
     public void generateCityPoints() {
         int centerX = 250;
@@ -95,58 +98,53 @@ public class ImcGraphModel {
         return Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
     }
 
-    public void designMST(int graphArray[][]) {
-        int countOfVertices = numCities;
+    public static void primMST(int[][] graph) {
+        int vertices = graph.length;
+        int[] parent = new int[vertices];
+        int[] key = new int[vertices];
+        boolean[] mstSet = new boolean[vertices];
+        Arrays.fill(key, Integer.MAX_VALUE);
 
-        int mstArray[] = new int[countOfVertices];
-        int keys[] = new int[countOfVertices];
-        Boolean setOfMST[] = new Boolean[countOfVertices];
+        key[0] = 0;
+        parent[0] = -1;
+        for (int count = 0; count < vertices - 1; count++) {
+           
+            int u = minKey(key, mstSet);
 
-        for (int j = 0; j < countOfVertices; j++) {
-            keys[j] = Integer.MAX_VALUE;
-            setOfMST[j] = false;
-        }
+            mstSet[u] = true;
 
-        keys[0] = 0;
-        mstArray[0] = -1;
-
-        for (int i = 0; i < countOfVertices - 1; i++) {
-            int edge = findMinKeyVertex(keys, setOfMST);
-            setOfMST[edge] = true;
-
-            for (int vertex = 0; vertex < countOfVertices; vertex++) {
-                if (graphArray[edge][vertex] != 0 && setOfMST[vertex] == false && graphArray[edge][vertex] < keys[vertex]) {
-                    mstArray[vertex] = edge;
-                    keys[vertex] = graphArray[edge][vertex];
+            for (int v = 0; v < vertices; v++) {
+                if (graph[u][v] != 0 && !mstSet[v] && graph[u][v] < key[v]) {
+                    parent[v] = u;
+                    key[v] = graph[u][v];
                 }
             }
         }
-
-        showMinimumSpanningTree(mstArray, graphArray);
+        System.out.println("Edge \tWeight");
+        for (int i = 1; i < vertices; i++) {
+            System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
+            correctEdges.add(i * numCities + parent[i]);
+        }
     }
 
-    int findMinKeyVertex(int keys[], Boolean setOfMST[]) {
-        int minimum_index = -1;
-        int minimum_value = Integer.MAX_VALUE;
-        for (int vertex = 0; vertex < numCities; vertex++) {
-            if (setOfMST[vertex] == false && keys[vertex] < minimum_value) {
-                minimum_value = keys[vertex];
-                minimum_index = vertex;
+    private static int minKey(int[] key, boolean[] mstSet) {
+        int min = Integer.MAX_VALUE;
+        int minIndex = -1;
+        int length = key.length;
+
+        for (int v = 0; v < length; v++) {
+            if (!mstSet[v] && key[v] < min) {
+                min = key[v];
+                minIndex = v;
             }
         }
-        return minimum_index;
+
+        return minIndex;
     }
 
-    void showMinimumSpanningTree(int mstArray[], int graphArray[][]) {
-        System.out.println("Edge \t\t Weight");
-        for (int j = 1; j < numCities; j++) {
-            System.out.println(mstArray[j] + " <-> " + j + "\t \t" + graphArray[j][mstArray[j]]);
-        }
-    }
-
-    private int numCities = 0;
+    private static int numCities = 0;
     private int[][] matrix = new int[numCities][numCities];
     private List<Point> cityPoints = new ArrayList<>();
     private List<Integer> selectedEdges = new ArrayList<>();
-    private List<Integer> correctEdges = new ArrayList<>();
+    private static List<Integer> correctEdges = new ArrayList<>();
 }

@@ -14,20 +14,21 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
 
 public class ImcGraphView extends javax.swing.JPanel {
 
     ImcGraphModel model;
     private boolean viewCorrectAnswer = false;
+
     public ImcGraphView(ImcGraphModel model) {
         this.model = model;
         setPreferredSize(new Dimension(500, 500));
         initComponents();
-        
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -36,14 +37,14 @@ public class ImcGraphView extends javax.swing.JPanel {
                     if (model.getSelectedEdges().contains(clickedEdge)) {
                         model.getSelectedEdges().remove(Integer.valueOf(clickedEdge));
                     } else {
-                       model.getSelectedEdges().add(clickedEdge);
+                        model.getSelectedEdges().add(clickedEdge);
                     }
                     repaint();
                 }
             }
         });
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -79,9 +80,19 @@ public class ImcGraphView extends javax.swing.JPanel {
                 }
                 if (viewCorrectAnswer) {
                     if (model.getCorrectEdges().contains(r * model.getNumCities() + c)) {
-                        g2d.setColor(Color.BLACK);
+                        g2d.setColor(Color.ORANGE);
+                        g2d.setStroke(new BasicStroke(5));
                         g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
-                        JOptionPane.showMessageDialog(null,"Correct ");
+                        // JOptionPane.showMessageDialog(null,"Correct ");
+                        distanceText = String.valueOf(matrix[r][c]);
+                        textX = (cityR.x + cityC.x) / 2;
+                        textY = (cityR.y + cityC.y) / 2;
+
+                        g2d.setColor(Color.WHITE);
+                        g2d.fillRect(textX - 10, textY - 10, 20, 20);
+
+                        g2d.setColor(lineColors[r % lineColors.length]);
+                        g2d.drawString(distanceText, textX - 5, textY + 5);
                     }
                 }
             }
@@ -111,8 +122,7 @@ public class ImcGraphView extends javax.swing.JPanel {
             frame.setVisible(true);
         });
     }
-    
-  
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -157,15 +167,24 @@ public class ImcGraphView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        for(int edge: model.getSelectedEdges())
-        {
-            JOptionPane.showMessageDialog(null,"Edge Number "+ edge);
+        model.getCorrectEdges().clear();
+        ImcGraphModel.primMST(model.getMatrix());
+        Collections.sort(model.getCorrectEdges());
+        Collections.sort(model.getSelectedEdges());
+        boolean match = model.getCorrectEdges().equals(model.getSelectedEdges());
+
+        if (match && model.getCorrectEdges().size() == model.getSelectedEdges().size()) {
+            JOptionPane.showMessageDialog(null, "Congratulations! You win!");
+        } else {
+             JOptionPane.showMessageDialog(null, "You lose. Please try again later.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       
-       model.designMST(model.getMatrix());
+        model.getCorrectEdges().clear();
+        viewCorrectAnswer = true;
+        ImcGraphModel.primMST(model.getMatrix());
+        repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

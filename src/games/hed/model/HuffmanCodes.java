@@ -1,48 +1,87 @@
 package games.hed.model;
 
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class HuffmanCodes {
 
-    static final int MAX_SIZE = 100;
-
-    static HuffmanNode generateTree(PriorityQueue<HuffmanNode> queue) {
-        while (queue.size() != 1) {
-            HuffmanNode left = queue.poll();
-            HuffmanNode right = queue.poll();
-            HuffmanNode node = new HuffmanNode('$', left.freq + right.freq);
-            queue.add(node);
+    public static Map<Character, String> encode(String input) {
+        // Step 1: Calculate frequency of each character
+        Map<Character, Integer> frequencyMap = new HashMap<>();
+        for (char c : input.toCharArray()) {
+            frequencyMap.put(c, frequencyMap.getOrDefault(c, 0) + 1);
         }
-        return queue.poll();
+
+        // Step 2: Create priority queue
+        PriorityQueue<HuffmanNode> pq = new PriorityQueue<>();
+        for (Map.Entry<Character, Integer> entry : frequencyMap.entrySet()) {
+            pq.offer(new HuffmanNode(entry.getKey(), entry.getValue(), null, null));
+        }
+
+        // Step 3: Build Huffman tree
+        while (pq.size() > 1) {
+            HuffmanNode left = pq.poll();
+            HuffmanNode right = pq.poll();
+            HuffmanNode parent = new HuffmanNode('\0', left.frequency + right.frequency, left, right);
+            pq.offer(parent);
+        }
+
+        // Step 4: Generate Huffman codes
+        HuffmanNode root = pq.poll();
+        Map<Character, String> huffmanCodes = new HashMap<>();
+        generateCodes(root, "", huffmanCodes);
+
+        return huffmanCodes;
     }
 
-    static void huffmanCodes(char[] data, int[] freq, int size) {
-        PriorityQueue<HuffmanNode> queue = new PriorityQueue<>();
-        for (int i = 0; i < size; i++) {
-            HuffmanNode node = new HuffmanNode(data[i], freq[i]);
-            queue.add(node);
+    private static void generateCodes(HuffmanNode node, String code, Map<Character, String> huffmanCodes) {
+        if (node == null) {
+            return;
         }
-        HuffmanNode root = generateTree(queue);
-        int[] arr = new int[MAX_SIZE];
-        int top = 0;
-        printCodes(root, arr, top);
+
+        if (node.left == null && node.right == null) {
+            huffmanCodes.put(node.character, code);
+        }
+
+        generateCodes(node.left, code + "0", huffmanCodes);
+        generateCodes(node.right, code + "1", huffmanCodes);
     }
 
-    static void printCodes(HuffmanNode root, int[] arr, int top) {
-        if (root.left != null) {
-            arr[top] = 0;
-            printCodes(root.left, arr, top + 1);
-        }
-        if (root.right != null) {
-            arr[top] = 1;
-            printCodes(root.right, arr, top + 1);
-        }
-        if (root.left == null && root.right == null) {
-            System.out.print(root.data + " ");
-            for (int i = 0; i < top; ++i) {
-                System.out.print(arr[i]);
+    public static String decode(String encodedString, Map<Character, String> huffmanCodes) {
+        StringBuilder decodedString = new StringBuilder();
+        StringBuilder currentCode = new StringBuilder();
+
+        for (char c : encodedString.toCharArray()) {
+            currentCode.append(c);
+
+            for (Map.Entry<Character, String> entry : huffmanCodes.entrySet()) {
+                if (entry.getValue().equals(currentCode.toString())) {
+                    decodedString.append(entry.getKey());
+                    currentCode = new StringBuilder();
+                    break;
+                }
             }
-            System.out.println();
         }
+        return decodedString.toString();
+    }
+
+    public static void main(String[] args) {
+        // String input = "HUFFMAN PUFF";
+        String input = "HIMSARA PUFF";
+        Map<Character, String> huffmanCodes = encode(input);
+
+        System.out.println("Huffman Codes:");
+        for (Map.Entry<Character, String> entry : huffmanCodes.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+
+        String encodedString = "";
+        for (char c : input.toCharArray()) {
+            encodedString += huffmanCodes.get(c);
+        }
+
+        System.out.println("Encoded string: " + encodedString);
+
+        String decodedString = decode(encodedString, huffmanCodes);
+        System.out.println("Decoded string: " + decodedString);
     }
 }

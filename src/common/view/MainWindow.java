@@ -70,7 +70,9 @@ public class MainWindow extends javax.swing.JFrame {
                 }
                 case "Uncle Prim" -> {
                     ImcGraphPanel igp = new ImcGraphPanel();
-//                    setTttBtnActions(tbp);
+                    igp.setUser(currentUser);
+                    igp.setDatabaseUpdatedEvent(setUpCongratsMeg());
+                    setIMCBtnActions(igp);
                     Utilities.setUI(mainContainer, igp);
                 }
             }
@@ -112,6 +114,24 @@ public class MainWindow extends javax.swing.JFrame {
             }
         };
         tbp.setMenuItemSelectedEvent(mis);
+    }
+
+    private void setIMCBtnActions(ImcGraphPanel igp) {
+        var mis = (MenuItemSelected) (ActionEvent evt) -> {
+            String acmd = evt.getActionCommand();
+            switch (acmd) {
+                case "undo" -> {
+                }
+                case "redo" -> {
+                }
+                case "hint" -> {
+                }
+                case "close" -> {
+                    Utilities.setUI(mainContainer, menu);
+                }
+            }
+        };
+        igp.setMenuItemSelectedEvent(mis);
     }
 
     private void setupCursor() {

@@ -96,12 +96,9 @@ public class ImcGraphModel {
                 Point cityC = cityPoints.get(c);
                 int distance = matrix[r][c];
                 if (isClickedOnLine(mouseX, mouseY, cityR.x, cityR.y, cityC.x, cityC.y) && distance != 0) {
-                    if(getMirrorSelectedEdges().contains( c * numCities + r))
-                    {
+                    if (getMirrorSelectedEdges().contains(c * numCities + r)) {
                         getMirrorSelectedEdges().remove(Integer.valueOf(c * numCities + r));
-                    }
-                    else
-                    {
+                    } else {
                         getMirrorSelectedEdges().add(c * numCities + r);
                     }
                     return r * numCities + c;
@@ -117,7 +114,8 @@ public class ImcGraphModel {
     }
 
     public double getDistanceFromPointToLine(int x, int y, int x1, int y1, int x2, int y2) {
-        return Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+        return Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1)
+                / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
     }
 
     public static void primMST(int[][] graph) {
@@ -141,10 +139,9 @@ public class ImcGraphModel {
         }
         // System.out.println("Edge \tWeight");
         for (int i = 1; i < vertices; i++) {
-//            System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
+            // System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
             correctEdges.add(i * numCities + parent[i]);
         }
-
     }
 
     private static int minKey(int[] key, boolean[] mstSet) {
@@ -161,6 +158,7 @@ public class ImcGraphModel {
     }
 
     private static int numCities = 0;
+    public final static int GAME_ID = 5;
     private int[][] matrix = new int[numCities][numCities];
     private List<Point> cityPoints = new ArrayList<>();
     private List<Integer> selectedEdges = new ArrayList<>();

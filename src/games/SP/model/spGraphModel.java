@@ -14,24 +14,23 @@ public class spGraphModel {
     /**
      * @return the targetNode
      */
-    public  int getTargetNode() {
+    public int getTargetNode() {
         return targetNode;
     }
 
     /**
      * @param aTargetNode the targetNode to set
      */
-    public  void setTargetNode(int aTargetNode) {
+    public void setTargetNode(int aTargetNode) {
         targetNode = aTargetNode;
     }
-    
-    public spGraphModel(int numofcities)
-    {   
-         this.setNumCities(numofcities);
-         Random r = new Random();
-         targetNode =r.nextInt(numCities-2)+2;
+
+    public spGraphModel(int numofcities) {
+        this.setNumCities(numofcities);
+        Random r = new Random();
+        targetNode = r.nextInt(numCities - 2) + 2;
     }
-    
+
     /**
      * @return the mirrorSelectedEdges
      */
@@ -39,9 +38,6 @@ public class spGraphModel {
         return mirrorSelectedEdges;
     }
 
-    /**
-     * @param mirrorSelectedEdges the mirrorSelectedEdges to set
-     */
     public void setMirrorSelectedEdges(List<Integer> mirrorSelectedEdges) {
         this.mirrorSelectedEdges = mirrorSelectedEdges;
     }
@@ -51,7 +47,7 @@ public class spGraphModel {
     }
 
     public void setCorrectEdges(List<Integer> correctEdges) {
-        this.correctEdges = correctEdges;
+        spGraphModel.correctEdges = correctEdges;
     }
 
     public int getNumCities() {
@@ -71,7 +67,7 @@ public class spGraphModel {
     }
 
     public void setNumCities(int numCities) {
-        this.numCities = numCities;
+        spGraphModel.numCities = numCities;
     }
 
     public void setMatrix(int[][] matrix) {
@@ -97,18 +93,18 @@ public class spGraphModel {
         }
         int dropamount = (int) Math.pow(2, numCities / 1.8);
         for (int i = 0; i < dropamount; i++) {
-            int r = (int) (Math.random() * numCities );
-            int c = (int) (Math.random() * numCities );
+            int r = (int) (Math.random() * numCities);
+            int c = (int) (Math.random() * numCities);
             matrix[r][c] = 0;
             matrix[c][r] = 0;
         }
         matrix[getTargetNode()][0] = 0;
         matrix[0][getTargetNode()] = 0;
-        
-//        int dis =(int) (Math.random() * 41) + 5;
-//        
-//        matrix[1][0] = dis;
-//        matrix[0][1] = dis;
+
+        // int dis =(int) (Math.random() * 41) + 5;
+        //
+        // matrix[1][0] = dis;
+        // matrix[0][1] = dis;
         setMatrix(matrix);
     }
 
@@ -133,14 +129,12 @@ public class spGraphModel {
                 Point cityC = cityPoints.get(c);
                 int distance = matrix[r][c];
                 if (isClickedOnLine(mouseX, mouseY, cityR.x, cityR.y, cityC.x, cityC.y) && distance != 0) {
-                    if(mirrorSelectedEdges.contains(c* numCities + r))
-                    {
-                      mirrorSelectedEdges.remove(Integer.valueOf(c* numCities + r));
+                    if (mirrorSelectedEdges.contains(c * numCities + r)) {
+                        mirrorSelectedEdges.remove(Integer.valueOf(c * numCities + r));
+                    } else {
+                        mirrorSelectedEdges.add(c * numCities + r);
                     }
-                    else{
-                     mirrorSelectedEdges.add(c* numCities + r);
-                    }
-                   return r* numCities + c;
+                    return r * numCities + c;
                 }
             }
         }
@@ -153,10 +147,11 @@ public class spGraphModel {
     }
 
     public double getDistanceFromPointToLine(int x, int y, int x1, int y1, int x2, int y2) {
-        return Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+        return Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1)
+                / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
     }
 
-    public  void getShortestPaths(int[][] adjacencyMatrix, int startNode) {
+    public void getShortestPaths(int[][] adjacencyMatrix, int startNode) {
         int numCities = adjacencyMatrix.length;
         int[] distances = new int[numCities];
         boolean[] visited = new boolean[numCities];
@@ -195,7 +190,7 @@ public class spGraphModel {
             int previousEdge = previousEdges[getTargetNode()];
             while (previousEdge != 0) {
                 int previousNode = (previousEdge - 1) / numCities;
-                
+
                 correctEdges.add(previousEdge);
                 previousEdge = previousEdges[previousNode];
             }
@@ -204,11 +199,11 @@ public class spGraphModel {
     }
 
     private static final int INFINITY = Integer.MAX_VALUE;
-    private int targetNode  ;
+    private int targetNode;
     private static int numCities = 0;
     private int[][] matrix = new int[numCities][numCities];
     private List<Point> cityPoints = new ArrayList<>();
     private List<Integer> selectedEdges = new ArrayList<>();
-    private List<Integer> mirrorSelectedEdges =new ArrayList<>();
+    private List<Integer> mirrorSelectedEdges = new ArrayList<>();
     private static List<Integer> correctEdges = new ArrayList<>();
 }

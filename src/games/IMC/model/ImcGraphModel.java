@@ -76,7 +76,7 @@ public class ImcGraphModel {
     public void generateCityPoints() {
         int centerX = 300;
         int centerY = 300;
-        int radius = 275;
+        int radius = 250;
 
         double angleIncrement = 2 * Math.PI / numCities;
         double angle = 0;
@@ -112,7 +112,7 @@ public class ImcGraphModel {
     }
 
     public boolean isClickedOnLine(int mouseX, int mouseY, int x1, int y1, int x2, int y2) {
-        final int CLICK_TOLERANCE = 5;
+        final int CLICK_TOLERANCE = 10;
         return getDistanceFromPointToLine(mouseX, mouseY, x1, y1, x2, y2) < CLICK_TOLERANCE;
     }
 

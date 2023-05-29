@@ -210,7 +210,11 @@ public class spGraphView extends javax.swing.JPanel {
         model.getShortestPaths(model.getMatrix(), 0);
         Collections.sort(model.getCorrectEdges());
         Collections.sort(model.getMirrorSelectedEdges());
-        boolean match = model.getCorrectEdges().equals(model.getMirrorSelectedEdges());
+        boolean match =false;
+        for(int a :model.getCorrectEdges())
+        {
+          match = model.getSelectedEdges().contains(a)|| model.getMirrorSelectedEdges().contains(a);
+        }
         repaint();
         if (match && model.getCorrectEdges().size() == model.getMirrorSelectedEdges().size()) {
             JOptionPane.showMessageDialog(null, "Congratulations! You win!");
@@ -221,7 +225,7 @@ public class spGraphView extends javax.swing.JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         model.getCorrectEdges().clear();
-        viewCorrectAnswer = true;
+         viewCorrectAnswer = !viewCorrectAnswer;
         model.getShortestPaths(model.getMatrix(), 0);
         repaint();
     }//GEN-LAST:event_jButton2ActionPerformed

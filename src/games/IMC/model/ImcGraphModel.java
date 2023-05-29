@@ -7,6 +7,20 @@ import java.util.List;
 
 public class ImcGraphModel {
 
+    /**
+     * @return the mirrorSelectedEdges
+     */
+    public List<Integer> getMirrorSelectedEdges() {
+        return mirrorSelectedEdges;
+    }
+
+    /**
+     * @param mirrorSelectedEdges the mirrorSelectedEdges to set
+     */
+    public void setMirrorSelectedEdges(List<Integer> mirrorSelectedEdges) {
+        this.mirrorSelectedEdges = mirrorSelectedEdges;
+    }
+
     public List<Integer> getCorrectEdges() {
         return correctEdges;
     }
@@ -82,6 +96,14 @@ public class ImcGraphModel {
                 Point cityC = cityPoints.get(c);
                 int distance = matrix[r][c];
                 if (isClickedOnLine(mouseX, mouseY, cityR.x, cityR.y, cityC.x, cityC.y) && distance != 0) {
+                    if(getMirrorSelectedEdges().contains( c * numCities + r))
+                    {
+                        getMirrorSelectedEdges().remove(Integer.valueOf(c * numCities + r));
+                    }
+                    else
+                    {
+                        getMirrorSelectedEdges().add(c * numCities + r);
+                    }
                     return r * numCities + c;
                 }
             }
@@ -122,7 +144,7 @@ public class ImcGraphModel {
         } 
        // System.out.println("Edge \tWeight");
         for (int i = 1; i < vertices; i++) {
-           System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
+          // System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
            correctEdges.add(i * numCities + parent[i]);
         }
        
@@ -147,5 +169,6 @@ public class ImcGraphModel {
     private int[][] matrix = new int[numCities][numCities];
     private List<Point> cityPoints = new ArrayList<>();
     private List<Integer> selectedEdges = new ArrayList<>();
+    private List<Integer> mirrorSelectedEdges = new ArrayList<>();
     private static List<Integer> correctEdges = new ArrayList<>();
 }

@@ -87,7 +87,6 @@ public class ImcGraphView extends javax.swing.JPanel {
                         g2d.setColor(Color.BLACK);
                         g2d.setStroke(new BasicStroke(5));
                         g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
-                        // JOptionPane.showMessageDialog(null,"Correct ");
                         distanceText = String.valueOf(matrix[r][c]);
                         textX = (cityR.x + cityC.x) / 2;
                         textY = (cityR.y + cityC.y) / 2;
@@ -116,7 +115,7 @@ public class ImcGraphView extends javax.swing.JPanel {
             JFrame frame = new JFrame("Graph Panel");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             ImcGraphModel model = new ImcGraphModel();
-            model.setNumCities(5);
+            model.setNumCities(3);
             model.generateMatrix();
             model.generateCityPoints();
             frame.getContentPane().add(new ImcGraphView(model));
@@ -174,8 +173,13 @@ public class ImcGraphView extends javax.swing.JPanel {
         ImcGraphModel.primMST(model.getMatrix());
         Collections.sort(model.getCorrectEdges());
         Collections.sort(model.getSelectedEdges());
-        boolean match = model.getCorrectEdges().equals(model.getSelectedEdges());
+        boolean match =false;
+        for(int a :model.getCorrectEdges())
+        {
+          match = model.getSelectedEdges().contains(a)|| model.getMirrorSelectedEdges().contains(a);
+        }
         repaint();
+
         if (match && model.getCorrectEdges().size() == model.getSelectedEdges().size()) {
             JOptionPane.showMessageDialog(null, "Congratulations! You win!");
         } else {
@@ -187,7 +191,7 @@ public class ImcGraphView extends javax.swing.JPanel {
         model.getCorrectEdges().clear();
         viewCorrectAnswer = !viewCorrectAnswer;
         ImcGraphModel.primMST(model.getMatrix());
-        //for(int a:model.getCorrectEdges()){ System.out.println(a);}
+        for(int a:model.getCorrectEdges()){ System.out.println(a);}
         repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 

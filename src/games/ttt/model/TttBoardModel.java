@@ -190,264 +190,255 @@ public class TttBoardModel extends JPanel implements ActionListener {
     }
 
     @Override
- public void actionPerformed(ActionEvent e) {
-        try{
-    for (int i = 0; i < 9; i++) {
-        if (e.getSource() == btns[i]) {
-            if (playerTurn) {
-                if (btns[i].getText().equals("")) {
-                    btns[i].setForeground(colorX);
-                    btns[i].setText("X");
-                    playerTurn = false;
-                    textfield.setText("O turn");
-                    if (!checkGameOver()) {
-                        makeComputerMove();
+    public void actionPerformed(ActionEvent e) {
+        try {
+            for (int i = 0; i < 9; i++) {
+                if (e.getSource() == btns[i]) {
+                    if (playerTurn) {
+                        if (btns[i].getText().equals("")) {
+                            btns[i].setForeground(colorX);
+                            btns[i].setText("X");
+                            playerTurn = false;
+                            textfield.setText("O turn");
+                            if (!checkGameOver()) {
+                                makeComputerMove();
+                            }
+                        }
                     }
                 }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
         }
     }
-  }catch(Exception ex) {
-        ex.printStackTrace();
-       
+
+    private void startGame() {
+        playerTurn = true;
+        textfield.setText("X turn");
+        for (int i = 0; i < 9; i++) {
+            btns[i].setEnabled(true);
+            btns[i].setBackground(colorBgCell);
+        }
     }
-}
 
-private void startGame() {
-    playerTurn = true;
-    textfield.setText("X turn");
-    for (int i = 0; i < 9; i++) {
-        btns[i].setEnabled(true);
-        btns[i].setBackground(colorBgCell);
+    private void resetGame() {
+        for (int i = 0; i < 9; i++) {
+            btns[i].setText("");
+            btns[i].setEnabled(false);
+            btns[i].setBackground(UIManager.getColor("Button.background"));
+            textfield.setText("Tic-Tac-Toe");
+        }
     }
-}
 
-
-
-private void resetGame() {
-    for (int i = 0; i < 9; i++) {
-        btns[i].setText("");
-        btns[i].setEnabled(false);
-        btns[i].setBackground(UIManager.getColor("Button.background"));
-        textfield.setText("Tic-Tac-Toe");
-    }
-}
-     
-   public boolean checkGameOver() {
+    public boolean checkGameOver() {
         try {
-    if (checkWin("X")) {
-        int[] winningRow = getWinningRow("X");
-        gameOver("X wins", winningRow);
-        return true;
-    } else if (checkWin("O")) {
-        int[] winningRow = getWinningRow("O");
-        gameOver("O wins", winningRow);
-        return true;
-    } else if (isBoardFull()) {
-        gameOver("It's a draw", null);
-        return true;
-    }
-    return false;
-        }
-        catch(Exception ex) {
-        ex.printStackTrace();
-       
-        return false;
-    }
-}
+            if (checkWin("X")) {
+                int[] winningRow = getWinningRow("X");
+                gameOver("X wins", winningRow);
+                return true;
+            } else if (checkWin("O")) {
+                int[] winningRow = getWinningRow("O");
+                gameOver("O wins", winningRow);
+                return true;
+            } else if (isBoardFull()) {
+                gameOver("It's a draw", null);
+                return true;
+            }
+            return false;
+        } catch (Exception ex) {
+            ex.printStackTrace();
 
-private boolean checkWin(String player) {
-try {
-    String[][] board = new String[3][3];
-
-    // Copy button texts to the 2D array
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            board[i][j] = btns[i * 3 + j].getText();
-        }
-    }
-
-    // Define the winning conditions using indexes in the 2D array
-    int[][] winningConditions = {
-        {0, 1, 2}, // Rows
-        {3, 4, 5},
-        {6, 7, 8},
-        {0, 3, 6}, // Columns
-        {1, 4, 7},
-        {2, 5, 8},
-        {0, 4, 8}, // Diagonals
-        {2, 4, 6}
-    };
-
-    // Check for a win
-    for (int[] condition : winningConditions) {
-        if (board[condition[0] / 3][condition[0] % 3].equals(player)
-                && board[condition[1] / 3][condition[1] % 3].equals(player)
-                && board[condition[2] / 3][condition[2] % 3].equals(player)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-catch(Exception ex) {
-        ex.printStackTrace();
-       
-        return false;
-    }
-}
-
-private int[] getWinningRow(String symbol) {
-    try {
-    int[][] winningConditions = {
-        {0, 1, 2}, // Rows
-        {3, 4, 5},
-        {6, 7, 8},
-        {0, 3, 6}, // Columns
-        {1, 4, 7},
-        {2, 5, 8},
-        {0, 4, 8}, // Diagonals
-        {2, 4, 6}
-    };
-
-    for (int[] condition : winningConditions) {
-        if (btns[condition[0]].getText().equals(symbol) &&
-            btns[condition[1]].getText().equals(symbol) &&
-            btns[condition[2]].getText().equals(symbol)) {
-            return condition;
-        }
-    }
-
-    return null;
-    }
-catch(Exception ex) {
-        ex.printStackTrace();
-       
-        return null;
-    }
-}
-
-private boolean isBoardFull() {
-    try {
-    for (int i = 0; i < 9; i++) {
-        if (btns[i].getText().equals("")) {
             return false;
         }
     }
-    return true;
-    }catch (Exception ex) {
-ex.printStackTrace();
 
-return false;
-}
-}
+    private boolean checkWin(String player) {
+        try {
+            String[][] board = new String[3][3];
 
-private void gameOver(String message, int[] winningRow) {
-    for (int i = 0; i < 9; i++) {
-        btns[i].setEnabled(false);
-        if (winningRow != null && isInWinningRow(i, winningRow)) {
-            btns[i].setBackground(Color.GREEN);
+            // Copy button texts to the 2D array
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    board[i][j] = btns[i * 3 + j].getText();
+                }
+            }
+
+            // Define the winning conditions using indexes in the 2D array
+            int[][] winningConditions = {
+                {0, 1, 2}, // Rows
+                {3, 4, 5},
+                {6, 7, 8},
+                {0, 3, 6}, // Columns
+                {1, 4, 7},
+                {2, 5, 8},
+                {0, 4, 8}, // Diagonals
+                {2, 4, 6}
+            };
+
+            // Check for a win
+            for (int[] condition : winningConditions) {
+                if (board[condition[0] / 3][condition[0] % 3].equals(player)
+                        && board[condition[1] / 3][condition[1] % 3].equals(player)
+                        && board[condition[2] / 3][condition[2] % 3].equals(player)) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+            return false;
         }
     }
-    textfield.setText(message);
-}
 
-private boolean isInWinningRow(int buttonIndex, int[] winningRow) {
-    for (int index : winningRow) {
-        if (buttonIndex == index) {
+    private int[] getWinningRow(String symbol) {
+        try {
+            int[][] winningConditions = {
+                {0, 1, 2}, // Rows
+                {3, 4, 5},
+                {6, 7, 8},
+                {0, 3, 6}, // Columns
+                {1, 4, 7},
+                {2, 5, 8},
+                {0, 4, 8}, // Diagonals
+                {2, 4, 6}
+            };
+
+            for (int[] condition : winningConditions) {
+                if (btns[condition[0]].getText().equals(symbol)
+                        && btns[condition[1]].getText().equals(symbol)
+                        && btns[condition[2]].getText().equals(symbol)) {
+                    return condition;
+                }
+            }
+
+            return null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+            return null;
+        }
+    }
+
+    private boolean isBoardFull() {
+        try {
+            for (int i = 0; i < 9; i++) {
+                if (btns[i].getText().equals("")) {
+                    return false;
+                }
+            }
             return true;
-        }
-    }
-    return false;
-}
+        } catch (Exception ex) {
+            ex.printStackTrace();
 
-private void makeComputerMove() {
-    try{
-    int bestScore = Integer.MIN_VALUE;
-    int bestMove = -1;
-    String[] board = new String[9];
-
-    // Copy button texts to the array
-    for (int i = 0; i < 9; i++) {
-        board[i] = btns[i].getText();
-    }
-
-    // Find the best move using the Minimax algorithm
-    for (int i = 0; i < 9; i++) {
-        if (board[i].equals("")) {
-            board[i] = "O";
-            int score = minimax(board, 0, false);
-            board[i] = "";
-
-            if (score > bestScore) {
-                bestScore = score;
-                bestMove = i;
-            }
+            return false;
         }
     }
 
-    // If no valid move found, choose a random available move
-    if (bestMove == -1) {
+    private void gameOver(String message, int[] winningRow) {
         for (int i = 0; i < 9; i++) {
-            if (board[i].equals("")) {
-                bestMove = i;
-                break;
+            btns[i].setEnabled(false);
+            if (winningRow != null && isInWinningRow(i, winningRow)) {
+                btns[i].setBackground(Color.GREEN);
             }
+        }
+        textfield.setText(message);
+    }
+
+    private boolean isInWinningRow(int buttonIndex, int[] winningRow) {
+        for (int index : winningRow) {
+            if (buttonIndex == index) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void makeComputerMove() {
+        try {
+            int bestScore = Integer.MIN_VALUE;
+            int bestMove = -1;
+            String[] board = new String[9];
+
+            // Copy button texts to the array
+            for (int i = 0; i < 9; i++) {
+                board[i] = btns[i].getText();
+            }
+
+            // Find the best move using the Minimax algorithm
+            for (int i = 0; i < 9; i++) {
+                if (board[i].equals("")) {
+                    board[i] = "O";
+                    int score = minimax(board, 0, false);
+                    board[i] = "";
+
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = i;
+                    }
+                }
+            }
+
+            // If no valid move found, choose a random available move
+            if (bestMove == -1) {
+                for (int i = 0; i < 9; i++) {
+                    if (board[i].equals("")) {
+                        bestMove = i;
+                        break;
+                    }
+                }
+            }
+
+            // Make the optimal move for the computer
+            btns[bestMove].setForeground(colorO);
+            btns[bestMove].setText("O");
+            playerTurn = true;
+            textfield.setText("X turn");
+
+            // Check if the game is over
+            checkGameOver();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
         }
     }
 
-    // Make the optimal move for the computer
-    btns[bestMove].setForeground(colorO);
-    btns[bestMove].setText("O");
-    playerTurn = true;
-    textfield.setText("X turn");
-    }
-
-    // Check if the game is over
-    checkGameOver();
-    }
-    catch (Exception ex) {
-ex.printStackTrace();
-
-}
-}
-
-private int minimax(String[] board, int depth, boolean isMaximizingPlayer) {
-    if (checkWin("X")) {
-        return -1; // X wins
-    } else if (checkWin("O")) {
-        return 1; // O wins
-    } else if (isBoardFull()) {
-        return 0; // Draw
-    }
-
-    if (isMaximizingPlayer) {
-        int bestScore = Integer.MIN_VALUE;
-        for (int i = 0; i < 9; i++) {
-            if (board[i].equals("")) {
-                board[i] = "O";
-                int score = minimax(board, depth + 1, false);
-                board[i] = "";
-                bestScore = Math.max(score, bestScore);
-            }
+    private int minimax(String[] board, int depth, boolean isMaximizingPlayer) {
+        if (checkWin("X")) {
+            return -1; // X wins
+        } else if (checkWin("O")) {
+            return 1; // O wins
+        } else if (isBoardFull()) {
+            return 0; // Draw
         }
-        return bestScore;
-    } else {
-        int bestScore = Integer.MAX_VALUE;
-        for (int i = 0; i < 9; i++) {
-            if (board[i].equals("")) {
-                board[i] = "X";
-                int score = minimax(board, depth + 1, true);
-                board[i] = "";
-                bestScore = Math.min(score, bestScore);
+
+        if (isMaximizingPlayer) {
+            int bestScore = Integer.MIN_VALUE;
+            for (int i = 0; i < 9; i++) {
+                if (board[i].equals("")) {
+                    board[i] = "O";
+                    int score = minimax(board, depth + 1, false);
+                    board[i] = "";
+                    bestScore = Math.max(score, bestScore);
+                }
             }
+            return bestScore;
+        } else {
+            int bestScore = Integer.MAX_VALUE;
+            for (int i = 0; i < 9; i++) {
+                if (board[i].equals("")) {
+                    board[i] = "X";
+                    int score = minimax(board, depth + 1, true);
+                    board[i] = "";
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
+            return bestScore;
         }
-        return bestScore;
     }
-}
 
-
-        
     public void redo() {
     }
 

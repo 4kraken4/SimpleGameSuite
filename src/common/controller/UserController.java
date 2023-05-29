@@ -1,7 +1,10 @@
 package common.controller;
 
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import common.events.ExceptionThrown;
+import common.model.Score;
 import common.model.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +13,7 @@ import java.util.List;
 import util.DatabaseManager;
 import util.GameSuiteLogger;
 import util.TranslationHandler;
+import util.Utilities;
 
 public class UserController implements ExceptionThrown {
 
@@ -58,16 +62,25 @@ public class UserController implements ExceptionThrown {
 
     public User getUser() {
         JsonObject params = new JsonObject();
-        params.addProperty("Userid", user.getUserId());
         params.addProperty("Username", user.getUsername());
+        ResultSet resultSet = null;
         try {
-            ResultSet executeQuery = db.executeQuery(namespace, "GetUser", params);
-            while (executeQuery.next()) {
-                user.setUserId(executeQuery.getInt(1));
-                user.setUsername(executeQuery.getString(2));
+            resultSet = db.executeQuery(namespace, "GetUser", params);
+            while (resultSet.next()) {
+                user.setUserId(resultSet.getInt(1));
+                user.setUsername(resultSet.getString(2));
             }
         } catch (SQLException ex) {
             logger.logError(UserController.class.getName(), ex);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    logger.logError(UserController.class.getName(), e);
+                }
+            }
+            db.closeConnection();
         }
         return user;
     }
@@ -86,6 +99,33 @@ public class UserController implements ExceptionThrown {
             throw ex;
         }
         return user;
+    }
+
+    public int saveAnswer() {
+        JsonObject params = new JsonObject();
+        params.addProperty("UID", user.getUserId());
+        params.addProperty("GID", user.getGame().getGameId());
+        params.addProperty("Value", user.getGame().getScore().getValue());
+        byte[] serialized = Utilities.serialize(user.getGame().getScore().getAnswer());
+        String base64 = java.util.Base64.getEncoder().encodeToString(serialized);
+        params.addProperty("Answer", "base64:" + base64);
+        if (user.getGame().getScore().getHelperData() != null) {
+            serialized = Utilities.serialize(user.getGame().getScore().getHelperData());
+            base64 = java.util.Base64.getEncoder().encodeToString(serialized);
+            params.addProperty("HelperData", "base64:" + base64);
+        } else {
+            params.add("HelperData", JsonNull.INSTANCE);
+        }
+        int executeUpdate = 0;
+        try {
+            executeUpdate = db.executeUpdate(namespace, "UpdateUserScore", params);
+            if (executeUpdate > 0) {
+                logger.logInfo("User score registered successfully.");
+            }
+        } catch (SQLException ex) {
+            logger.logError(UserController.class.getName(), ex);
+        }
+        return executeUpdate;
     }
 
     @Override

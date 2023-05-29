@@ -8,6 +8,15 @@ public class Game {
     protected String gameTitle;
     protected String gameDescription;
     protected boolean isActive;
+    private Score score;
+
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
 
     public int getGameId() {
         return gameId;
@@ -44,12 +53,26 @@ public class Game {
     public Game() {
     }
 
+    public Game(int gameId) {
+        this.gameId = gameId;
+    }
+
     public Game(int gameId, String gameTitle, String gameDescription, boolean isActive) {
         this.gameId = gameId;
         this.gameTitle = gameTitle;
         this.gameDescription = gameDescription;
         this.isActive = isActive;
     }
+
+    public Game(int gameId, String gameTitle, String gameDescription, boolean isActive, Score score) {
+        this.gameId = gameId;
+        this.gameTitle = gameTitle;
+        this.gameDescription = gameDescription;
+        this.isActive = isActive;
+        this.score = score;
+    }
+    
+    
 
     @Override
     public String toString() {

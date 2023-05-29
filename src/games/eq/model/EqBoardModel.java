@@ -1,5 +1,6 @@
 package games.eq.model;
 
+import common.events.GameWin;
 import common.events.MenuItemSelected;
 import common.viewmodel.CustomLabel;
 import java.awt.Color;
@@ -34,6 +35,16 @@ public class EqBoardModel extends JPanel {
     private int ubdoStepCount;
     private MenuItemSelected mis;
     private boolean isPathHighlighted;
+    private GameWin win;
+    public static final int GAME_ID = 1;
+
+    public GameWin getWin() {
+        return win;
+    }
+
+    public void setWin(GameWin win) {
+        this.win = win;
+    }
 
     public boolean isPathHighlighted() {
         return isPathHighlighted;
@@ -140,6 +151,7 @@ public class EqBoardModel extends JPanel {
                     squares[queens[i]][i].setOverlayColor(CustomLabel.COLOR_SOLVED);
                     squares[queens[i]][i].setIsHighlighted(true);
                 }
+                win.onGameWin(queens, null);
             } else {
                 for (CustomLabel[] labels : squares) {
                     for (CustomLabel label : labels) {

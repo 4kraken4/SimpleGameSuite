@@ -1,9 +1,17 @@
 package games.eq.view;
 
+import common.controller.UserController;
+import common.events.DatabaseUpdated;
+import common.events.GameWin;
 import common.events.MenuItemSelected;
+import common.model.Game;
+import common.model.Score;
+import common.model.User;
 import common.viewmodel.CustomButton;
+import games.eq.model.EqBoardModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -11,19 +19,38 @@ import javax.swing.ImageIcon;
 public class EqBoardPanel extends javax.swing.JPanel {
 
     private MenuItemSelected mis;
+    private DatabaseUpdated du;
+    private User user;
 
-    public MenuItemSelected getMis() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public MenuItemSelected getMenuItemSelectedEvent() {
         return mis;
     }
 
-    public void setMis(MenuItemSelected mis) {
+    public void setMenuItemSelectedEvent(MenuItemSelected mis) {
         this.mis = mis;
+    }
+
+    public DatabaseUpdated getDatabaseUpdatedEvent() {
+        return du;
+    }
+
+    public void setDatabaseUpdatedEvent(DatabaseUpdated du) {
+        this.du = du;
     }
 
     public EqBoardPanel() {
         initComponents();
         setHeaderButtonIcons();
         setHeaderButtonActions();
+        purgeOnWin();
     }
 
     @SuppressWarnings("unchecked")
@@ -264,6 +291,19 @@ public class EqBoardPanel extends javax.swing.JPanel {
         });
     }
 
+    private void purgeOnWin() {
+        var win = (GameWin) (Object data, Object helperData) -> {
+            Score score = new Score(0, 0, data, helperData, LocalDate.now());
+            Game game = new Game(EqBoardModel.GAME_ID, "", "", true, score);
+            user.setGame(game);
+            UserController uc = new UserController(user);
+            int purgeAnswer = uc.saveAnswer();
+            boolean isUpdated = purgeAnswer > 0;
+            du.onDatabseUpdate(EqBoardModel.GAME_ID, isUpdated);
+        };
+        gameBoard1.setWin(win);
+    }
+
     private final String iconUndoNormal = "/common/icons/undo-black.png";
     private final String iconRedoNormal = "/common/icons/redo-black.png";
     private final String iconHintNormal = "/common/icons/lightbulb-line.png";
@@ -293,4 +333,5 @@ public class EqBoardPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     // End of variables declaration//GEN-END:variables
+
 }

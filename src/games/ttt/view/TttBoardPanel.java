@@ -1,78 +1,125 @@
 package games.ttt.view;
 
+import common.controller.UserController;
+import common.events.DatabaseUpdated;
+import common.events.GameWin;
 import common.events.MenuItemSelected;
+import common.model.Game;
+import common.model.Score;
+import common.model.User;
 import common.viewmodel.CustomButton;
+import games.eq.model.EqBoardModel;
+import games.ttt.model.TttBoardModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.ImageIcon;
 
 public class TttBoardPanel extends javax.swing.JPanel {
 
     private MenuItemSelected mis;
+    private DatabaseUpdated du;
+    private User user;
 
-    public MenuItemSelected getMis() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public DatabaseUpdated getDatabaseUpdatedEvent() {
+        return du;
+    }
+
+    public void setDatabaseUpdatedEvent(DatabaseUpdated du) {
+        this.du = du;
+    }
+
+    public MenuItemSelected getMenuItemSelectedEvent() {
         return mis;
     }
 
-    public void setMis(MenuItemSelected mis) {
+    public void setMenuItemSelectedEvent(MenuItemSelected mis) {
         this.mis = mis;
     }
 
     public TttBoardPanel() {
         initComponents();
-        setButttonActions();
+        setHeaderButtonIcons();
+        setHeaderButtonActions();
+        purgeOnWin();
     }
 
-    private void setButttonActions() {
+    private void setHeaderButtonActions() {
+        btnUndo.addActionListener((e) -> {
+            tttBoardModel2.undo();
+        });
+        btnRedo.addActionListener((e) -> {
+            tttBoardModel2.redo();
+        });
+        btnHint.addActionListener(e -> {
+//            tttBoardModel2.setPathHighlighted(!gameBoard1.isPathHighlighted());
+        });
+        btnClose.addActionListener((e) -> {
+            mis.itemSelected(e);
+        });
+    }
+
+    private void setHeaderButtonIcons() {
         List<CustomButton> btns = Arrays.asList(btnUndo, btnRedo, btnHint, btnClose);
         btns.forEach(btn -> {
             String s1 = "";
             String s2 = "";
             switch (btn.getActionCommand()) {
                 case "undo" -> {
-                    s1 = "/common/icons/undo-yellow.png";
-                    s2 = "/common/icons/undo-black.png";
-                    btn.addActionListener((e) -> {
-                        tttBoardModel2.undo();
-                    });
+                    s1 = iconUndoNormal;
+                    s2 = iconUndoHover;
                 }
                 case "redo" -> {
-                    s1 = "/common/icons/redo-yellow.png";
-                    s2 = "/common/icons/redo-black.png";
-                    btn.addActionListener((e) -> {
-                        tttBoardModel2.redo();
-                    });
+                    s1 = iconRedoNormal;
+                    s2 = iconRedoHover;
                 }
                 case "hint" -> {
-                    s1 = "/common/icons/lightbulb-fill.png";
-                    s2 = "/common/icons/lightbulb-line.png";
-                    btn.addActionListener(e -> {
-                        System.out.println("hint for tic tac toe");
-                    });
+                    s1 = iconHintNormal;
+                    s2 = iconHintHover;
                 }
                 case "close" -> {
-                    s1 = "/common/icons/cancel-fill.png";
-                    s2 = "/common/icons/cancel-line.png";
-                    btn.addActionListener((e) -> {
-                        mis.itemSelected(e);
-                    });
+                    s1 = iconCloseNormal;
+                    s2 = iconCloseHover;
                 }
             }
+            btn.setIcon(new ImageIcon(getClass().getResource(s1)));
             final String me = s1;
             final String ml = s2;
             btn.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(me)));
+                    btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(ml)));
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(ml)));
+                    btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(me)));
                 }
             });
         });
+    }
+
+    private void purgeOnWin() {
+        var win = (GameWin) (Object data, Object helperData) -> {
+            Score score = new Score(0, 0, data, helperData, LocalDate.now());
+            Game game = new Game(TttBoardModel.GAME_ID, "", "", true, score);
+            user.setGame(game);
+            UserController uc = new UserController(user);
+            int purgeAnswer = uc.saveAnswer();
+            boolean isUpdated = purgeAnswer > 0;
+            du.onDatabseUpdate(EqBoardModel.GAME_ID, isUpdated);
+        };
+        tttBoardModel2.setWin(win);
     }
 
     @SuppressWarnings("unchecked")
@@ -269,6 +316,14 @@ public class TttBoardPanel extends javax.swing.JPanel {
         add(jPanel7, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+    private final String iconUndoNormal = "/common/icons/undo-black.png";
+    private final String iconRedoNormal = "/common/icons/redo-black.png";
+    private final String iconHintNormal = "/common/icons/lightbulb-line.png";
+    private final String iconCloseNormal = "/common/icons/cancel-line.png";
+    private final String iconUndoHover = "/common/icons/undo-yellow.png";
+    private final String iconRedoHover = "/common/icons/redo-yellow.png";
+    private final String iconHintHover = "/common/icons/lightbulb-fill.png";
+    private final String iconCloseHover = "/common/icons/cancel-fill.png";
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private common.viewmodel.CustomButton btnClose;

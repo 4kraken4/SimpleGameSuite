@@ -1,0 +1,6 @@
+{
+  "GetGames": "SELECT * FROM GAME",
+  "GetGame": "SELECT * FROM USER WHERE GameId in (?) ORDER BY GameId ASC LIMIT 1",
+  "SaveGame": "INSERT INTO Game (`GameTitle`) VALUES (?)",
+  "UpdateGame": "UPDATE GAME SET GameTitle = ? WHERE GameId = ?"
+}

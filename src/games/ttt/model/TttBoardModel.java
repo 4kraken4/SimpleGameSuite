@@ -1,5 +1,6 @@
 package games.ttt.model;
 
+import common.events.GameWin;
 import common.viewmodel.CustomButton;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,6 +17,7 @@ import javax.swing.UIManager;
 
 public class TttBoardModel extends JPanel implements ActionListener {
 
+    private boolean isdraw = true;
     private Random random;
     private JPanel pnlTitle, btnPanel, startButtonPanel;
     public JLabel textfield;
@@ -24,6 +26,16 @@ public class TttBoardModel extends JPanel implements ActionListener {
     boolean playerTurn;
     private Color colorBgTitle, colorFgTitle, colorBgCell, colorX, colorO, colorBtnPanel;
     private Font fontTitle, fontCell;
+    private GameWin win;
+    public final static int GAME_ID = 2;
+
+    public GameWin getWin() {
+        return win;
+    }
+
+    public void setWin(GameWin win) {
+        this.win = win;
+    }
 
     public Color getColorBtnPanel() {
         return colorBtnPanel;
@@ -245,6 +257,7 @@ private void resetGame() {
     }
 }
 
+
 private boolean checkWin(String player) {
 try {
     String[][] board = new String[3][3];
@@ -253,7 +266,9 @@ try {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             board[i][j] = btns[i * 3 + j].getText();
+
         }
+        textfield.setText("Tic-Tac-Toe");
     }
 
     // Define the winning conditions using indexes in the 2D array
@@ -377,12 +392,7 @@ private void makeComputerMove() {
 
     // If no valid move found, choose a random available move
     if (bestMove == -1) {
-        for (int i = 0; i < 9; i++) {
-            if (board[i].equals("")) {
-                bestMove = i;
-                break;
-            }
-        }
+
     }
 
     // Make the optimal move for the computer
@@ -393,12 +403,14 @@ private void makeComputerMove() {
 
     // Check if the game is over
     checkGameOver();
+  
     }
     catch (Exception ex) {
 ex.printStackTrace();
  JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
 }
 }
+
 
 private int minimax(String[] board, int depth, boolean isMaximizingPlayer) {
     if (checkWin("X")) {
@@ -411,6 +423,7 @@ private int minimax(String[] board, int depth, boolean isMaximizingPlayer) {
 
     if (isMaximizingPlayer) {
         int bestScore = Integer.MIN_VALUE;
+
         for (int i = 0; i < 9; i++) {
             if (board[i].equals("")) {
                 board[i] = "O";
@@ -419,6 +432,7 @@ private int minimax(String[] board, int depth, boolean isMaximizingPlayer) {
                 bestScore = Math.max(score, bestScore);
             }
         }
+
         return bestScore;
     } else {
         int bestScore = Integer.MAX_VALUE;
@@ -431,6 +445,10 @@ private int minimax(String[] board, int depth, boolean isMaximizingPlayer) {
             }
         }
         return bestScore;
+
+        textfield.setText("O wins");
+        return false;
+
     }
 }
 

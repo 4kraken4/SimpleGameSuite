@@ -1,0 +1,3 @@
+{
+  "GetGames": "SELECT * FROM GAME"
+}

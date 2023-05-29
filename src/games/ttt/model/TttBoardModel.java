@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -198,7 +199,7 @@ public void actionPerformed(ActionEvent e) {
         }
     } catch (Exception ex) {
         ex.printStackTrace();
-        // Handle the exception, display an error message, or take appropriate action
+        JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
     }
 }
 
@@ -239,7 +240,7 @@ private void resetGame() {
         }
         catch(Exception ex) {
         ex.printStackTrace();
-        // Handle the exception, display an error message, or take appropriate action
+        JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
         return false;
     }
 }
@@ -280,7 +281,7 @@ try {
 }
 catch(Exception ex) {
         ex.printStackTrace();
-        // Handle the exception, display an error message, or take appropriate action
+        JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
         return false;
     }
 }
@@ -310,7 +311,7 @@ private int[] getWinningRow(String symbol) {
     }
 catch(Exception ex) {
         ex.printStackTrace();
-        // Handle the exception, display an error message, or take appropriate action
+        JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
         return null;
     }
 }
@@ -325,7 +326,7 @@ private boolean isBoardFull() {
     return true;
     }catch (Exception ex) {
 ex.printStackTrace();
-// Handle the exception, display an error message, or take appropriate action
+ JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
 return false;
 }
 }
@@ -395,8 +396,7 @@ private void makeComputerMove() {
     }
     catch (Exception ex) {
 ex.printStackTrace();
-// Handle the exception, display an error message, or take appropriate action
-
+ JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
 }
 }
 

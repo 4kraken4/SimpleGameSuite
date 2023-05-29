@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package games.IMC.view;
 
 import games.IMC.model.ImcGraphModel;
@@ -16,21 +12,23 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 public class ImcGraphView extends javax.swing.JPanel {
 
     ImcGraphModel model;
     private boolean viewCorrectAnswer = false;
 
-    public ImcGraphView(ImcGraphModel model) {
-        this.model = model;
-        setPreferredSize(new Dimension(500, 500));
+    public ImcGraphView() {
+        setBackground(new Color(0, 0, 0, 0));
+        setOpaque(false);
         initComponents();
-        this.setBackground(Color.decode("#87CBB9"));
-
+        model = new ImcGraphModel();
+        model.setNumCities(5);
+        model.generateMatrix();
+        model.generateCityPoints();
+        setPreferredSize(new Dimension(600, 600));
+        setBackground(Color.decode("#87CBB9"));
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -81,9 +79,10 @@ public class ImcGraphView extends javax.swing.JPanel {
                     g2d.setColor(Color.YELLOW);
                     g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
                 }
-               
+
                 if (viewCorrectAnswer) {
-                    if (model.getCorrectEdges().contains(r * model.getNumCities() + c)|| model.getCorrectEdges().contains(c * model.getNumCities() + r)) {
+                    if (model.getCorrectEdges().contains(r * model.getNumCities() + c)
+                            || model.getCorrectEdges().contains(c * model.getNumCities() + r)) {
                         g2d.setColor(Color.BLACK);
                         g2d.setStroke(new BasicStroke(5));
                         g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
@@ -111,29 +110,16 @@ public class ImcGraphView extends javax.swing.JPanel {
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Graph Panel");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            ImcGraphModel model = new ImcGraphModel();
-            model.setNumCities(5);
-            model.generateMatrix();
-            model.generateCityPoints();
-            frame.getContentPane().add(new ImcGraphView(model));
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
-    }
-
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButton1 = new common.viewmodel.CustomButton();
+        jButton2 = new common.viewmodel.CustomButton();
 
         jButton1.setText("Submit Answer");
+        jButton1.setFocusPainted(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -141,6 +127,7 @@ public class ImcGraphView extends javax.swing.JPanel {
         });
 
         jButton2.setText("View Answer");
+        jButton2.setFocusPainted(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -154,22 +141,22 @@ public class ImcGraphView extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 255, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 301, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(428, Short.MAX_VALUE)
+                .addContainerGap(465, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         model.getCorrectEdges().clear();
         ImcGraphModel.primMST(model.getMatrix());
         Collections.sort(model.getCorrectEdges());
@@ -179,21 +166,20 @@ public class ImcGraphView extends javax.swing.JPanel {
         if (match && model.getCorrectEdges().size() == model.getSelectedEdges().size()) {
             JOptionPane.showMessageDialog(null, "Congratulations! You win!");
         } else {
-             JOptionPane.showMessageDialog(null, "You lose. Please try again later.");
+            JOptionPane.showMessageDialog(null, "You lose. Please try again later.");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }// GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
         model.getCorrectEdges().clear();
         viewCorrectAnswer = !viewCorrectAnswer;
         ImcGraphModel.primMST(model.getMatrix());
-        //for(int a:model.getCorrectEdges()){ System.out.println(a);}
+        // for(int a:model.getCorrectEdges()){ System.out.println(a);}
         repaint();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
+    }// GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private common.viewmodel.CustomButton jButton1;
+    private common.viewmodel.CustomButton jButton2;
     // End of variables declaration//GEN-END:variables
 }

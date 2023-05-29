@@ -391,15 +391,16 @@ private void makeComputerMove() {
     }
 
     // If no valid move found, choose a random available move
-    if (bestMove == -1) {
+    while (bestMove != -1) {
 
-    }
+    
 
     // Make the optimal move for the computer
     btns[bestMove].setForeground(colorO);
     btns[bestMove].setText("O");
     playerTurn = true;
     textfield.setText("X turn");
+    }
 
     // Check if the game is over
     checkGameOver();
@@ -445,10 +446,6 @@ private int minimax(String[] board, int depth, boolean isMaximizingPlayer) {
             }
         }
         return bestScore;
-
-        textfield.setText("O wins");
-        return false;
-
     }
 }
 

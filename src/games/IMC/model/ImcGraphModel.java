@@ -60,9 +60,9 @@ public class ImcGraphModel {
     }
 
     public void generateCityPoints() {
-        int centerX = 300;
-        int centerY = 300;
-        int radius = 275;
+        int centerX = 255;
+        int centerY = 250;
+        int radius = 230;
 
         double angleIncrement = 2 * Math.PI / numCities;
         double angle = 0;
@@ -122,7 +122,6 @@ public class ImcGraphModel {
 //            System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
             correctEdges.add(i * numCities + parent[i]);
         }
-
     }
 
     private static int minKey(int[] key, boolean[] mstSet) {
@@ -139,6 +138,7 @@ public class ImcGraphModel {
     }
 
     private static int numCities = 0;
+    public final static int GAME_ID = 5;
     private int[][] matrix = new int[numCities][numCities];
     private List<Point> cityPoints = new ArrayList<>();
     private List<Integer> selectedEdges = new ArrayList<>();

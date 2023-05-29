@@ -1,5 +1,6 @@
 package games.IMC.view;
 
+import common.events.GameWin;
 import games.IMC.model.ImcGraphModel;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -18,16 +19,25 @@ public class ImcGraphView extends javax.swing.JPanel {
 
     ImcGraphModel model;
     private boolean viewCorrectAnswer = false;
+    private GameWin win;
+
+    public GameWin getWin() {
+        return win;
+    }
+
+    public void setWin(GameWin win) {
+        this.win = win;
+    }
 
     public ImcGraphView() {
         setBackground(new Color(0, 0, 0, 0));
         setOpaque(false);
         initComponents();
         model = new ImcGraphModel();
-        model.setNumCities(5);
+        model.setNumCities(3);
         model.generateMatrix();
         model.generateCityPoints();
-        setPreferredSize(new Dimension(600, 600));
+        setPreferredSize(new Dimension(500, 500));
         setBackground(Color.decode("#87CBB9"));
         addMouseListener(new MouseAdapter() {
             @Override
@@ -86,7 +96,6 @@ public class ImcGraphView extends javax.swing.JPanel {
                         g2d.setColor(Color.BLACK);
                         g2d.setStroke(new BasicStroke(5));
                         g2d.drawLine(cityR.x, cityR.y, cityC.x, cityC.y);
-                        // JOptionPane.showMessageDialog(null,"Correct ");
                         distanceText = String.valueOf(matrix[r][c]);
                         textX = (cityR.x + cityC.x) / 2;
                         textY = (cityR.y + cityC.y) / 2;
@@ -164,7 +173,7 @@ public class ImcGraphView extends javax.swing.JPanel {
         boolean match = model.getCorrectEdges().equals(model.getSelectedEdges());
         repaint();
         if (match && model.getCorrectEdges().size() == model.getSelectedEdges().size()) {
-            JOptionPane.showMessageDialog(null, "Congratulations! You win!");
+            win.onGameWin(model.getSelectedEdges(), model.getMatrix());
         } else {
             JOptionPane.showMessageDialog(null, "You lose. Please try again later.");
         }
@@ -174,7 +183,6 @@ public class ImcGraphView extends javax.swing.JPanel {
         model.getCorrectEdges().clear();
         viewCorrectAnswer = !viewCorrectAnswer;
         ImcGraphModel.primMST(model.getMatrix());
-        // for(int a:model.getCorrectEdges()){ System.out.println(a);}
         repaint();
     }// GEN-LAST:event_jButton2ActionPerformed
 
@@ -182,4 +190,10 @@ public class ImcGraphView extends javax.swing.JPanel {
     private common.viewmodel.CustomButton jButton1;
     private common.viewmodel.CustomButton jButton2;
     // End of variables declaration//GEN-END:variables
+
+    void undo() {
+    }
+
+    void redo() {
+    }
 }

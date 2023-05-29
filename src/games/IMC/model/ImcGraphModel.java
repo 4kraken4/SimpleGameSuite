@@ -26,7 +26,7 @@ public class ImcGraphModel {
     }
 
     public void setCorrectEdges(List<Integer> correctEdges) {
-        this.correctEdges = correctEdges;
+        ImcGraphModel.correctEdges = correctEdges;
     }
 
     public int getNumCities() {
@@ -46,7 +46,7 @@ public class ImcGraphModel {
     }
 
     public void setNumCities(int numCities) {
-        this.numCities = numCities;
+        ImcGraphModel.numCities = numCities;
     }
 
     public void setMatrix(int[][] matrix) {
@@ -61,22 +61,22 @@ public class ImcGraphModel {
         this.selectedEdges = selectedEdges;
     }
 
-   public void generateMatrix() {
-    this.matrix = new int[numCities][numCities];
-    for (int r = 0; r < numCities; r++) {
-        for (int c = 0; c < r; c++) {
-            int value = (int) (Math.random() * 91) + 10;
-            matrix[r][c] = value;
-            matrix[c][r] = value; 
+    public void generateMatrix() {
+        this.matrix = new int[numCities][numCities];
+        for (int r = 0; r < numCities; r++) {
+            for (int c = 0; c < r; c++) {
+                int value = (int) (Math.random() * 91) + 10;
+                matrix[r][c] = value;
+                matrix[c][r] = value;
+            }
         }
+        setMatrix(matrix);
     }
-    setMatrix(matrix);
-}
 
     public void generateCityPoints() {
-        int centerX = 250;
-        int centerY = 250;
-        int radius = 200;
+        int centerX = 300;
+        int centerY = 300;
+        int radius = 275;
 
         double angleIncrement = 2 * Math.PI / numCities;
         double angle = 0;
@@ -115,7 +115,7 @@ public class ImcGraphModel {
         final int CLICK_TOLERANCE = 5;
         return getDistanceFromPointToLine(mouseX, mouseY, x1, y1, x2, y2) < CLICK_TOLERANCE;
     }
-    
+
     public double getDistanceFromPointToLine(int x, int y, int x1, int y1, int x2, int y2) {
         return Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
     }
@@ -130,32 +130,27 @@ public class ImcGraphModel {
         key[0] = 0;
         parent[0] = -1;
         for (int count = 0; count < vertices - 1; count++) {
-           
             int u = minKey(key, mstSet);
-
             mstSet[u] = true;
-
             for (int v = 0; v < vertices; v++) {
                 if (graph[u][v] != 0 && !mstSet[v] && graph[u][v] < key[v]) {
                     parent[v] = u;
                     key[v] = graph[u][v];
                 }
             }
-        } 
-       // System.out.println("Edge \tWeight");
-        for (int i = 1; i < vertices; i++) {
-          // System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
-           correctEdges.add(i * numCities + parent[i]);
         }
-       
-        
+        // System.out.println("Edge \tWeight");
+        for (int i = 1; i < vertices; i++) {
+//            System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
+            correctEdges.add(i * numCities + parent[i]);
+        }
+
     }
 
     private static int minKey(int[] key, boolean[] mstSet) {
         int min = Integer.MAX_VALUE;
         int minIndex = -1;
         int length = key.length;
-
         for (int v = 0; v < length; v++) {
             if (!mstSet[v] && key[v] < min) {
                 min = key[v];

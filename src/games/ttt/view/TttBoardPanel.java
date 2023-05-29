@@ -1,9 +1,18 @@
 package games.ttt.view;
 
+import common.controller.UserController;
+import common.events.DatabaseUpdated;
+import common.events.GameWin;
 import common.events.MenuItemSelected;
+import common.model.Game;
+import common.model.Score;
+import common.model.User;
 import common.viewmodel.CustomButton;
+import games.eq.model.EqBoardModel;
+import games.ttt.model.TttBoardModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -11,12 +20,30 @@ import javax.swing.ImageIcon;
 public class TttBoardPanel extends javax.swing.JPanel {
 
     private MenuItemSelected mis;
+    private DatabaseUpdated du;
+    private User user;
 
-    public MenuItemSelected getMis() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public DatabaseUpdated getDatabaseUpdatedEvent() {
+        return du;
+    }
+
+    public void setDatabaseUpdatedEvent(DatabaseUpdated du) {
+        this.du = du;
+    }
+
+    public MenuItemSelected getMenuItemSelectedEvent() {
         return mis;
     }
 
-    public void setMis(MenuItemSelected mis) {
+    public void setMenuItemSelectedEvent(MenuItemSelected mis) {
         this.mis = mis;
     }
 
@@ -24,6 +51,7 @@ public class TttBoardPanel extends javax.swing.JPanel {
         initComponents();
         setHeaderButtonIcons();
         setHeaderButtonActions();
+        purgeOnWin();
     }
 
     private void setHeaderButtonActions() {
@@ -79,6 +107,19 @@ public class TttBoardPanel extends javax.swing.JPanel {
                 }
             });
         });
+    }
+
+    private void purgeOnWin() {
+        var win = (GameWin) (Object data, Object helperData) -> {
+            Score score = new Score(0, 0, data, helperData, LocalDate.now());
+            Game game = new Game(TttBoardModel.GAME_ID, "", "", true, score);
+            user.setGame(game);
+            UserController uc = new UserController(user);
+            int purgeAnswer = uc.saveAnswer();
+            boolean isUpdated = purgeAnswer > 0;
+            du.onDatabseUpdate(EqBoardModel.GAME_ID, isUpdated);
+        };
+        tttBoardModel2.setWin(win);
     }
 
     @SuppressWarnings("unchecked")

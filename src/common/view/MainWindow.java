@@ -8,6 +8,7 @@ import common.events.MenuItemSelected;
 import common.events.UserActionPerformed;
 import common.model.Game;
 import common.model.User;
+import games.IMC.view.ImcGraphPanel;
 import games.eq.view.EqBoardPanel;
 import games.ttt.view.TttBoardPanel;
 import java.awt.Cursor;
@@ -68,9 +69,9 @@ public class MainWindow extends javax.swing.JFrame {
                     Utilities.setUI(mainContainer, tbp);
                 }
                 case "Uncle Prim" -> {
-                    TttBoardPanel tbp = new TttBoardPanel();
-                    setTttBtnActions(tbp);
-                    Utilities.setUI(mainContainer, tbp);
+                    ImcGraphPanel igp = new ImcGraphPanel();
+//                    setTttBtnActions(tbp);
+                    Utilities.setUI(mainContainer, igp);
                 }
             }
         };
@@ -110,7 +111,7 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
         };
-        tbp.setMis(mis);
+        tbp.setMenuItemSelectedEvent(mis);
     }
 
     private void setupCursor() {

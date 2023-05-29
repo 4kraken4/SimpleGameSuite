@@ -1,5 +1,6 @@
 package games.ttt.model;
 
+import common.events.GameWin;
 import common.viewmodel.CustomButton;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -18,12 +20,22 @@ public class TttBoardModel extends JPanel implements ActionListener {
     private boolean isdraw = true;
     private Random random;
     private JPanel pnlTitle, btnPanel, startButtonPanel;
-    private JLabel textfield;
-    private CustomButton[] btns;
+    public JLabel textfield;
+    public CustomButton[] btns;
     private CustomButton btnStart;
     boolean playerTurn;
     private Color colorBgTitle, colorFgTitle, colorBgCell, colorX, colorO, colorBtnPanel;
     private Font fontTitle, fontCell;
+    private GameWin win;
+    public final static int GAME_ID = 2;
+
+    public GameWin getWin() {
+        return win;
+    }
+
+    public void setWin(GameWin win) {
+        this.win = win;
+    }
 
     public Color getColorBtnPanel() {
         return colorBtnPanel;
@@ -123,8 +135,8 @@ public class TttBoardModel extends JPanel implements ActionListener {
         colorFgTitle = Color.ORANGE;
         colorBgCell = Color.WHITE;
         colorBtnPanel = Color.GRAY;
-        colorO = Color.RED;
-        colorX = Color.BLUE;
+        colorO = Color.BLUE;
+        colorX = Color.RED;
         fontTitle = new Font("Ink Free", Font.BOLD, 50);
         fontCell = new Font("MV Boli", Font.BOLD, 50);
         btns = new CustomButton[9];
@@ -178,147 +190,270 @@ public class TttBoardModel extends JPanel implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+public void actionPerformed(ActionEvent e) {
+    try {
         for (int i = 0; i < 9; i++) {
             if (e.getSource() == btns[i]) {
                 if (playerTurn) {
                     if (btns[i].getText().equals("")) {
-                        btns[i].setForeground(colorO);
+                        btns[i].setForeground(colorX);
                         btns[i].setText("X");
                         playerTurn = false;
                         textfield.setText("O turn");
-                        check();
-                    }
-                } else {
-                    if (btns[i].getText().equals("")) {
-                        btns[i].setForeground(colorX);
-                        btns[i].setText("O");
-                        playerTurn = true;
-                        textfield.setText("X turn");
-                        check();
+                        if (!checkGameOver()) {
+                            makeComputerMove();
+                        }
+                    } else {
+                        throw new IllegalStateException("Invalid move: Cell already occupied.");
                     }
                 }
             }
         }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
     }
+}
 
-    private void startGame() {
-        playerTurn = true;
-        textfield.setText("X turn");
-        for (int i = 0; i < 9; i++) {
-            btns[i].setEnabled(true);
-            btns[i].setBackground(colorBgCell);
-        }
+private void startGame() {
+    playerTurn = true;
+    textfield.setText("X turn");
+    for (int i = 0; i < 9; i++) {
+        btns[i].setEnabled(true);
+        btns[i].setBackground(colorBgCell);
     }
+}
 
-    private void firstTurn() {
-        if (random.nextInt(2) == 0) {
-            playerTurn = true;
-            textfield.setText("X turn");
-        } else {
-            playerTurn = false;
-            textfield.setText("O turn");
-        }
+
+
+private void resetGame() {
+    for (int i = 0; i < 9; i++) {
+        btns[i].setText("");
+        btns[i].setEnabled(false);
+        btns[i].setBackground(UIManager.getColor("Button.background"));
     }
-
-    private void resetGame() {
-        for (int i = 0; i < 9; i++) {
-            btns[i].setText("");
-            btns[i].setEnabled(false);
-            btns[i].setBackground(UIManager.getColor("Button.background"));
-        }
+}
+     
+   public boolean checkGameOver() {
+        try {
+    if (checkWin("X")) {
+        int[] winningRow = getWinningRow("X");
+        gameOver("X wins", winningRow);
+        return true;
+    } else if (checkWin("O")) {
+        int[] winningRow = getWinningRow("O");
+        gameOver("O wins", winningRow);
+        return true;
+    } else if (isBoardFull()) {
+        gameOver("It's a draw", null);
+        return true;
     }
-
-    private void check() {
-       
-            if (btns[0].getText().equals("X") && btns[1].getText().equals("X") && btns[2].getText().equals("X")) {
-                isdraw = xWins(0, 1, 2);
-            }
-            if (btns[3].getText().equals("X") && btns[4].getText().equals("X") && btns[5].getText().equals("X")) {
-                isdraw = xWins(3, 4, 5);
-            }
-            if (btns[6].getText().equals("X") && btns[7].getText().equals("X") && btns[8].getText().equals("X")) {
-                isdraw = xWins(6, 7, 8);
-            }
-            if (btns[0].getText().equals("X") && btns[3].getText().equals("X") && btns[6].getText().equals("X")) {
-                isdraw = xWins(0, 3, 6);
-            }
-            if (btns[1].getText().equals("X") && btns[4].getText().equals("X") && btns[7].getText().equals("X")) {
-                isdraw = xWins(1, 4, 7);
-            }
-            if (btns[2].getText().equals("X") && btns[5].getText().equals("X") && btns[8].getText().equals("X")) {
-                isdraw = xWins(2, 5, 8);
-            }
-            if (btns[0].getText().equals("X") && btns[4].getText().equals("X") && btns[8].getText().equals("X")) {
-                isdraw = xWins(0, 4, 8);
-            }
-            if (btns[2].getText().equals("X") && btns[4].getText().equals("X") && btns[6].getText().equals("X")) {
-                isdraw = xWins(2, 4, 6);
-            }
-            if (btns[0].getText().equals("O") && btns[1].getText().equals("O") && btns[2].getText().equals("O")) {
-                isdraw = oWins(0, 1, 2);
-            }
-            if (btns[3].getText().equals("O") && btns[4].getText().equals("O") && btns[5].getText().equals("O")) {
-                isdraw = oWins(3, 4, 5);
-            }
-            if (btns[6].getText().equals("O") && btns[7].getText().equals("O") && btns[8].getText().equals("O")) {
-                isdraw = oWins(6, 7, 8);
-            }
-            if (btns[0].getText().equals("O") && btns[3].getText().equals("O") && btns[6].getText().equals("O")) {
-                oWins(0, 3, 6);
-            }
-            if (btns[1].getText().equals("O") && btns[4].getText().equals("O") && btns[7].getText().equals("O")) {
-                isdraw = oWins(1, 4, 7);
-            }
-            if (btns[2].getText().equals("O") && btns[5].getText().equals("O") && btns[8].getText().equals("O")) {
-                isdraw = oWins(2, 5, 8);
-            }
-            if (btns[0].getText().equals("O") && btns[4].getText().equals("O") && btns[8].getText().equals("O")) {
-                isdraw = oWins(0, 4, 8);
-            }
-            if (btns[2].getText().equals("O") && btns[4].getText().equals("O") && btns[6].getText().equals("O")) {
-                isdraw = oWins(2, 4, 6);
-            }
-        
-        boolean draw = true;
-        for (int i = 0; i < 9; i++) {
-            if (btns[i].getText().equals("")) {
-                draw = false;
-                break;
-            }
+    return false;
         }
-        if (draw) {
-            for (int i = 0; i < 9; i++) {
-                btns[i].setEnabled(false);
-            }
-            if (isdraw) {
-                textfield.setText("It's a draw");
-            }
-        }
-    }
-
-    private boolean xWins(int a, int b, int c) {
-        btns[a].setBackground(Color.GREEN);
-        btns[b].setBackground(Color.GREEN);
-        btns[c].setBackground(Color.GREEN);
-        for (int i = 0; i < 9; i++) {
-            btns[i].setEnabled(false);
-        }
-        textfield.setText("X wins");
+        catch(Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
         return false;
     }
+}
 
-    private boolean oWins(int a, int b, int c) {
-        btns[a].setBackground(Color.GREEN);
-        btns[b].setBackground(Color.GREEN);
-        btns[c].setBackground(Color.GREEN);
-        for (int i = 0; i < 9; i++) {
-            btns[i].setEnabled(false);
+
+private boolean checkWin(String player) {
+try {
+    String[][] board = new String[3][3];
+
+    // Copy button texts to the 2D array
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            board[i][j] = btns[i * 3 + j].getText();
+
         }
+        textfield.setText("Tic-Tac-Toe");
+    }
+
+    // Define the winning conditions using indexes in the 2D array
+    int[][] winningConditions = {
+        {0, 1, 2}, // Rows
+        {3, 4, 5},
+        {6, 7, 8},
+        {0, 3, 6}, // Columns
+        {1, 4, 7},
+        {2, 5, 8},
+        {0, 4, 8}, // Diagonals
+        {2, 4, 6}
+    };
+
+    // Check for a win
+    for (int[] condition : winningConditions) {
+        if (board[condition[0] / 3][condition[0] % 3].equals(player)
+                && board[condition[1] / 3][condition[1] % 3].equals(player)
+                && board[condition[2] / 3][condition[2] % 3].equals(player)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+catch(Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
+        return false;
+    }
+}
+
+private int[] getWinningRow(String symbol) {
+    try {
+    int[][] winningConditions = {
+        {0, 1, 2}, // Rows
+        {3, 4, 5},
+        {6, 7, 8},
+        {0, 3, 6}, // Columns
+        {1, 4, 7},
+        {2, 5, 8},
+        {0, 4, 8}, // Diagonals
+        {2, 4, 6}
+    };
+
+    for (int[] condition : winningConditions) {
+        if (btns[condition[0]].getText().equals(symbol) &&
+            btns[condition[1]].getText().equals(symbol) &&
+            btns[condition[2]].getText().equals(symbol)) {
+            return condition;
+        }
+    }
+
+    return null;
+    }
+catch(Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
+        return null;
+    }
+}
+
+private boolean isBoardFull() {
+    try {
+    for (int i = 0; i < 9; i++) {
+        if (btns[i].getText().equals("")) {
+            return false;
+        }
+    }
+    return true;
+    }catch (Exception ex) {
+ex.printStackTrace();
+ JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
+return false;
+}
+}
+
+private void gameOver(String message, int[] winningRow) {
+    for (int i = 0; i < 9; i++) {
+        btns[i].setEnabled(false);
+        if (winningRow != null && isInWinningRow(i, winningRow)) {
+            btns[i].setBackground(Color.GREEN);
+        }
+    }
+    textfield.setText(message);
+}
+
+private boolean isInWinningRow(int buttonIndex, int[] winningRow) {
+    for (int index : winningRow) {
+        if (buttonIndex == index) {
+            return true;
+        }
+    }
+    return false;
+}
+
+private void makeComputerMove() {
+    try{
+    int bestScore = Integer.MIN_VALUE;
+    int bestMove = -1;
+    String[] board = new String[9];
+
+    // Copy button texts to the array
+    for (int i = 0; i < 9; i++) {
+        board[i] = btns[i].getText();
+    }
+
+    // Find the best move using the Minimax algorithm
+    for (int i = 0; i < 9; i++) {
+        if (board[i].equals("")) {
+            board[i] = "O";
+            int score = minimax(board, 0, false);
+            board[i] = "";
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = i;
+            }
+        }
+    }
+
+    // If no valid move found, choose a random available move
+    if (bestMove == -1) {
+
+    }
+
+    // Make the optimal move for the computer
+    btns[bestMove].setForeground(colorO);
+    btns[bestMove].setText("O");
+    playerTurn = true;
+    textfield.setText("X turn");
+
+    // Check if the game is over
+    checkGameOver();
+  
+    }
+    catch (Exception ex) {
+ex.printStackTrace();
+ JOptionPane.showMessageDialog(null, ex, "Alert" , JOptionPane.INFORMATION_MESSAGE);
+}
+}
+
+
+private int minimax(String[] board, int depth, boolean isMaximizingPlayer) {
+    if (checkWin("X")) {
+        return -1; // X wins
+    } else if (checkWin("O")) {
+        return 1; // O wins
+    } else if (isBoardFull()) {
+        return 0; // Draw
+    }
+
+    if (isMaximizingPlayer) {
+        int bestScore = Integer.MIN_VALUE;
+
+        for (int i = 0; i < 9; i++) {
+            if (board[i].equals("")) {
+                board[i] = "O";
+                int score = minimax(board, depth + 1, false);
+                board[i] = "";
+                bestScore = Math.max(score, bestScore);
+            }
+        }
+
+        return bestScore;
+    } else {
+        int bestScore = Integer.MAX_VALUE;
+        for (int i = 0; i < 9; i++) {
+            if (board[i].equals("")) {
+                board[i] = "X";
+                int score = minimax(board, depth + 1, true);
+                board[i] = "";
+                bestScore = Math.min(score, bestScore);
+            }
+        }
+        return bestScore;
+
         textfield.setText("O wins");
         return false;
-    }
 
+    }
+}
+
+
+        
     public void redo() {
     }
 

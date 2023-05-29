@@ -30,9 +30,10 @@ public class GameSuiteLogger {
         String formattedDateTime = now.format(formatter);
         int RETAINABLE_FILECOUNT = Integer.parseInt(configuration.getProperty("RETAINABLE_LOGFILECOUNT"));
         int MAX_FILESIZE = Integer.parseInt(configuration.getProperty("MAX_LOGFILE_SIZE"));
-        String LOGDIRECTORY = configuration.getProperty("LOGFILEDIRPATH");
+        String BASEDIR = System.getProperty("user.dir");
+        String LOGDIR = configuration.getProperty("LOGFOLDERNAME");
         String LOGFILE = configuration.getProperty("LOGFILENAME");
-        LOGFILEPATH = LOGDIRECTORY + "/" + LOGFILE + "_" + formattedDateTime + ".log";
+        LOGFILEPATH = BASEDIR.concat("/") + LOGDIR.concat("/") + LOGFILE + "_" + formattedDateTime + ".log";
         try {
             FileHandler fileHandler = new FileHandler(LOGFILEPATH, MAX_FILESIZE, RETAINABLE_FILECOUNT, false);
             fileHandler.setFormatter(new SimpleFormatter());

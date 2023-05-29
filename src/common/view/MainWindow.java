@@ -1,9 +1,12 @@
 package common.view;
 
 import common.components.GlassPanePopup;
+import common.controller.GameController;
 import common.controller.UserController;
+import common.events.DatabaseUpdated;
 import common.events.MenuItemSelected;
 import common.events.UserActionPerformed;
+import common.model.Game;
 import common.model.User;
 import games.eq.view.EqBoardPanel;
 import games.ttt.view.TttBoardPanel;
@@ -14,6 +17,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import util.GameConfiguration;
 import util.GameSuiteLogger;
@@ -31,6 +36,7 @@ public class MainWindow extends javax.swing.JFrame {
         GlassPanePopup.install(this);
         setupUserDataPanel();
         setupCursor();
+        currentUser = null;
     }
 
     private void setMenuActions() {
@@ -41,6 +47,8 @@ public class MainWindow extends javax.swing.JFrame {
             switch (acmd) {
                 case "8 Queens" -> {
                     EqBoardPanel eqb = new EqBoardPanel();
+                    eqb.setUser(currentUser);
+                    eqb.setDatabaseUpdatedEvent(setUpCongratsMeg());
                     setEQueenBtnActions(eqb);
                     Utilities.setUI(mainContainer, eqb);
                 }
@@ -84,7 +92,7 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
         };
-        eqb.setMis(mis);
+        eqb.setMenuItemSelectedEvent(mis);
     }
 
     private void setTttBtnActions(TttBoardPanel tbp) {
@@ -120,6 +128,33 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
 
+    private DatabaseUpdated setUpCongratsMeg() {
+        GameController gc = new GameController(new Game(0));
+        List<Game> games = gc.getGames();
+        var dbu = (DatabaseUpdated) (int gameId, boolean isUpdated) -> {
+            if (games != null && !games.isEmpty()) {
+                Game game = games.stream()
+                        .filter(g -> g.getGameId() == gameId)
+                        .collect(Collectors.toList())
+                        .get(0);
+                PopUpMessage pum = new PopUpMessage(isUpdated);
+                String title = "You've done it, BUT";
+                String message = "It looks like this answer has been already found. But nevever mind just keep trying...you ca do it!";
+                if (isUpdated) {
+                    title = "You've done it!.";
+                    message = "Congradulation on finding a correct answer for " + game.getGameTitle() + " game.";
+                }
+                pum.setTitle(title);
+                pum.setMessage(message);
+                pum.eventOK((e) -> {
+                    GlassPanePopup.closePopupLast();
+                });
+                GlassPanePopup.showPopup(pum);
+            }
+        };
+        return dbu;
+    }
+
     private void setupUserDataPanel() {
         udp = new UserDataPanel();
         Utilities.setUI(mainContainer, udp);
@@ -144,6 +179,7 @@ public class MainWindow extends javax.swing.JFrame {
                 try {
                     int saveUser = uc.saveUser();
                     if (saveUser > 0) {
+                        currentUser = uc.getUser();
                         setMenuActions();
                     }
                 } catch (SQLException ex) {
@@ -183,6 +219,7 @@ public class MainWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private User currentUser;
     private final GameConfiguration configuration;
     private final TranslationHandler translations;
     private final GameSuiteLogger logger;

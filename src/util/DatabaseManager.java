@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.*;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import common.events.QueryExecutionListener;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class DatabaseManager {
@@ -26,10 +25,10 @@ public class DatabaseManager {
     private static String DATABASE;
     private static String DBUSER;
     private static String DBPASSWORD;
-    private static String JSONQUERYPATH;
+    private static String JSONQUERYFOLDER;
     private Connection connection;
-    private GameConfiguration configuration;
-    private GameSuiteLogger logger;
+    private final GameConfiguration configuration;
+    private final GameSuiteLogger logger;
     private QueryExecutionListener listener;
     private static volatile DatabaseManager instance;
 
@@ -48,7 +47,7 @@ public class DatabaseManager {
         DBUSER = configuration.getProperty("DBUSER");
         DBPASSWORD = configuration.getProperty("DBPASSWORD");
         DBURL = configuration.getProperty("DBURL");
-        JSONQUERYPATH = configuration.getProperty("JSONQUERYPATH");
+        JSONQUERYFOLDER = configuration.getProperty("JSONQUERYFOLDER");
         createDatabaseIfNotExist();
     }
 
@@ -88,7 +87,12 @@ public class DatabaseManager {
             for (String paramName : params.keySet()) {
                 JsonElement ele = params.get(paramName);
                 if (ele.isJsonPrimitive()) {
-                    if (ele.getAsJsonPrimitive().isString()) {
+                    JsonPrimitive jsonPrimitive = ele.getAsJsonPrimitive();
+                    if (jsonPrimitive.isJsonPrimitive() && jsonPrimitive.getAsString().startsWith("base64:")) {
+                        String base64Data = jsonPrimitive.getAsString().substring(7);
+                        byte[] byteArrayData = java.util.Base64.getDecoder().decode(base64Data);
+                        preparedStatement.setBytes(++idx, byteArrayData);
+                    } else if (ele.getAsJsonPrimitive().isString()) {
                         preparedStatement.setString(++idx, ele.getAsString());
                     } else if (ele.getAsJsonPrimitive().isBoolean()) {
                         preparedStatement.setBoolean(++idx, ele.getAsBoolean());
@@ -101,6 +105,8 @@ public class DatabaseManager {
                     } else {
                         throw new IllegalArgumentException("Unsupported data type for parameter.");
                     }
+                } else if (ele.isJsonNull()) {
+                    preparedStatement.setNull(++idx, Types.NULL);
                 }
             }
         }
@@ -121,26 +127,19 @@ public class DatabaseManager {
 
     public ResultSet executeQuery(String namespace, String statementName, JsonObject params) throws SQLException {
         ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = prepareStatement(namespace, statementName, params);
+            preparedStatement = prepareStatement(namespace, statementName, params);
             resultSet = preparedStatement.executeQuery();
         } catch (SQLException e) {
             throw e;
-        } finally {
-            closeConnection();
         }
         return resultSet;
     }
 
     private String getStatementFromJSON(String namespace, String statementName) {
-        String query = null;
-        try ( FileReader reader = new FileReader(JSONQUERYPATH + "/" + namespace + ".json")) {
-            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
-            query = jsonObject.get(statementName).getAsString();
-        } catch (IOException e) {
-            logger.logError(DatabaseManager.class.getName(), e);
-        }
-        return query;
+        return Utilities
+                .getValueFromJsonFile(JSONQUERYFOLDER.concat("/") + namespace.concat(".json"), statementName);
     }
 
     public final boolean checkDatabaseExists() {
@@ -154,7 +153,7 @@ public class DatabaseManager {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.logError(DatabaseManager.class.getName(), ex);
         } finally {
             closeConnection();
         }
@@ -211,7 +210,7 @@ public class DatabaseManager {
         boolean exists = checkDatabaseExists();
         if (!exists) {
             logger.logInfo("Staring to create the database because" + DATABASE + "does not exist.");
-            File latestSQLFile = getLatestSQLFile(JSONQUERYPATH);
+            File latestSQLFile = getLatestSQLFile(JSONQUERYFOLDER);
             if (latestSQLFile.canRead()) {
                 try {
                     String sql = readFile(latestSQLFile.getAbsolutePath());

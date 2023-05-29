@@ -5,11 +5,27 @@ import java.util.Objects;
 
 public class Score {
 
-    protected int scoreId;
-    protected Game game;
-    protected User user;
-    protected int value;
-    protected LocalDate lastUpdated;
+    private int scoreId;
+    private int value;
+    private Object answer;
+    private Object helperData;
+    private LocalDate lastUpdated;
+
+    public Object getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(Object answer) {
+        this.answer = answer;
+    }
+
+    public Object getHelperData() {
+        return helperData;
+    }
+
+    public void setHelperData(Object helperData) {
+        this.helperData = helperData;
+    }
 
     public int getScoreId() {
         return scoreId;
@@ -17,22 +33,6 @@ public class Score {
 
     public void setScoreId(int scoreId) {
         this.scoreId = scoreId;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public int getValue() {
@@ -54,11 +54,17 @@ public class Score {
     public Score() {
     }
 
-    public Score(int scoreId, Game game, User user, int value, LocalDate lastUpdated) {
+    public Score(int scoreId, int value, LocalDate lastUpdated) {
         this.scoreId = scoreId;
-        this.game = game;
-        this.user = user;
         this.value = value;
+        this.lastUpdated = lastUpdated;
+    }
+
+    public Score(int scoreId, int value, Object answer, Object helperData, LocalDate lastUpdated) {
+        this.scoreId = scoreId;
+        this.value = value;
+        this.answer = answer;
+        this.helperData = helperData;
         this.lastUpdated = lastUpdated;
     }
 
@@ -66,8 +72,6 @@ public class Score {
     public int hashCode() {
         int hash = 7;
         hash = 71 * hash + this.scoreId;
-        hash = 71 * hash + Objects.hashCode(this.game);
-        hash = 71 * hash + Objects.hashCode(this.user);
         hash = 71 * hash + this.value;
         hash = 71 * hash + Objects.hashCode(this.lastUpdated);
         return hash;
@@ -91,17 +95,11 @@ public class Score {
         if (this.value != other.value) {
             return false;
         }
-        if (!Objects.equals(this.game, other.game)) {
-            return false;
-        }
-        if (!Objects.equals(this.user, other.user)) {
-            return false;
-        }
         return Objects.equals(this.lastUpdated, other.lastUpdated);
     }
 
     @Override
     public String toString() {
-        return "Score{" + "scoreId=" + scoreId + ", game=" + game + ", user=" + user + ", value=" + value + ", lastUpdated=" + lastUpdated + '}';
+        return "Score{" + "scoreId=" + scoreId + ", value=" + value + ", lastUpdated=" + lastUpdated + '}';
     }
 }

@@ -5,13 +5,19 @@ import com.google.gson.JsonObject;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class Utilities {
-    
+
     private static final GameSuiteLogger logger = GameSuiteLogger.getInstance();
 
     public static ImageIcon scaleIcon(ImageIcon icn, int maxWidth, int maxHeight) {
@@ -36,7 +42,8 @@ public class Utilities {
     }
 
     public static String getValueFromJsonFile(String filePath, String key) {
-        try ( FileReader reader = new FileReader(filePath)) {
+        String BASEDIR = System.getProperty("user.dir");
+        try ( FileReader reader = new FileReader(BASEDIR.concat("/") + filePath)) {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.fromJson(reader, JsonObject.class);
             String value = jsonObject.get(key).getAsString();
@@ -44,6 +51,30 @@ public class Utilities {
         } catch (IOException e) {
             logger.logError(Utilities.class.getName(), e);
         } catch (Exception e) {
+            logger.logError(Utilities.class.getName(), e);
+        }
+        return null;
+    }
+
+    public static byte[] serialize(Object object) {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(object);
+            oos.flush();
+            return bos.toByteArray();
+        } catch (IOException e) {
+            logger.logError(Utilities.class.getName(), e);
+        }
+        return null;
+    }
+
+    public static Object deserialize(byte[] data) {
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(data);
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            return ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
             logger.logError(Utilities.class.getName(), e);
         }
         return null;

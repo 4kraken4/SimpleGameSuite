@@ -4,8 +4,17 @@ import java.util.Objects;
 
 public class User {
 
-    protected int userId;
-    protected String username;
+    private int userId;
+    private String username;
+    private Game game;
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 
     public int getUserId() {
         return userId;
@@ -29,6 +38,12 @@ public class User {
     public User(int userId, String username) {
         this.userId = userId;
         this.username = username;
+    }
+
+    public User(int userId, String username, Game game) {
+        this.userId = userId;
+        this.username = username;
+        this.game = game;
     }
 
     @Override

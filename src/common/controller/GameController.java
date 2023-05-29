@@ -37,19 +37,29 @@ public class GameController {
 
     public List<Game> getGames() {
         List<Game> games = new ArrayList<>();
+        ResultSet resultSet = null;
         try {
-            ResultSet executeQuery = db.executeQuery(namespace, "GetGames", new JsonObject());
-            while (executeQuery.next()) {
+            resultSet = db.executeQuery(namespace, "GetGames", new JsonObject());
+            while (resultSet.next()) {
                 Game g = new Game(
-                        executeQuery.getInt(1),
-                        executeQuery.getString(2),
-                        executeQuery.getString(3),
-                        executeQuery.getBoolean(4)
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getBoolean(5)
                 );
                 games.add(g);
             }
         } catch (SQLException ex) {
             logger.logError(UserController.class.getName(), ex);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    logger.logError(UserController.class.getName(), e);
+                }
+            }
+            db.closeConnection();
         }
         return games;
     }

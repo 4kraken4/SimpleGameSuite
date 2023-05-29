@@ -16,7 +16,7 @@ public class OptDecode extends javax.swing.JPanel {
 
         txtEncoded.setEditable(false);
         txtEncoded.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtEncoded.setText("Text Encoded");
+        txtEncoded.setText("Decoded");
         txtEncoded.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         txtEncoded.setRound(60);
 

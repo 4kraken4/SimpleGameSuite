@@ -17,8 +17,8 @@ public class TttBoardModel extends JPanel implements ActionListener {
 
     private Random random;
     private JPanel pnlTitle, btnPanel, startButtonPanel;
-    private JLabel textfield;
-    private CustomButton[] btns;
+    public JLabel textfield;
+    public CustomButton[] btns;
     private CustomButton btnStart;
     boolean playerTurn;
     private Color colorBgTitle, colorFgTitle, colorBgCell, colorX, colorO, colorBtnPanel;
@@ -177,21 +177,28 @@ public class TttBoardModel extends JPanel implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-    for (int i = 0; i < 9; i++) {
-        if (e.getSource() == btns[i]) {
-            if (playerTurn) {
-                if (btns[i].getText().equals("")) {
-                    btns[i].setForeground(colorX);
-                    btns[i].setText("X");
-                    playerTurn = false;
-                    textfield.setText("O turn");
-                    if (!checkGameOver()) {
-                        makeComputerMove();
+public void actionPerformed(ActionEvent e) {
+    try {
+        for (int i = 0; i < 9; i++) {
+            if (e.getSource() == btns[i]) {
+                if (playerTurn) {
+                    if (btns[i].getText().equals("")) {
+                        btns[i].setForeground(colorX);
+                        btns[i].setText("X");
+                        playerTurn = false;
+                        textfield.setText("O turn");
+                        if (!checkGameOver()) {
+                            makeComputerMove();
+                        }
+                    } else {
+                        throw new IllegalStateException("Invalid move: Cell already occupied.");
                     }
                 }
             }
         }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        // Handle the exception, display an error message, or take appropriate action
     }
 }
 
@@ -204,16 +211,7 @@ private void startGame() {
     }
 }
 
-private void firstTurn() {
-    if (random.nextInt(2) == 0) {
-        playerTurn = true;
-        textfield.setText("X turn");
-    } else {
-        playerTurn = false;
-        textfield.setText("O turn");
-        makeComputerMove();
-    }
-}
+
 
 private void resetGame() {
     for (int i = 0; i < 9; i++) {
@@ -222,26 +220,9 @@ private void resetGame() {
         btns[i].setBackground(UIManager.getColor("Button.background"));
     }
 }
-   private void xWins(int a, int b, int c) {
-        btns[a].setBackground(Color.GREEN);
-        btns[b].setBackground(Color.GREEN);
-        btns[c].setBackground(Color.GREEN);
-        for (int i = 0; i < 9; i++) {
-            btns[i].setEnabled(false);
-        }
-        textfield.setText("X wins");
-    }
-   private void oWins(int a, int b, int c) {
-        btns[a].setBackground(Color.GREEN);
-        btns[b].setBackground(Color.GREEN);
-        btns[c].setBackground(Color.GREEN);
-        for (int i = 0; i < 9; i++) {
-            btns[i].setEnabled(false);
-        }
-        textfield.setText("O wins");
-    }
-   
-   private boolean checkGameOver() {
+     
+   public boolean checkGameOver() {
+        try {
     if (checkWin("X")) {
         int[] winningRow = getWinningRow("X");
         gameOver("X wins", winningRow);
@@ -255,9 +236,16 @@ private void resetGame() {
         return true;
     }
     return false;
+        }
+        catch(Exception ex) {
+        ex.printStackTrace();
+        // Handle the exception, display an error message, or take appropriate action
+        return false;
+    }
 }
 
 private boolean checkWin(String player) {
+try {
     String[][] board = new String[3][3];
 
     // Copy button texts to the 2D array
@@ -290,8 +278,15 @@ private boolean checkWin(String player) {
 
     return false;
 }
+catch(Exception ex) {
+        ex.printStackTrace();
+        // Handle the exception, display an error message, or take appropriate action
+        return false;
+    }
+}
 
 private int[] getWinningRow(String symbol) {
+    try {
     int[][] winningConditions = {
         {0, 1, 2}, // Rows
         {3, 4, 5},
@@ -312,15 +307,27 @@ private int[] getWinningRow(String symbol) {
     }
 
     return null;
+    }
+catch(Exception ex) {
+        ex.printStackTrace();
+        // Handle the exception, display an error message, or take appropriate action
+        return null;
+    }
 }
 
 private boolean isBoardFull() {
+    try {
     for (int i = 0; i < 9; i++) {
         if (btns[i].getText().equals("")) {
             return false;
         }
     }
     return true;
+    }catch (Exception ex) {
+ex.printStackTrace();
+// Handle the exception, display an error message, or take appropriate action
+return false;
+}
 }
 
 private void gameOver(String message, int[] winningRow) {
@@ -343,6 +350,7 @@ private boolean isInWinningRow(int buttonIndex, int[] winningRow) {
 }
 
 private void makeComputerMove() {
+    try{
     int bestScore = Integer.MIN_VALUE;
     int bestMove = -1;
     String[] board = new String[9];
@@ -384,6 +392,12 @@ private void makeComputerMove() {
 
     // Check if the game is over
     checkGameOver();
+    }
+    catch (Exception ex) {
+ex.printStackTrace();
+// Handle the exception, display an error message, or take appropriate action
+
+}
 }
 
 private int minimax(String[] board, int depth, boolean isMaximizingPlayer) {

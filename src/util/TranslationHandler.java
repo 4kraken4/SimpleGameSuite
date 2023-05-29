@@ -3,9 +3,9 @@ package util;
 public class TranslationHandler {
 
     private TranslationHandler() {
-        TRANSLATION_FILE_PATH_ABSOLUTE = GameConfiguration
+        TRANSLATION_FILE_FOLDER = GameConfiguration
                 .getInstance()
-                .getProperty("TRANSLATIONPATH");
+                .getProperty("TRANSLATIONFOLDER");
     }
 
     public static TranslationHandler getInstance() {
@@ -21,10 +21,10 @@ public class TranslationHandler {
 
     public String getTranslation(String schema, String labelIdentifier) {
         return Utilities.getValueFromJsonFile(
-                TRANSLATION_FILE_PATH_ABSOLUTE + "/" + schema + ".json", labelIdentifier);
+                TRANSLATION_FILE_FOLDER + "/" + schema + ".json", labelIdentifier);
     }
 
-    private static String TRANSLATION_FILE_PATH_ABSOLUTE;
+    private static String TRANSLATION_FILE_FOLDER;
     private static volatile TranslationHandler instance;
     public static final String SCHEMMA_ERROR_TRANSLATION = "error-label-translation";
 }

@@ -110,7 +110,7 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
         };
-        tbp.setMis(mis);
+        tbp.setMenuItemSelectedEvent(mis);
     }
 
     private void setupCursor() {

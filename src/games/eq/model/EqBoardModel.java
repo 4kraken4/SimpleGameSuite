@@ -36,7 +36,7 @@ public class EqBoardModel extends JPanel {
     private MenuItemSelected mis;
     private boolean isPathHighlighted;
     private GameWin win;
-    public static final int GAME_ID = 1;
+    public final static int GAME_ID = 1;
 
     public GameWin getWin() {
         return win;

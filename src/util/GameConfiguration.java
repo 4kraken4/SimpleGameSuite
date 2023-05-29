@@ -50,7 +50,7 @@ public class GameConfiguration {
             }
             propertyValue = properties.getProperty(property);
         } catch (IOException | PropertyNotFoundException ex) {
-            // logger.logError(GameConfiguration.class.getName(), ex);
+             logger.logError(GameConfiguration.class.getName(), ex);
         }
         return propertyValue;
     }

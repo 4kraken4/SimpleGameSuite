@@ -125,7 +125,7 @@ public class IMCGraphPanel extends javax.swing.JPanel {
             UserController uc = new UserController(user);
             int purgeAnswer = uc.saveAnswer();
             boolean isUpdated = purgeAnswer > 0;
-            du.onDatabseUpdate(EqBoardModel.GAME_ID, isUpdated);
+            du.onDatabseUpdate(IMCGraphModel.GAME_ID, isUpdated);
         };
         imcGraphView1.setWin(win);
     }

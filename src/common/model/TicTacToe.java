@@ -62,4 +62,5 @@ public class TicTacToe extends Game {
 
     private int[] answer;
     private boolean isX;
+    public static final int GAME_ID = 2;
 }

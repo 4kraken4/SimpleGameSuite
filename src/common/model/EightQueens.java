@@ -49,4 +49,5 @@ public class EightQueens extends Game {
     }
 
     private int[] answer;
+    public static final int GAME_ID = 1;
 }

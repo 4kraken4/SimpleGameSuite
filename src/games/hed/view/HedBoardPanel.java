@@ -5,6 +5,7 @@ import common.events.DatabaseUpdated;
 import common.events.GameWin;
 import common.events.MenuItemSelected;
 import common.model.Game;
+import common.model.HuffmanED;
 import common.model.Score;
 import common.model.User;
 import common.viewmodel.CustomButton;
@@ -52,12 +53,12 @@ public class HedBoardPanel extends javax.swing.JPanel {
     private void purgeOnWin() {
         var win = (GameWin) (Object data, Object helperData) -> {
             Score score = new Score(0, 0, data, helperData, LocalDate.now());
-            Game game = new Game(EqBoardModel.GAME_ID, "", "", true, score);
+            Game game = new Game(HuffmanED.GAME_ID, "", "", true, score);
             user.setGame(game);
             UserController uc = new UserController(user);
             int purgeAnswer = uc.saveAnswer();
             boolean isUpdated = purgeAnswer > 0;
-            du.onDatabseUpdate(EqBoardModel.GAME_ID, isUpdated);
+            du.onDatabseUpdate(HuffmanED.GAME_ID, isUpdated);
         };
         answerPanel.setWin(win);
     }
@@ -65,6 +66,7 @@ public class HedBoardPanel extends javax.swing.JPanel {
     
     private void setupAnswerPanel(boolean isEncode) {
         answerPanel = new HedAnswerPanel();
+        answerPanel.setIsOptEncode(isEncode);
         Utilities.setUI(hedContainer, answerPanel);
         answerPanel.onBack((ActionEvent e) -> {
             hedOptionsPanel2 = new HedOptionsPanel();
@@ -176,13 +178,11 @@ public class HedBoardPanel extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(700, 500));
         setLayout(new java.awt.GridBagLayout());
 
-        jPanel7.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         jPanel7.setPreferredSize(new java.awt.Dimension(700, 500));
         jPanel7.setRequestFocusEnabled(false);
         jPanel7.setVerifyInputWhenFocusTarget(false);
         jPanel7.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 102, 255)));
         jPanel1.setPreferredSize(new java.awt.Dimension(500, 80));
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -324,7 +324,6 @@ public class HedBoardPanel extends javax.swing.JPanel {
 
         jPanel7.add(jPanel1, java.awt.BorderLayout.NORTH);
 
-        hedContainer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 255, 51)));
         hedContainer.setPreferredSize(new java.awt.Dimension(700, 500));
         hedContainer.setLayout(new java.awt.BorderLayout());
         hedContainer.add(hedOptionsPanel2, java.awt.BorderLayout.CENTER);

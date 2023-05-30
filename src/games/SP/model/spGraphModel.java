@@ -102,8 +102,8 @@ public class SPGraphModel {
     }
 
     public void generateCityPoints() {
-        int centerX = 250;
-        int centerY = 250;
+        int centerX = 300;
+        int centerY = 300;
         int radius = 200;
         double angleIncrement = 2 * Math.PI / numCities;
         double angle = 0;
@@ -135,7 +135,7 @@ public class SPGraphModel {
     }
 
     public boolean isClickedOnLine(int mouseX, int mouseY, int x1, int y1, int x2, int y2) {
-        final int CLICK_TOLERANCE = 5;
+        final int CLICK_TOLERANCE = 10;
         return getDistanceFromPointToLine(mouseX, mouseY, x1, y1, x2, y2) < CLICK_TOLERANCE;
     }
 
@@ -149,7 +149,6 @@ public class SPGraphModel {
         int[] distances = new int[nCities];
         boolean[] visited = new boolean[nCities];
         int[] previousEdges = new int[nCities];
-
         Arrays.fill(distances, Integer.MAX_VALUE);
         distances[startNode] = 0;
 
@@ -168,7 +167,6 @@ public class SPGraphModel {
                     if (newDistance < distances[neighborNode]) {
                         distances[neighborNode] = newDistance;
                         previousEdges[neighborNode] = edgeNumber;
-
                         if (!queue.contains(neighborNode)) {
                             queue.add(neighborNode);
                         }
@@ -176,14 +174,12 @@ public class SPGraphModel {
                 }
             }
         }
-
         if (distances[getTargetNode()] == Integer.MAX_VALUE) {
             JOptionPane.showMessageDialog(null, " unreachable");
         } else {
             int previousEdge = previousEdges[getTargetNode()];
             while (previousEdge != 0) {
                 int previousNode = (previousEdge - 1) / nCities;
-
                 correctEdges.add(previousEdge);
                 previousEdge = previousEdges[previousNode];
             }

@@ -5,19 +5,15 @@ import java.util.*;
 public class HuffmanCodes {
 
     public static Map<Character, String> encode(String input) {
-        // Step 1: Calculate frequency of each character
+       
         Map<Character, Integer> frequencyMap = new HashMap<>();
         for (char c : input.toCharArray()) {
             frequencyMap.put(c, frequencyMap.getOrDefault(c, 0) + 1);
         }
-
-        // Step 2: Create priority queue
         PriorityQueue<HuffmanNode> pq = new PriorityQueue<>();
         for (Map.Entry<Character, Integer> entry : frequencyMap.entrySet()) {
             pq.offer(new HuffmanNode(entry.getKey(), entry.getValue(), null, null));
         }
-
-        // Step 3: Build Huffman tree
         while (pq.size() > 1) {
             HuffmanNode left = pq.poll();
             HuffmanNode right = pq.poll();
@@ -25,7 +21,6 @@ public class HuffmanCodes {
             pq.offer(parent);
         }
 
-        // Step 4: Generate Huffman codes
         HuffmanNode root = pq.poll();
         Map<Character, String> huffmanCodes = new HashMap<>();
         generateCodes(root, "", huffmanCodes);
@@ -41,7 +36,6 @@ public class HuffmanCodes {
         if (node.left == null && node.right == null) {
             huffmanCodes.put(node.character, code);
         }
-
         generateCodes(node.left, code + "0", huffmanCodes);
         generateCodes(node.right, code + "1", huffmanCodes);
     }

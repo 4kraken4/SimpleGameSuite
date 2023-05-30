@@ -27,13 +27,11 @@ public class HedOptionsPanel extends javax.swing.JPanel {
         btnDecode = new common.viewmodel.CustomButton();
         btnEncode = new common.viewmodel.CustomButton();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 51, 255)));
         setMaximumSize(new java.awt.Dimension(300, 200));
         setMinimumSize(new java.awt.Dimension(300, 200));
         setPreferredSize(new java.awt.Dimension(300, 200));
         setLayout(new java.awt.GridBagLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 51, 102)));
         jPanel2.setPreferredSize(new java.awt.Dimension(300, 200));
         jPanel2.setLayout(new java.awt.BorderLayout(0, 50));
 

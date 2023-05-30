@@ -6,6 +6,7 @@ public class HuffmanED extends Game {
     private String answer;
     private boolean isEncode;
     private String question;
+    public static final int GAME_ID = 3;
 
     public HuffmanED(String answer, boolean isEncode, String question) {
         this.answer = answer;

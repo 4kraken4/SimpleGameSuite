@@ -1,4 +1,4 @@
-package games.IMC.view;
+package games.SP.view;
 
 import common.controller.UserController;
 import common.events.DatabaseUpdated;
@@ -8,7 +8,7 @@ import common.model.Game;
 import common.model.Score;
 import common.model.User;
 import common.viewmodel.CustomButton;
-import games.IMC.model.IMCGraphModel;
+import games.SP.model.SPGraphModel;
 import games.eq.model.EqBoardModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.ImageIcon;
 
-public class IMCGraphPanel extends javax.swing.JPanel {
+public class SPGraphPanel extends javax.swing.JPanel {
     
     private MenuItemSelected mis;
     private DatabaseUpdated du;
@@ -32,11 +32,11 @@ public class IMCGraphPanel extends javax.swing.JPanel {
     }
     
     public GameWin getWin() {
-        return imcGraphView1.getWin();
+        return spGraphView1.getWin();
     }
 
     public void setWin(GameWin win) {
-        this.imcGraphView1.setWin(win);
+        this.spGraphView1.setWin(win);
     }
 
     public MenuItemSelected getMenuItemSelectedEvent() {
@@ -55,7 +55,7 @@ public class IMCGraphPanel extends javax.swing.JPanel {
         this.du = du;
     }
 
-    public IMCGraphPanel() {
+    public SPGraphPanel() {
         initComponents();
         setHeaderButtonIcons();
         setHeaderButtonActions();
@@ -64,10 +64,10 @@ public class IMCGraphPanel extends javax.swing.JPanel {
     
     private void setHeaderButtonActions() {
         btnUndo.addActionListener((e) -> {
-            imcGraphView1.undo();
+            spGraphView1.undo();
         });
         btnRedo.addActionListener((e) -> {
-            imcGraphView1.redo();
+            spGraphView1.redo();
         });
         btnHint.addActionListener(e -> {
 //            imcGraphView2.setPathHighlighted(!gameBoard1.isPathHighlighted());
@@ -120,14 +120,14 @@ public class IMCGraphPanel extends javax.swing.JPanel {
     private void purgeOnWin() {
         var win = (GameWin) (Object data, Object helperData) -> {
             Score score = new Score(0, 0, data, helperData, LocalDate.now());
-            Game game = new Game(IMCGraphModel.GAME_ID, "", "", true, score);
+            Game game = new Game(SPGraphModel.GAME_ID, "", "", true, score);
             user.setGame(game);
             UserController uc = new UserController(user);
             int purgeAnswer = uc.saveAnswer();
             boolean isUpdated = purgeAnswer > 0;
             du.onDatabseUpdate(EqBoardModel.GAME_ID, isUpdated);
         };
-        imcGraphView1.setWin(win);
+        spGraphView1.setWin(win);
     }
 
     @SuppressWarnings("unchecked")
@@ -153,7 +153,7 @@ public class IMCGraphPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         btnHint = new common.viewmodel.CustomButton();
         btnClose = new common.viewmodel.CustomButton();
-        imcGraphView1 = new games.IMC.view.IMCGraphView();
+        spGraphView1 = new games.SP.view.SPGraphView();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -298,15 +298,15 @@ public class IMCGraphPanel extends javax.swing.JPanel {
         jPanel1.add(jPanel4);
 
         jPanel7.add(jPanel1, java.awt.BorderLayout.NORTH);
-        jPanel7.add(imcGraphView1, java.awt.BorderLayout.CENTER);
+        jPanel7.add(spGraphView1, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 84;
-        gridBagConstraints.ipady = 508;
+        gridBagConstraints.ipady = 473;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
+        gridBagConstraints.insets = new java.awt.Insets(0, 6, 0, 0);
         add(jPanel7, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -323,7 +323,6 @@ public class IMCGraphPanel extends javax.swing.JPanel {
     private common.viewmodel.CustomButton btnHint;
     private common.viewmodel.CustomButton btnRedo;
     private common.viewmodel.CustomButton btnUndo;
-    private games.IMC.view.IMCGraphView imcGraphView1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -338,5 +337,6 @@ public class IMCGraphPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private games.SP.view.SPGraphView spGraphView1;
     // End of variables declaration//GEN-END:variables
 }

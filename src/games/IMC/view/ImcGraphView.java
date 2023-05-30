@@ -1,7 +1,7 @@
 package games.IMC.view;
 
 import common.events.GameWin;
-import games.IMC.model.ImcGraphModel;
+import games.IMC.model.IMCGraphModel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,9 +19,9 @@ import java.util.Collections;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-public class ImcGraphView extends javax.swing.JPanel {
+public class IMCGraphView extends javax.swing.JPanel {
 
-    ImcGraphModel model;
+    IMCGraphModel model;
     private boolean viewCorrectAnswer = false;
     private GameWin win;
 
@@ -33,7 +33,7 @@ public class ImcGraphView extends javax.swing.JPanel {
         this.win = win;
     }
 
-    public ImcGraphView() {
+    public IMCGraphView() {
         setBackground(new Color(0, 0, 0, 0));
         setOpaque(false);
         initComponents();
@@ -44,7 +44,7 @@ public class ImcGraphView extends javax.swing.JPanel {
         } catch (IOException e) {
 
         }
-        model = new ImcGraphModel();
+        model = new IMCGraphModel();
         model.setNumCities(5);
         model.generateMatrix();
         model.generateCityPoints();
@@ -148,6 +148,7 @@ public class ImcGraphView extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -178,7 +179,7 @@ public class ImcGraphView extends javax.swing.JPanel {
                                 .addGap(38, 38, 38)
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 109,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 301,
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216,
                                         Short.MAX_VALUE)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 103,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -186,7 +187,7 @@ public class ImcGraphView extends javax.swing.JPanel {
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(465, Short.MAX_VALUE)
+                                .addContainerGap(449, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -199,7 +200,7 @@ public class ImcGraphView extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         model.getCorrectEdges().clear();
-        ImcGraphModel.primMST(model.getMatrix());
+        IMCGraphModel.primMST(model.getMatrix());
         Collections.sort(model.getCorrectEdges());
         Collections.sort(model.getSelectedEdges());
         boolean match = false;
@@ -208,7 +209,8 @@ public class ImcGraphView extends javax.swing.JPanel {
         }
         repaint();
 
-        if (match && model.getCorrectEdges().size() == model.getSelectedEdges().size() && model.getCorrectEdges().size()==model.getMirrorSelectedEdges().size()) {
+        if (match && model.getCorrectEdges().size() == model.getSelectedEdges().size()
+                && model.getCorrectEdges().size() == model.getMirrorSelectedEdges().size()) {
             win.onGameWin(model.getSelectedEdges(), model.getMatrix());
         } else {
             JOptionPane.showMessageDialog(null, "You lose. Please try again later.");
@@ -218,7 +220,7 @@ public class ImcGraphView extends javax.swing.JPanel {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
         model.getCorrectEdges().clear();
         viewCorrectAnswer = !viewCorrectAnswer;
-        ImcGraphModel.primMST(model.getMatrix());
+        IMCGraphModel.primMST(model.getMatrix());
         repaint();
     }// GEN-LAST:event_jButton2ActionPerformed
 

@@ -9,31 +9,24 @@ import java.util.PriorityQueue;
 import java.util.Random;
 import javax.swing.JOptionPane;
 
-public class spGraphModel {
+public class SPGraphModel {
 
-    /**
-     * @return the targetNode
-     */
+    public static final int GAME_ID = 4;
+
     public int getTargetNode() {
         return targetNode;
     }
 
-    /**
-     * @param aTargetNode the targetNode to set
-     */
     public void setTargetNode(int aTargetNode) {
         targetNode = aTargetNode;
     }
 
-    public spGraphModel(int numofcities) {
+    public SPGraphModel(int numofcities) {
         this.setNumCities(numofcities);
         Random r = new Random();
         targetNode = r.nextInt(numCities - 2) + 2;
     }
 
-    /**
-     * @return the mirrorSelectedEdges
-     */
     public List<Integer> getMirrorSelectedEdges() {
         return mirrorSelectedEdges;
     }
@@ -47,7 +40,7 @@ public class spGraphModel {
     }
 
     public void setCorrectEdges(List<Integer> correctEdges) {
-        spGraphModel.correctEdges = correctEdges;
+        SPGraphModel.correctEdges = correctEdges;
     }
 
     public int getNumCities() {
@@ -66,8 +59,8 @@ public class spGraphModel {
         return selectedEdges;
     }
 
-    public void setNumCities(int numCities) {
-        spGraphModel.numCities = numCities;
+    public final void setNumCities(int numCities) {
+        SPGraphModel.numCities = numCities;
     }
 
     public void setMatrix(int[][] matrix) {
@@ -109,9 +102,9 @@ public class spGraphModel {
     }
 
     public void generateCityPoints() {
-        int centerX = 300;
-        int centerY = 300;
-        int radius = 230;
+        int centerX = 250;
+        int centerY = 250;
+        int radius = 200;
         double angleIncrement = 2 * Math.PI / numCities;
         double angle = 0;
         for (int i = 0; i < numCities; i++) {
@@ -152,25 +145,25 @@ public class spGraphModel {
     }
 
     public void getShortestPaths(int[][] adjacencyMatrix, int startNode) {
-        int numCities = adjacencyMatrix.length;
-        int[] distances = new int[numCities];
-        boolean[] visited = new boolean[numCities];
-        int[] previousEdges = new int[numCities];
+        int nCities = adjacencyMatrix.length;
+        int[] distances = new int[nCities];
+        boolean[] visited = new boolean[nCities];
+        int[] previousEdges = new int[nCities];
 
         Arrays.fill(distances, Integer.MAX_VALUE);
         distances[startNode] = 0;
 
-        PriorityQueue<Integer> queue = new PriorityQueue<>(numCities, Comparator.comparingInt(node -> distances[node]));
+        PriorityQueue<Integer> queue = new PriorityQueue<>(nCities, Comparator.comparingInt(node -> distances[node]));
         queue.add(startNode);
 
         while (!queue.isEmpty()) {
             int currentNode = queue.poll();
             visited[currentNode] = true;
 
-            for (int neighborNode = 0; neighborNode < numCities; neighborNode++) {
+            for (int neighborNode = 0; neighborNode < nCities; neighborNode++) {
                 int edgeWeight = adjacencyMatrix[currentNode][neighborNode];
                 if (edgeWeight != 0 && !visited[neighborNode]) {
-                    int edgeNumber = currentNode * numCities + neighborNode;
+                    int edgeNumber = currentNode * nCities + neighborNode;
                     int newDistance = distances[currentNode] + edgeWeight;
                     if (newDistance < distances[neighborNode]) {
                         distances[neighborNode] = newDistance;
@@ -189,7 +182,7 @@ public class spGraphModel {
         } else {
             int previousEdge = previousEdges[getTargetNode()];
             while (previousEdge != 0) {
-                int previousNode = (previousEdge - 1) / numCities;
+                int previousNode = (previousEdge - 1) / nCities;
 
                 correctEdges.add(previousEdge);
                 previousEdge = previousEdges[previousNode];

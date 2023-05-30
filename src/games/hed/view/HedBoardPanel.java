@@ -1,16 +1,156 @@
 package games.hed.view;
 
+import common.controller.UserController;
+import common.events.DatabaseUpdated;
+import common.events.GameWin;
+import common.events.MenuItemSelected;
+import common.model.Game;
+import common.model.Score;
+import common.model.User;
+import common.viewmodel.CustomButton;
+import games.eq.model.EqBoardModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.ImageIcon;
+import util.Utilities;
+
 public class HedBoardPanel extends javax.swing.JPanel {
+
+    private MenuItemSelected mis;
+    private DatabaseUpdated du;
+    private HedAnswerPanel answerPanel;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
+    public MenuItemSelected getMenuItemSelectedEvent() {
+        return mis;
+    }
+
+    public void setMenuItemSelectedEvent(MenuItemSelected mis) {
+        this.mis = mis;
+    }
+
+    public DatabaseUpdated getDatabaseUpdatedEvent() {
+        return du;
+    }
+
+    public void setDatabaseUpdatedEvent(DatabaseUpdated du) {
+        this.du = du;
+    }
+    
+    private void purgeOnWin() {
+        var win = (GameWin) (Object data, Object helperData) -> {
+            Score score = new Score(0, 0, data, helperData, LocalDate.now());
+            Game game = new Game(EqBoardModel.GAME_ID, "", "", true, score);
+            user.setGame(game);
+            UserController uc = new UserController(user);
+            int purgeAnswer = uc.saveAnswer();
+            boolean isUpdated = purgeAnswer > 0;
+            du.onDatabseUpdate(EqBoardModel.GAME_ID, isUpdated);
+        };
+        answerPanel.setWin(win);
+    }
+    
+    
+    private void setupAnswerPanel(boolean isEncode) {
+        answerPanel = new HedAnswerPanel();
+        Utilities.setUI(hedContainer, answerPanel);
+        answerPanel.onBack((ActionEvent e) -> {
+            hedOptionsPanel2 = new HedOptionsPanel();
+            setupOptions();
+            Utilities.setUI(hedContainer, hedOptionsPanel2);
+        });
+        purgeOnWin();
+    }
+    
+    private void setupOptions() {
+        hedOptionsPanel2.onSelectDecode((ActionEvent e) -> {
+            setupAnswerPanel(false);
+        });
+        hedOptionsPanel2.onSelectEncode((ActionEvent e) -> {
+            setupAnswerPanel(true);
+        });
+    }
 
     public HedBoardPanel() {
         initComponents();
+        setHeaderButtonIcons();
+        setHeaderButtonActions();
+        setupOptions();
     }
-    
+
+    private void setHeaderButtonActions() {
+        btnUndo.addActionListener((e) -> {
+//            gameBoard1.undo();
+        });
+        btnRedo.addActionListener((e) -> {
+//            gameBoard1.redo();
+        });
+        btnHint.addActionListener(e -> {
+//            gameBoard1.setPathHighlighted(!gameBoard1.isPathHighlighted());
+        });
+        btnClose.addActionListener((e) -> {
+            mis.itemSelected(e);
+        });
+    }
+
+    private void setHeaderButtonIcons() {
+        List<CustomButton> btns = Arrays.asList(btnUndo, btnRedo, btnHint, btnClose);
+        btns.forEach(btn -> {
+            String s1 = "";
+            String s2 = "";
+            switch (btn.getActionCommand()) {
+                case "undo" -> {
+                    s1 = iconUndoNormal;
+                    s2 = iconUndoHover;
+                }
+                case "redo" -> {
+                    s1 = iconRedoNormal;
+                    s2 = iconRedoHover;
+                }
+                case "hint" -> {
+                    s1 = iconHintNormal;
+                    s2 = iconHintHover;
+                }
+                case "close" -> {
+                    s1 = iconCloseNormal;
+                    s2 = iconCloseHover;
+                }
+            }
+            btn.setIcon(new ImageIcon(getClass().getResource(s1)));
+            final String me = s1;
+            final String ml = s2;
+            btn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(ml)));
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    btn.setIcon(new javax.swing.ImageIcon(getClass().getResource(me)));
+                }
+            });
+        });
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel7 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnRedo = new common.viewmodel.CustomButton();
@@ -28,7 +168,22 @@ public class HedBoardPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         btnHint = new common.viewmodel.CustomButton();
         btnClose = new common.viewmodel.CustomButton();
-        jPanel7 = new javax.swing.JPanel();
+        hedContainer = new javax.swing.JPanel();
+        hedOptionsPanel2 = new games.hed.view.HedOptionsPanel();
+
+        setMaximumSize(new java.awt.Dimension(700, 500));
+        setMinimumSize(new java.awt.Dimension(700, 500));
+        setPreferredSize(new java.awt.Dimension(700, 500));
+        setLayout(new java.awt.GridBagLayout());
+
+        jPanel7.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        jPanel7.setPreferredSize(new java.awt.Dimension(700, 500));
+        jPanel7.setRequestFocusEnabled(false);
+        jPanel7.setVerifyInputWhenFocusTarget(false);
+        jPanel7.setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 102, 255)));
+        jPanel1.setPreferredSize(new java.awt.Dimension(500, 80));
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -167,39 +322,41 @@ public class HedBoardPanel extends javax.swing.JPanel {
 
         jPanel1.add(jPanel4);
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 362, Short.MAX_VALUE)
-        );
+        jPanel7.add(jPanel1, java.awt.BorderLayout.NORTH);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        hedContainer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 255, 51)));
+        hedContainer.setPreferredSize(new java.awt.Dimension(700, 500));
+        hedContainer.setLayout(new java.awt.BorderLayout());
+        hedContainer.add(hedOptionsPanel2, java.awt.BorderLayout.CENTER);
+
+        jPanel7.add(hedContainer, java.awt.BorderLayout.CENTER);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 31;
+        gridBagConstraints.ipady = 258;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 10, 13, 10);
+        add(jPanel7, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+    private final String iconUndoNormal = "/common/icons/undo-black.png";
+    private final String iconRedoNormal = "/common/icons/redo-black.png";
+    private final String iconHintNormal = "/common/icons/lightbulb-line.png";
+    private final String iconCloseNormal = "/common/icons/cancel-line.png";
+    private final String iconUndoHover = "/common/icons/undo-yellow.png";
+    private final String iconRedoHover = "/common/icons/redo-yellow.png";
+    private final String iconHintHover = "/common/icons/lightbulb-fill.png";
+    private final String iconCloseHover = "/common/icons/cancel-fill.png";
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private common.viewmodel.CustomButton btnClose;
     private common.viewmodel.CustomButton btnHint;
     private common.viewmodel.CustomButton btnRedo;
     private common.viewmodel.CustomButton btnUndo;
+    private javax.swing.JPanel hedContainer;
+    private games.hed.view.HedOptionsPanel hedOptionsPanel2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package games.SP.view;
 
-import games.SP.model.spGraphModel;
+import common.events.GameWin;
+import games.SP.model.SPGraphModel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,17 +17,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
-public class spGraphView extends javax.swing.JPanel {
+public class SPGraphView extends javax.swing.JPanel {
 
-    spGraphModel model;
+    SPGraphModel model;
     private boolean viewCorrectAnswer = false;
+    private GameWin win;
 
-    public spGraphView(spGraphModel model) {
-        this.model = model;
+    public SPGraphView() {
+        setBackground(new Color(0, 0, 0, 0));
+        setOpaque(false);
+        initComponents();
+        model = new SPGraphModel(10);
+        model.generateMatrix();
+        model.generateCityPoints();
         try {
             this.cityImage = ImageIO.read(new File("src\\common\\icons\\cityBuildingimg.png"));
             this.targetcityImage = ImageIO.read(new File("src\\common\\icons\\targetCity.png"));
@@ -38,8 +39,7 @@ public class spGraphView extends javax.swing.JPanel {
         } catch (IOException e) {
 
         }
-        setPreferredSize(new Dimension(600, 600));
-        initComponents();
+        setPreferredSize(new Dimension(500, 500));
         this.setBackground(Color.WHITE);
         this.lblInstruction.setText("Find the Shortest Path from City A to City " + String.valueOf((char) ('A' + model.getTargetNode())));
         addMouseListener(new MouseAdapter() {
@@ -65,8 +65,8 @@ public class spGraphView extends javax.swing.JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(new BasicStroke(1));
 
-        Color[] lineColors = new Color[]{Color.decode("#618C03"), Color.decode("#F2B705"), Color.decode("#D97904"), Color.decode("#D92B04"),Color.decode("#551073"),
-           Color.decode("#3B3F8C"), Color.decode("#8C0E03"), Color.decode("#5C8EF2"), Color.decode("#618C03"), Color.decode("#3B3F8C")};
+        Color[] lineColors = new Color[]{Color.decode("#618C03"), Color.decode("#F2B705"), Color.decode("#D97904"), Color.decode("#D92B04"), Color.decode("#551073"),
+            Color.decode("#3B3F8C"), Color.decode("#8C0E03"), Color.decode("#5C8EF2"), Color.decode("#618C03"), Color.decode("#3B3F8C")};
 
         g2d.setFont(new Font("Arial", Font.BOLD, 12));
         var matrix = model.getMatrix();
@@ -119,36 +119,17 @@ public class spGraphView extends javax.swing.JPanel {
         }
         for (int i = 0; i < model.getNumCities(); i++) {
             Point city = model.getCityPoints().get(i);
-            if(model.getTargetNode() == i)
-            {
-                 g2d.drawImage(targetcityImage, city.x - 5, city.y - 30, 35, 35, null);
-            }
-            else if(i==0)
-            {
+            if (model.getTargetNode() == i) {
+                g2d.drawImage(targetcityImage, city.x - 5, city.y - 30, 35, 35, null);
+            } else if (i == 0) {
                 g2d.drawImage(homecityImage, city.x - 5, city.y - 30, 30, 30, null);
-            }
-            else
-            {
-                 g2d.drawImage(cityImage, city.x - 5, city.y - 30, 30, 30, null);
+            } else {
+                g2d.drawImage(cityImage, city.x - 5, city.y - 30, 30, 30, null);
             }
             g2d.setColor(Color.BLACK);
-            String cityName = "City "+String.valueOf((char) ('A' + i));
+            String cityName = "City " + String.valueOf((char) ('A' + i));
             g2d.drawString(cityName, city.x, city.y + 10);
         }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Sp Graph Panel");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            spGraphModel model = new spGraphModel(10);
-            model.generateMatrix();
-            model.generateCityPoints();
-            frame.getContentPane().add(new spGraphView(model));
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
     }
 
     @SuppressWarnings("unchecked")
@@ -210,26 +191,28 @@ public class spGraphView extends javax.swing.JPanel {
         model.getShortestPaths(model.getMatrix(), 0);
         Collections.sort(model.getCorrectEdges());
         Collections.sort(model.getMirrorSelectedEdges());
-        boolean match =false;
-        for(int a :model.getCorrectEdges())
-        {
-          match = model.getSelectedEdges().contains(a)|| model.getMirrorSelectedEdges().contains(a);
+        boolean match = false;
+        for (int a : model.getCorrectEdges()) {
+            match = model.getSelectedEdges().contains(a) || model.getMirrorSelectedEdges().contains(a);
         }
-        repaint();
         if (match && model.getCorrectEdges().size() == model.getMirrorSelectedEdges().size()) {
             JOptionPane.showMessageDialog(null, "Congratulations! You win!");
+            win.onGameWin(model.getMirrorSelectedEdges(), model.getMatrix());
+            model.getCorrectEdges().clear();
+            model.getSelectedEdges().clear();
         } else {
             JOptionPane.showMessageDialog(null, "You lose. Please try again later.");
         }
+        repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         model.getCorrectEdges().clear();
-         viewCorrectAnswer = !viewCorrectAnswer;
+        viewCorrectAnswer = !viewCorrectAnswer;
         model.getShortestPaths(model.getMatrix(), 0);
         repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
-    
+
     private BufferedImage homecityImage;
     private BufferedImage targetcityImage;
     private BufferedImage cityImage;
@@ -238,4 +221,18 @@ public class spGraphView extends javax.swing.JPanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel lblInstruction;
     // End of variables declaration//GEN-END:variables
+
+    void undo() {
+    }
+
+    void redo() {
+    }
+
+    GameWin getWin() {
+        return win;
+    }
+
+    void setWin(GameWin win) {
+        this.win = win;
+    }
 }

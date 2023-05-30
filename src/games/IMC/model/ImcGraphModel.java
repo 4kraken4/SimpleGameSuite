@@ -5,18 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ImcGraphModel {
+public class IMCGraphModel {
 
-    /**
-     * @return the mirrorSelectedEdges
-     */
     public List<Integer> getMirrorSelectedEdges() {
         return mirrorSelectedEdges;
     }
 
-    /**
-     * @param mirrorSelectedEdges the mirrorSelectedEdges to set
-     */
     public void setMirrorSelectedEdges(List<Integer> mirrorSelectedEdges) {
         this.mirrorSelectedEdges = mirrorSelectedEdges;
     }
@@ -26,7 +20,7 @@ public class ImcGraphModel {
     }
 
     public void setCorrectEdges(List<Integer> correctEdges) {
-        ImcGraphModel.correctEdges = correctEdges;
+        IMCGraphModel.correctEdges = correctEdges;
     }
 
     public int getNumCities() {
@@ -46,7 +40,7 @@ public class ImcGraphModel {
     }
 
     public void setNumCities(int numCities) {
-        ImcGraphModel.numCities = numCities;
+        IMCGraphModel.numCities = numCities;
     }
 
     public void setMatrix(int[][] matrix) {
@@ -74,9 +68,9 @@ public class ImcGraphModel {
     }
 
     public void generateCityPoints() {
-        int centerX = 300;
-        int centerY = 300;
-        int radius = 250;
+        int centerX = 250;
+        int centerY = 250;
+        int radius = 180;
 
         double angleIncrement = 2 * Math.PI / numCities;
         double angle = 0;

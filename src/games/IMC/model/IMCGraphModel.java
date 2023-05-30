@@ -1,4 +1,4 @@
-package games.IMC.model;
+package games.imc.model;
 
 import java.awt.Point;
 import java.util.ArrayList;

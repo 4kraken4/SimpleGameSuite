@@ -1,7 +1,7 @@
 package games.IMC.view;
 
 import common.events.GameWin;
-import games.IMC.model.IMCGraphModel;
+import games.imc.model.IMCGraphModel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;

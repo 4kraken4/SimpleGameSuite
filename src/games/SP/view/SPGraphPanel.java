@@ -8,7 +8,7 @@ import common.model.Game;
 import common.model.Score;
 import common.model.User;
 import common.viewmodel.CustomButton;
-import games.IMC.model.IMCGraphModel;
+import games.imc.model.IMCGraphModel;
 import games.SP.model.SPGraphModel;
 import games.eq.model.EqBoardModel;
 import java.awt.event.MouseAdapter;

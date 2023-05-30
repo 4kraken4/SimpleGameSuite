@@ -9,10 +9,10 @@ public class HedAnswerPanel extends javax.swing.JPanel {
 
     public HedAnswerPanel() {
         initComponents();
-        jTextPane1.setBackground(new Color(0, 0, 0, 0));
-        jTextPane1.setSelectionColor(new Color(48, 170, 63, 200));
-        jTextPane1.setOpaque(false);
-        jTextPane1.setForeground(Color.decode("#1E1E1E"));
+        textPane.setBackground(new Color(0, 0, 0, 0));
+        textPane.setSelectionColor(new Color(48, 170, 63, 200));
+        textPane.setOpaque(false);
+        textPane.setForeground(Color.decode("#1E1E1E"));
         setBackBtnActions();
     }
 
@@ -43,7 +43,7 @@ public class HedAnswerPanel extends javax.swing.JPanel {
         customButton1 = new common.viewmodel.CustomButton();
         btnBack = new common.viewmodel.CustomButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        textPane = new javax.swing.JTextPane();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 51)));
         setPreferredSize(new java.awt.Dimension(700, 500));
@@ -55,7 +55,6 @@ public class HedAnswerPanel extends javax.swing.JPanel {
 
         txtEncoded.setEditable(false);
         txtEncoded.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtEncoded.setText("Text Encoded");
         txtEncoded.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         txtEncoded.setPreferredSize(new java.awt.Dimension(300, 50));
         txtEncoded.setRound(35);
@@ -70,7 +69,6 @@ public class HedAnswerPanel extends javax.swing.JPanel {
         jPanel1.add(txtEncoded, gridBagConstraints);
 
         txtAnswer.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtAnswer.setText("Text Answer");
         txtAnswer.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         txtAnswer.setPreferredSize(new java.awt.Dimension(300, 50));
         txtAnswer.setRound(35);
@@ -109,8 +107,8 @@ public class HedAnswerPanel extends javax.swing.JPanel {
 
         jScrollPane1.setBorder(null);
 
-        jTextPane1.setBorder(null);
-        jScrollPane1.setViewportView(jTextPane1);
+        textPane.setBorder(null);
+        jScrollPane1.setViewportView(textPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -139,7 +137,7 @@ public class HedAnswerPanel extends javax.swing.JPanel {
     private common.viewmodel.CustomButton customButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane textPane;
     private common.viewmodel.CustomTextField txtAnswer;
     private common.viewmodel.CustomTextField txtEncoded;
     // End of variables declaration//GEN-END:variables

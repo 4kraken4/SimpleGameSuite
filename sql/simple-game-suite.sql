@@ -31,12 +31,12 @@ CREATE TABLE IF NOT EXISTS `score` (
   `Value` int NOT NULL DEFAULT '0',
   `Answer` varbinary(256) NOT NULL,
   `LastUpdated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `HelperData` varchar(256),
+  `HelperData` varbinary(600) DEFAULT NULL,
   PRIMARY KEY (`ScoreId`),
   UNIQUE KEY `uni_score_answer` (`Answer`),
   KEY `fk_score_userid` (`UID`) USING BTREE,
   KEY `fk_score_gameid` (`GID`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `LastPayedOn` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`UserId`),
   UNIQUE KEY `idx_user_username` (`Username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 ALTER TABLE `score`
   ADD CONSTRAINT `fk_score_gameid` FOREIGN KEY (`GID`) REFERENCES `game` (`GameId`) ON DELETE RESTRICT ON UPDATE RESTRICT,

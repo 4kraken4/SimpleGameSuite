@@ -7,6 +7,7 @@ package games.HPED.model;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 /**
  *
@@ -14,7 +15,9 @@ import java.util.PriorityQueue;
  */
 public class HedModel {
 
-    public HedModel(int len) {
+    public HedModel(int length) {
+        this.stringLength=length;
+        generateString();
     }
 
     public String getInput() {
@@ -108,6 +111,15 @@ public class HedModel {
     
     private void generateString()
     {
+        String characters ="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(stringLength);
+        for (int i = 0; i < stringLength; i++) {
+            int ranind = random.nextInt(characters.length());
+            char ranchar = characters.charAt(ranind);
+            sb.append(ranchar);
+        }
+        this.setInput(sb.toString());
         
     
     }

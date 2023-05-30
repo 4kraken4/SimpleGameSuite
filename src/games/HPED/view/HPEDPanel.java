@@ -5,7 +5,9 @@
 package games.HPED.view;
 
 import games.HPED.model.HedModel;
+import java.util.Map;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
@@ -22,6 +24,24 @@ public class HPEDPanel extends javax.swing.JPanel {
     public HPEDPanel(HedModel model) {
         initComponents();
         this.model = model;
+        this.lblText.setText(model.getInput());
+        model.setHuffmancodes(HedModel.encode(model.getInput()));
+        
+        for (Map.Entry<Character, String> entry : model.getHuffmancodes().entrySet()) {
+           txtHufmanCodes.setText(txtHufmanCodes.getText()+"\n"+entry.getKey() + ": " + entry.getValue());
+        } 
+        
+        for (char c : model.getInput().toCharArray()) {
+            txtEncodedText.setText(txtEncodedText.getText()+model.getHuffmancodes().get(c));
+        }
+        
+        txtDecodedText.setText(HedModel.decode(txtEncodedText.getText(), model.getHuffmancodes()));
+        
+        if((HedModel.decode(txtEncodedText.getText(), model.getHuffmancodes())).equals(model.getInput()))
+        {
+            JOptionPane.showMessageDialog(null, "Taraaa");
+        }
+        
     }
 
    public static void main(String[] args) {

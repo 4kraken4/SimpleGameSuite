@@ -10,31 +10,14 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-/**
- *
- * @author Acer
- */
 public class HPEDPanel extends javax.swing.JPanel {
 
     HedModel model;
 
-    /**
-     * Creates new form HPEDPanel
-     *
-     * @param model
-     */
+ 
     public HPEDPanel(HedModel model) {
         initComponents();
         this.model = model;
-        // this.lblText.setText(model.getInput());
-
-//        for (char c : model.getInput().toCharArray()) {
-//            txtEncodedText.setText(txtEncodedText.getText() + model.getHuffmancodes().get(c));
-//        }
-//        txtDecodedText.setText(HedModel.decode(txtEncodedText.getText(), model.getHuffmancodes()));
-//        if ((HedModel.decode(txtEncodedText.getText(), model.getHuffmancodes())).equals(model.getInput())) {
-//            JOptionPane.showMessageDialog(null, "Taraaa");
-//        }
     }
 
     public static void main(String[] args) {
@@ -175,10 +158,10 @@ public class HPEDPanel extends javax.swing.JPanel {
             for (Map.Entry<Character, String> entry : model.getHuffmancodes().entrySet()) {
                 txtHufmanCodes.setText(txtHufmanCodes.getText() + "\n" + entry.getKey() + ": " + entry.getValue());
             }
-            txtEncodedText.enable();
+            txtEncodedText.setEnabled(true);
             txtEncodedText.setText("");
             txtDecodedText.setText("");
-            txtDecodedText.disable();
+            txtDecodedText.setEnabled(false);
 
         } else {
             lblText.setText("");
@@ -214,8 +197,8 @@ public class HPEDPanel extends javax.swing.JPanel {
             jCheckBox2.setSelected(false);
             txtEncodedText.setText("");
             txtDecodedText.setText("");
-            txtDecodedText.enable();
-            txtEncodedText.disable();
+            txtDecodedText.setEnabled(true);
+            txtEncodedText.setEnabled(false);
             lblText.setText("");
             for (char c : model.getInput().toCharArray()) {
                 lblText.setText(lblText.getText() + model.getHuffmancodes().get(c));

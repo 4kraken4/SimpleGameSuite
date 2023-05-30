@@ -8,8 +8,10 @@ import common.events.MenuItemSelected;
 import common.events.UserActionPerformed;
 import common.model.Game;
 import common.model.User;
-import games.IMC.view.ImcGraphPanel;
+import games.IMC.view.IMCGraphPanel;
+import games.SP.view.SPGraphPanel;
 import games.eq.view.EqBoardPanel;
+import games.hed.view.HedBoardPanel;
 import games.ttt.view.TttBoardPanel;
 import java.awt.Cursor;
 import java.awt.Point;
@@ -55,24 +57,33 @@ public class MainWindow extends javax.swing.JFrame {
                 }
                 case "Tic Tac Toe" -> {
                     TttBoardPanel tbp = new TttBoardPanel();
+                    tbp.setUser(currentUser);
                     setTttBtnActions(tbp);
+                    tbp.setDatabaseUpdatedEvent(setUpCongratsMeg());
                     Utilities.setUI(mainContainer, tbp);
                 }
                 case "Huff-Man Encrypt" -> {
-                    TttBoardPanel tbp = new TttBoardPanel();
-                    setTttBtnActions(tbp);
-                    Utilities.setUI(mainContainer, tbp);
+                    HedBoardPanel hbp = new HedBoardPanel();
+                    hbp.setUser(currentUser);
+                    setHEDBtnActions(hbp);
+                    hbp.setDatabaseUpdatedEvent(setUpCongratsMeg());
+                    Utilities.setUI(mainContainer, hbp);
                 }
                 case "Get Me Out" -> {
-                    TttBoardPanel tbp = new TttBoardPanel();
-                    setTttBtnActions(tbp);
-                    Utilities.setUI(mainContainer, tbp);
+                    SPGraphPanel sgp = new SPGraphPanel();
+                    sgp.setUser(currentUser);
+                    setSPGBtnActions(sgp);
+                    sgp.setDatabaseUpdatedEvent(setUpCongratsMeg());
+                    Utilities.setUI(mainContainer, sgp);
                 }
                 case "Uncle Prim" -> {
-                    ImcGraphPanel igp = new ImcGraphPanel();
-//                    setTttBtnActions(tbp);
+                    IMCGraphPanel igp = new IMCGraphPanel();
+                    igp.setUser(currentUser);
+                    setIMCBtnActions(igp);
+                    igp.setDatabaseUpdatedEvent(setUpCongratsMeg());
                     Utilities.setUI(mainContainer, igp);
                 }
+
             }
         };
         menu.setMis(mis);
@@ -112,6 +123,60 @@ public class MainWindow extends javax.swing.JFrame {
             }
         };
         tbp.setMenuItemSelectedEvent(mis);
+    }
+
+    private void setIMCBtnActions(IMCGraphPanel igp) {
+        var mis = (MenuItemSelected) (ActionEvent evt) -> {
+            String acmd = evt.getActionCommand();
+            switch (acmd) {
+                case "undo" -> {
+                }
+                case "redo" -> {
+                }
+                case "hint" -> {
+                }
+                case "close" -> {
+                    Utilities.setUI(mainContainer, menu);
+                }
+            }
+        };
+        igp.setMenuItemSelectedEvent(mis);
+    }
+    
+    private void setHEDBtnActions(HedBoardPanel hbp) {
+        var mis = (MenuItemSelected) (ActionEvent evt) -> {
+            String acmd = evt.getActionCommand();
+            switch (acmd) {
+                case "undo" -> {
+                }
+                case "redo" -> {
+                }
+                case "hint" -> {
+                }
+                case "close" -> {
+                    Utilities.setUI(mainContainer, menu);
+                }
+            }
+        };
+        hbp.setMenuItemSelectedEvent(mis);
+    }
+    
+    private void setSPGBtnActions(SPGraphPanel sgp) {
+        var mis = (MenuItemSelected) (ActionEvent evt) -> {
+            String acmd = evt.getActionCommand();
+            switch (acmd) {
+                case "undo" -> {
+                }
+                case "redo" -> {
+                }
+                case "hint" -> {
+                }
+                case "close" -> {
+                    Utilities.setUI(mainContainer, menu);
+                }
+            }
+        };
+        sgp.setMenuItemSelectedEvent(mis);
     }
 
     private void setupCursor() {

@@ -5,14 +5,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ImcGraphModel {
+public class IMCGraphModel {
+
+    public List<Integer> getMirrorSelectedEdges() {
+        return mirrorSelectedEdges;
+    }
+
+    public void setMirrorSelectedEdges(List<Integer> mirrorSelectedEdges) {
+        this.mirrorSelectedEdges = mirrorSelectedEdges;
+    }
 
     public List<Integer> getCorrectEdges() {
         return correctEdges;
     }
 
     public void setCorrectEdges(List<Integer> correctEdges) {
-        ImcGraphModel.correctEdges = correctEdges;
+        IMCGraphModel.correctEdges = correctEdges;
     }
 
     public int getNumCities() {
@@ -32,7 +40,7 @@ public class ImcGraphModel {
     }
 
     public void setNumCities(int numCities) {
-        ImcGraphModel.numCities = numCities;
+        IMCGraphModel.numCities = numCities;
     }
 
     public void setMatrix(int[][] matrix) {
@@ -60,9 +68,9 @@ public class ImcGraphModel {
     }
 
     public void generateCityPoints() {
-        int centerX = 300;
-        int centerY = 300;
-        int radius = 275;
+        int centerX = 250;
+        int centerY = 250;
+        int radius = 200;
 
         double angleIncrement = 2 * Math.PI / numCities;
         double angle = 0;
@@ -82,6 +90,11 @@ public class ImcGraphModel {
                 Point cityC = cityPoints.get(c);
                 int distance = matrix[r][c];
                 if (isClickedOnLine(mouseX, mouseY, cityR.x, cityR.y, cityC.x, cityC.y) && distance != 0) {
+                    if (getMirrorSelectedEdges().contains(c * numCities + r)) {
+                        getMirrorSelectedEdges().remove(Integer.valueOf(c * numCities + r));
+                    } else {
+                        getMirrorSelectedEdges().add(c * numCities + r);
+                    }
                     return r * numCities + c;
                 }
             }
@@ -90,12 +103,13 @@ public class ImcGraphModel {
     }
 
     public boolean isClickedOnLine(int mouseX, int mouseY, int x1, int y1, int x2, int y2) {
-        final int CLICK_TOLERANCE = 5;
+        final int CLICK_TOLERANCE = 10;
         return getDistanceFromPointToLine(mouseX, mouseY, x1, y1, x2, y2) < CLICK_TOLERANCE;
     }
 
     public double getDistanceFromPointToLine(int x, int y, int x1, int y1, int x2, int y2) {
-        return Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+        return Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1)
+                / Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
     }
 
     public static void primMST(int[][] graph) {
@@ -119,10 +133,9 @@ public class ImcGraphModel {
         }
         // System.out.println("Edge \tWeight");
         for (int i = 1; i < vertices; i++) {
-//            System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
+            // System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
             correctEdges.add(i * numCities + parent[i]);
         }
-
     }
 
     private static int minKey(int[] key, boolean[] mstSet) {
@@ -139,8 +152,10 @@ public class ImcGraphModel {
     }
 
     private static int numCities = 0;
+    public final static int GAME_ID = 5;
     private int[][] matrix = new int[numCities][numCities];
     private List<Point> cityPoints = new ArrayList<>();
     private List<Integer> selectedEdges = new ArrayList<>();
+    private List<Integer> mirrorSelectedEdges = new ArrayList<>();
     private static List<Integer> correctEdges = new ArrayList<>();
 }

@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package games.unitTests;
 
 import games.IMC.model.IMCGraphModel;
@@ -10,10 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/**
- *
- * @author lihin
- */
+
 public class PrimMSTTest {
     
     static List<Integer> correctEdges = new ArrayList<>();

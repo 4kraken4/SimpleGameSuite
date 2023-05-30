@@ -20,7 +20,6 @@ public class HuffmanCodes {
             HuffmanNode parent = new HuffmanNode('\0', left.frequency + right.frequency, left, right);
             pq.offer(parent);
         }
-
         HuffmanNode root = pq.poll();
         Map<Character, String> huffmanCodes = new HashMap<>();
         generateCodes(root, "", huffmanCodes);
@@ -58,24 +57,4 @@ public class HuffmanCodes {
         return decodedString.toString();
     }
 
-    public static void main(String[] args) {
-        // String input = "HUFFMAN PUFF";
-        String input = "HIMSARA PUFF";
-        Map<Character, String> huffmanCodes = encode(input);
-
-        System.out.println("Huffman Codes:");
-        for (Map.Entry<Character, String> entry : huffmanCodes.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-
-        String encodedString = "";
-        for (char c : input.toCharArray()) {
-            encodedString += huffmanCodes.get(c);
-        }
-
-        System.out.println("Encoded string: " + encodedString);
-
-        String decodedString = decode(encodedString, huffmanCodes);
-        System.out.println("Decoded string: " + decodedString);
-    }
 }

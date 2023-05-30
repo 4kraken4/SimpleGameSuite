@@ -205,7 +205,6 @@ public class SPGraphView extends javax.swing.JPanel {
             match = model.getSelectedEdges().contains(a) || model.getMirrorSelectedEdges().contains(a);
         }
         if (match && model.getCorrectEdges().size() == model.getMirrorSelectedEdges().size()) {
-            JOptionPane.showMessageDialog(null, "Congratulations! You win!");
             win.onGameWin(model.getMirrorSelectedEdges(), model.getMatrix());
             model.getCorrectEdges().clear();
             model.getSelectedEdges().clear();

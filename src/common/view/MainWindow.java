@@ -6,9 +6,14 @@ import common.controller.UserController;
 import common.events.DatabaseUpdated;
 import common.events.MenuItemSelected;
 import common.events.UserActionPerformed;
+import common.model.EightQueens;
 import common.model.Game;
+import common.model.HuffmanED;
+import common.model.TicTacToe;
 import common.model.User;
+import games.IMC.model.IMCGraphModel;
 import games.IMC.view.IMCGraphPanel;
+import games.SP.model.SPGraphModel;
 import games.SP.view.SPGraphPanel;
 import games.eq.view.EqBoardPanel;
 import games.hed.view.HedBoardPanel;
@@ -23,7 +28,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
-import util.GameConfiguration;
 import util.GameSuiteLogger;
 import util.TranslationHandler;
 import util.Utilities;
@@ -33,7 +37,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     public MainWindow() {
         initComponents();
-        configuration = GameConfiguration.getInstance();
         translations = TranslationHandler.getInstance();
         logger = GameSuiteLogger.getInstance();
         GlassPanePopup.install(this);
@@ -53,6 +56,7 @@ public class MainWindow extends javax.swing.JFrame {
                     eqb.setUser(currentUser);
                     eqb.setDatabaseUpdatedEvent(setUpCongratsMeg());
                     setEQueenBtnActions(eqb);
+                    sidePanel1.changeSidepanelData(EightQueens.GAME_ID);
                     Utilities.setUI(mainContainer, eqb);
                 }
                 case "Tic Tac Toe" -> {
@@ -60,6 +64,7 @@ public class MainWindow extends javax.swing.JFrame {
                     tbp.setUser(currentUser);
                     setTttBtnActions(tbp);
                     tbp.setDatabaseUpdatedEvent(setUpCongratsMeg());
+                    sidePanel1.changeSidepanelData(TicTacToe.GAME_ID);
                     Utilities.setUI(mainContainer, tbp);
                 }
                 case "Huff-Man Encrypt" -> {
@@ -67,6 +72,7 @@ public class MainWindow extends javax.swing.JFrame {
                     hbp.setUser(currentUser);
                     setHEDBtnActions(hbp);
                     hbp.setDatabaseUpdatedEvent(setUpCongratsMeg());
+                    sidePanel1.changeSidepanelData(HuffmanED.GAME_ID);
                     Utilities.setUI(mainContainer, hbp);
                 }
                 case "Get Me Out" -> {
@@ -74,6 +80,7 @@ public class MainWindow extends javax.swing.JFrame {
                     sgp.setUser(currentUser);
                     setSPGBtnActions(sgp);
                     sgp.setDatabaseUpdatedEvent(setUpCongratsMeg());
+                    sidePanel1.changeSidepanelData(SPGraphModel.GAME_ID);
                     Utilities.setUI(mainContainer, sgp);
                 }
                 case "Uncle Prim" -> {
@@ -81,6 +88,7 @@ public class MainWindow extends javax.swing.JFrame {
                     igp.setUser(currentUser);
                     setIMCBtnActions(igp);
                     igp.setDatabaseUpdatedEvent(setUpCongratsMeg());
+                    sidePanel1.changeSidepanelData(IMCGraphModel.GAME_ID);
                     Utilities.setUI(mainContainer, igp);
                 }
 
@@ -286,7 +294,6 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private User currentUser;
-    private final GameConfiguration configuration;
     private final TranslationHandler translations;
     private final GameSuiteLogger logger;
     private UserDataPanel udp;

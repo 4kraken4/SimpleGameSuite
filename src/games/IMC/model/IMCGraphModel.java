@@ -70,7 +70,7 @@ public class IMCGraphModel {
     public void generateCityPoints() {
         int centerX = 250;
         int centerY = 250;
-        int radius = 200;
+        int radius = 180;
 
         double angleIncrement = 2 * Math.PI / numCities;
         double angle = 0;

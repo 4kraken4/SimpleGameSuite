@@ -5,5 +5,5 @@
   "SaveUser": "INSERT INTO USER (Username, LastPayedOn) VALUES (?, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE LastPayedOn = CURRENT_TIMESTAMP",
   "UpdateUser": "UPDATE USER SET Username = ? WHERE UserId = ?",
   "GetUserScore": "SELECT UserId, Username, UserScore, LastUpdated FROM SCORE s INNER JOIN USER WHERE u.Username in (?) AND u.UserId = s.UserId ORDER BY LastUpdated DESC LIMIT 1",
-  "UpdateUserScore": "INSERT IGNORE INTO score (UID, GID, Value, Answer, LastUpdated, HelperData) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?)"
+  "UpdateUserScore": "INSERT INTO score (UID, GID, Value, Answer, LastUpdated, HelperData) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?)"
 }

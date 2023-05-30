@@ -9,17 +9,15 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import util.GameSuiteLogger;
 
 public class TttBoardModel extends JPanel implements ActionListener {
 
-    private boolean isdraw = true;
-    private Random random;
     private JPanel pnlTitle, btnPanel, startButtonPanel;
+    private final GameSuiteLogger logger;
     public JLabel textfield;
     public CustomButton[] btns;
     private CustomButton btnStart;
@@ -124,10 +122,10 @@ public class TttBoardModel extends JPanel implements ActionListener {
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
         initCOmponents();
+        logger = GameSuiteLogger.getInstance();
     }
 
     private void initCOmponents() {
-        random = new Random();
         pnlTitle = new JPanel();
         btnPanel = new JPanel();
         textfield = new JLabel();
@@ -208,8 +206,7 @@ public class TttBoardModel extends JPanel implements ActionListener {
                 }
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
-
+            logger.logError(TttBoardModel.class.getName(), ex);
         }
     }
 
@@ -236,9 +233,11 @@ public class TttBoardModel extends JPanel implements ActionListener {
             if (checkWin("X")) {
                 int[] winningRow = getWinningRow("X");
                 gameOver("X wins", winningRow);
+                win.onGameWin("X", winningRow);
                 return true;
             } else if (checkWin("O")) {
                 int[] winningRow = getWinningRow("O");
+                win.onGameWin("O", winningRow);
                 gameOver("O wins", winningRow);
                 return true;
             } else if (isBoardFull()) {
@@ -247,8 +246,7 @@ public class TttBoardModel extends JPanel implements ActionListener {
             }
             return false;
         } catch (Exception ex) {
-            ex.printStackTrace();
-
+            logger.logError(TttBoardModel.class.getName(), ex);
             return false;
         }
     }
@@ -287,8 +285,7 @@ public class TttBoardModel extends JPanel implements ActionListener {
 
             return false;
         } catch (Exception ex) {
-            ex.printStackTrace();
-
+            logger.logError(TttBoardModel.class.getName(), ex);
             return false;
         }
     }
@@ -316,8 +313,7 @@ public class TttBoardModel extends JPanel implements ActionListener {
 
             return null;
         } catch (Exception ex) {
-            ex.printStackTrace();
-
+            logger.logError(TttBoardModel.class.getName(), ex);
             return null;
         }
     }
@@ -331,8 +327,7 @@ public class TttBoardModel extends JPanel implements ActionListener {
             }
             return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
-
+            logger.logError(TttBoardModel.class.getName(), ex);
             return false;
         }
     }
@@ -400,8 +395,7 @@ public class TttBoardModel extends JPanel implements ActionListener {
             // Check if the game is over
             checkGameOver();
         } catch (Exception ex) {
-            ex.printStackTrace();
-
+            logger.logError(TttBoardModel.class.getName(), ex);
         }
     }
 

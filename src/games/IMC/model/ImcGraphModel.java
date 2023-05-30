@@ -74,9 +74,9 @@ public class ImcGraphModel {
     }
 
     public void generateCityPoints() {
-        int centerX = 300;
-        int centerY = 300;
-        int radius = 250;
+        int centerX = 250;
+        int centerY = 250;
+        int radius = 200;
 
         double angleIncrement = 2 * Math.PI / numCities;
         double angle = 0;

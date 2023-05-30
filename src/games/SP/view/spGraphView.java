@@ -141,7 +141,7 @@ public class spGraphView extends javax.swing.JPanel {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Sp Graph Panel");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            spGraphModel model = new spGraphModel(10);
+            spGraphModel model = new spGraphModel(5);
             model.generateMatrix();
             model.generateCityPoints();
             frame.getContentPane().add(new spGraphView(model));

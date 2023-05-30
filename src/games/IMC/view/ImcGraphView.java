@@ -45,7 +45,7 @@ public class ImcGraphView extends javax.swing.JPanel {
 
         }
         model = new ImcGraphModel();
-        model.setNumCities(3);
+        model.setNumCities(5);
         model.generateMatrix();
         model.generateCityPoints();
         setPreferredSize(new Dimension(500, 500));
@@ -208,7 +208,7 @@ public class ImcGraphView extends javax.swing.JPanel {
         }
         repaint();
 
-        if (match && model.getCorrectEdges().size() == model.getSelectedEdges().size()) {
+        if (match && model.getCorrectEdges().size() == model.getSelectedEdges().size() && model.getCorrectEdges().size()==model.getMirrorSelectedEdges().size()) {
             win.onGameWin(model.getSelectedEdges(), model.getMatrix());
         } else {
             JOptionPane.showMessageDialog(null, "You lose. Please try again later.");

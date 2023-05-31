@@ -1,4 +1,4 @@
-package games.SP.view;
+package games.ksp.view;
 
 import common.controller.UserController;
 import common.events.DatabaseUpdated;
@@ -8,7 +8,7 @@ import common.model.Game;
 import common.model.Score;
 import common.model.User;
 import common.viewmodel.CustomButton;
-import games.SP.model.spGraphModel;
+import games.ksp.model.spGraphModel;
 import games.eq.model.EqBoardModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -153,7 +153,7 @@ public class SPGraphPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         btnHint = new common.viewmodel.CustomButton();
         btnClose = new common.viewmodel.CustomButton();
-        spGraphView1 = new games.SP.view.SPGraphView();
+        spGraphView1 = new games.ksp.view.SPGraphView();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -337,6 +337,6 @@ public class SPGraphPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private games.SP.view.SPGraphView spGraphView1;
+    private games.ksp.view.SPGraphView spGraphView1;
     // End of variables declaration//GEN-END:variables
 }

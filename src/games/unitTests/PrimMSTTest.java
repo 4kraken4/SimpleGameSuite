@@ -1,7 +1,7 @@
 
 package games.unitTests;
 
-import games.IMC.model.ImcGraphModel;
+import games.mst.model.ImcGraphModel;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;

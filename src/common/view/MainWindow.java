@@ -11,10 +11,10 @@ import common.model.Game;
 import common.model.HuffmanED;
 import common.model.TicTacToe;
 import common.model.User;
-import games.mst.model.ImcGraphModel;
-import games.mst.view.ImcGraphPanel;
-import games.ksp.model.spGraphModel;
-import games.ksp.view.SPGraphPanel;
+import games.mst.model.MSTGraphModel;
+import games.mst.view.MSTGraphPanel;
+import games.ksp.model.KSPGraphModel;
+import games.ksp.view.KSPGraphPanel;
 import games.eq.view.EqBoardPanel;
 import games.hed.view.HedBoardPanel;
 import games.ttt.view.TttBoardPanel;
@@ -76,23 +76,21 @@ public class MainWindow extends javax.swing.JFrame {
                     Utilities.setUI(mainContainer, hbp);
                 }
                 case "Get Me Out" -> {
-                    SPGraphPanel sgp = new SPGraphPanel();
+                    KSPGraphPanel sgp = new KSPGraphPanel();
                     sgp.setUser(currentUser);
                     setSPGBtnActions(sgp);
                     sgp.setDatabaseUpdatedEvent(setUpCongratsMeg());
-                    sidePanel1.changeSidepanelData(spGraphModel.GAME_ID);
+                    sidePanel1.changeSidepanelData(KSPGraphModel.GAME_ID);
                     Utilities.setUI(mainContainer, sgp);
                 }
                 case "Uncle Prim" -> {
-                    ImcGraphPanel igp = new ImcGraphPanel();
+                    MSTGraphPanel igp = new MSTGraphPanel();
                     igp.setUser(currentUser);
                     setIMCBtnActions(igp);
                     igp.setDatabaseUpdatedEvent(setUpCongratsMeg());
-                    sidePanel1.changeSidepanelData(ImcGraphModel.GAME_ID);
+                    sidePanel1.changeSidepanelData(MSTGraphModel.GAME_ID);
                     Utilities.setUI(mainContainer, igp);
                 }
-
-
 
             }
         };
@@ -135,7 +133,7 @@ public class MainWindow extends javax.swing.JFrame {
         tbp.setMenuItemSelectedEvent(mis);
     }
 
-    private void setIMCBtnActions(ImcGraphPanel igp) {
+    private void setIMCBtnActions(MSTGraphPanel igp) {
         var mis = (MenuItemSelected) (ActionEvent evt) -> {
             String acmd = evt.getActionCommand();
             switch (acmd) {
@@ -152,7 +150,7 @@ public class MainWindow extends javax.swing.JFrame {
         };
         igp.setMenuItemSelectedEvent(mis);
     }
-    
+
     private void setHEDBtnActions(HedBoardPanel hbp) {
         var mis = (MenuItemSelected) (ActionEvent evt) -> {
             String acmd = evt.getActionCommand();
@@ -170,8 +168,8 @@ public class MainWindow extends javax.swing.JFrame {
         };
         hbp.setMenuItemSelectedEvent(mis);
     }
-    
-    private void setSPGBtnActions(SPGraphPanel sgp) {
+
+    private void setSPGBtnActions(KSPGraphPanel sgp) {
         var mis = (MenuItemSelected) (ActionEvent evt) -> {
             String acmd = evt.getActionCommand();
             switch (acmd) {
@@ -274,7 +272,8 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         mainContainer = new javax.swing.JPanel();

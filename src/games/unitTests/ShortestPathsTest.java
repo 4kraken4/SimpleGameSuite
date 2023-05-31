@@ -1,7 +1,7 @@
 
 package games.unitTests;
 
-import games.ksp.model.spGraphModel;
+import games.ksp.model.KSPGraphModel;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +18,7 @@ public class ShortestPathsTest {
                 {0, 5, 3, 0}
         };
         int startNode = 0;
-        spGraphModel model = new spGraphModel(4);
+        KSPGraphModel model = new KSPGraphModel(4);
         model.getShortestPaths(adjacencyMatrix, startNode);
 
         List<Integer> expectedEdges = new ArrayList<>();

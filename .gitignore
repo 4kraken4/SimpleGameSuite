@@ -38,7 +38,7 @@ gradle-app.setting
 ##############################
 ## User Defined
 ##############################
-# *.log
+*.log
 *.log.lck
 *.log.*
 

@@ -13,33 +13,25 @@ public final class SidePanel extends javax.swing.JPanel {
 
     public SidePanel() {
         initComponents();
-        setDescription();
         logger = GameSuiteLogger.getInstance();
         translations = TranslationHandler.getInstance();
+        setDescription();
     }
 
     public void setDescription() {
-        gameDescription.setText(
-                "<html>"
-                + "<p align=\"justify\">"
-                + "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                + "Vivamus convallis blandit sollicitudin. Quisque volutpat quam vel arcu tristique accumsan. "
-                + "Aliquam erat volutpat. Nulla auctor nulla at vestibulum sollicitudin. "
-                + "Donec placerat libero a mi laoreet pellentesque. "
-                + "Fusce varius quis eros et ornare. "
-                + "Integer viverra, sapien non bibendum fringilla, tellus urna finibus mauris, non hendrerit elit diam aliquet arcu. "
-                + "Donec vel neque interdum, fringilla tellus sed, viverra lacus. "
-                + "Ut rutrum, dolor nec fringilla tincidunt, dolor dui pharetra velit, sit amet accumsan ligula lorem ac orci. "
-                + "Mauris eget congue est. "
-                + "Quisque egestas id nibh eget fringilla. "
-                + "Donec accumsan leo vel risus porta, at consectetur odio consectetur. "
-                + "Morbi massa nisl, laoreet porttitor posuere vel, rutrum molestie est."
+        ImageIcon imageIcon = new javax.swing.ImageIcon(getClass().getResource("/common/icons/8-queens.png"));
+        String title = translations.getTranslation("games-data", "TITLE_EIGHTQUEENS");
+        String description = translations.getTranslation("games-data", "DESC_EIGHTQUEENS");
+        gameImage.setIcon(imageIcon);
+        gameTitle.setText(title);
+        gameDescription.setText("<html>"
+                + "<p align=\"justify\">" + description
                 + "</p>"
                 + "</html>");
     }
 
     public void changeSidepanelData(int gameId) {
-        ImageIcon imageIcon = null;
+        ImageIcon imageIcon = new javax.swing.ImageIcon(getClass().getResource("/common/icons/8-queens.png"));
         String title = "";
         String description = "";
         switch (gameId) {

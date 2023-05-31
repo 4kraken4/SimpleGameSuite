@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class IMCGraphModel {
+public class ImcGraphModel {
 
     public List<Integer> getMirrorSelectedEdges() {
         return mirrorSelectedEdges;
@@ -20,7 +20,7 @@ public class IMCGraphModel {
     }
 
     public void setCorrectEdges(List<Integer> correctEdges) {
-        IMCGraphModel.correctEdges = correctEdges;
+        ImcGraphModel.correctEdges = correctEdges;
     }
 
     public int getNumCities() {
@@ -40,7 +40,7 @@ public class IMCGraphModel {
     }
 
     public void setNumCities(int numCities) {
-        IMCGraphModel.numCities = numCities;
+        ImcGraphModel.numCities = numCities;
     }
 
     public void setMatrix(int[][] matrix) {

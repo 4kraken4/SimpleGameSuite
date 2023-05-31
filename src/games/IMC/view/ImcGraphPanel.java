@@ -8,7 +8,7 @@ import common.model.Game;
 import common.model.Score;
 import common.model.User;
 import common.viewmodel.CustomButton;
-import games.IMC.model.IMCGraphModel;
+import games.IMC.model.ImcGraphModel;
 import games.eq.model.EqBoardModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.ImageIcon;
 
-public class IMCGraphPanel extends javax.swing.JPanel {
-    
+public class ImcGraphPanel extends javax.swing.JPanel {
+
     private MenuItemSelected mis;
     private DatabaseUpdated du;
     private User user;
@@ -30,7 +30,7 @@ public class IMCGraphPanel extends javax.swing.JPanel {
     public void setUser(User user) {
         this.user = user;
     }
-    
+
     public GameWin getWin() {
         return imcGraphView1.getWin();
     }
@@ -55,13 +55,13 @@ public class IMCGraphPanel extends javax.swing.JPanel {
         this.du = du;
     }
 
-    public IMCGraphPanel() {
+    public ImcGraphPanel() {
         initComponents();
         setHeaderButtonIcons();
         setHeaderButtonActions();
         purgeOnWin();
     }
-    
+
     private void setHeaderButtonActions() {
         btnUndo.addActionListener((e) -> {
             imcGraphView1.undo();
@@ -70,13 +70,13 @@ public class IMCGraphPanel extends javax.swing.JPanel {
             imcGraphView1.redo();
         });
         btnHint.addActionListener(e -> {
-//            imcGraphView2.setPathHighlighted(!gameBoard1.isPathHighlighted());
+            // imcGraphView2.setPathHighlighted(!gameBoard1.isPathHighlighted());
         });
         btnClose.addActionListener((e) -> {
             mis.itemSelected(e);
         });
     }
-    
+
     private void setHeaderButtonIcons() {
         List<CustomButton> btns = Arrays.asList(btnUndo, btnRedo, btnHint, btnClose);
         btns.forEach(btn -> {
@@ -116,22 +116,23 @@ public class IMCGraphPanel extends javax.swing.JPanel {
             });
         });
     }
-    
+
     private void purgeOnWin() {
         var win = (GameWin) (Object data, Object helperData) -> {
             Score score = new Score(0, 0, data, helperData, LocalDate.now());
-            Game game = new Game(IMCGraphModel.GAME_ID, "", "", true, score);
+            Game game = new Game(ImcGraphModel.GAME_ID, "", "", true, score);
             user.setGame(game);
             UserController uc = new UserController(user);
             int purgeAnswer = uc.saveAnswer();
             boolean isUpdated = purgeAnswer > 0;
-            du.onDatabseUpdate(IMCGraphModel.GAME_ID, isUpdated);
+            du.onDatabseUpdate(ImcGraphModel.GAME_ID, isUpdated);
         };
         imcGraphView1.setWin(win);
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
@@ -153,7 +154,7 @@ public class IMCGraphPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         btnHint = new common.viewmodel.CustomButton();
         btnClose = new common.viewmodel.CustomButton();
-        imcGraphView1 = new games.IMC.view.IMCGraphView();
+        imcGraphView1 = new games.IMC.view.ImcGraphView();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -323,7 +324,7 @@ public class IMCGraphPanel extends javax.swing.JPanel {
     private common.viewmodel.CustomButton btnHint;
     private common.viewmodel.CustomButton btnRedo;
     private common.viewmodel.CustomButton btnUndo;
-    private games.IMC.view.IMCGraphView imcGraphView1;
+    private games.IMC.view.ImcGraphView imcGraphView1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

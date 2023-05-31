@@ -11,9 +11,9 @@ import common.model.Game;
 import common.model.HuffmanED;
 import common.model.TicTacToe;
 import common.model.User;
-import games.IMC.model.IMCGraphModel;
-import games.IMC.view.IMCGraphPanel;
-import games.SP.model.SPGraphModel;
+import games.IMC.model.ImcGraphModel;
+import games.IMC.view.ImcGraphPanel;
+import games.SP.model.spGraphModel;
 import games.SP.view.SPGraphPanel;
 import games.eq.view.EqBoardPanel;
 import games.hed.view.HedBoardPanel;
@@ -80,17 +80,19 @@ public class MainWindow extends javax.swing.JFrame {
                     sgp.setUser(currentUser);
                     setSPGBtnActions(sgp);
                     sgp.setDatabaseUpdatedEvent(setUpCongratsMeg());
-                    sidePanel1.changeSidepanelData(SPGraphModel.GAME_ID);
+                    sidePanel1.changeSidepanelData(spGraphModel.GAME_ID);
                     Utilities.setUI(mainContainer, sgp);
                 }
                 case "Uncle Prim" -> {
-                    IMCGraphPanel igp = new IMCGraphPanel();
+                    ImcGraphPanel igp = new ImcGraphPanel();
                     igp.setUser(currentUser);
                     setIMCBtnActions(igp);
                     igp.setDatabaseUpdatedEvent(setUpCongratsMeg());
-                    sidePanel1.changeSidepanelData(IMCGraphModel.GAME_ID);
+                    sidePanel1.changeSidepanelData(ImcGraphModel.GAME_ID);
                     Utilities.setUI(mainContainer, igp);
                 }
+
+
 
             }
         };
@@ -133,7 +135,7 @@ public class MainWindow extends javax.swing.JFrame {
         tbp.setMenuItemSelectedEvent(mis);
     }
 
-    private void setIMCBtnActions(IMCGraphPanel igp) {
+    private void setIMCBtnActions(ImcGraphPanel igp) {
         var mis = (MenuItemSelected) (ActionEvent evt) -> {
             String acmd = evt.getActionCommand();
             switch (acmd) {

@@ -1,4 +1,4 @@
-package games.SP.model;
+package games.ksp.model;
 
 import java.awt.Point;
 import java.util.ArrayList;

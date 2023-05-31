@@ -1,7 +1,7 @@
 
 package games.unitTests;
 
-import games.SP.model.spGraphModel;
+import games.ksp.model.spGraphModel;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;

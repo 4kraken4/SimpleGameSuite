@@ -1,4 +1,4 @@
-package games.IMC.view;
+package games.mst.view;
 
 import common.controller.UserController;
 import common.events.DatabaseUpdated;
@@ -8,7 +8,7 @@ import common.model.Game;
 import common.model.Score;
 import common.model.User;
 import common.viewmodel.CustomButton;
-import games.IMC.model.ImcGraphModel;
+import games.mst.model.ImcGraphModel;
 import games.eq.model.EqBoardModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -154,7 +154,7 @@ public class ImcGraphPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         btnHint = new common.viewmodel.CustomButton();
         btnClose = new common.viewmodel.CustomButton();
-        imcGraphView1 = new games.IMC.view.ImcGraphView();
+        imcGraphView1 = new games.mst.view.ImcGraphView();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -324,7 +324,7 @@ public class ImcGraphPanel extends javax.swing.JPanel {
     private common.viewmodel.CustomButton btnHint;
     private common.viewmodel.CustomButton btnRedo;
     private common.viewmodel.CustomButton btnUndo;
-    private games.IMC.view.ImcGraphView imcGraphView1;
+    private games.mst.view.ImcGraphView imcGraphView1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

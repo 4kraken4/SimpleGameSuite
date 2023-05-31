@@ -9,7 +9,7 @@ import java.util.PriorityQueue;
 import java.util.Random;
 import javax.swing.JOptionPane;
 
-public class spGraphModel {
+public class KSPGraphModel {
 
     public static final int GAME_ID = 4;
 
@@ -21,7 +21,7 @@ public class spGraphModel {
         targetNode = aTargetNode;
     }
 
-    public spGraphModel(int numofcities) {
+    public KSPGraphModel(int numofcities) {
         this.setNumCities(numofcities);
         Random r = new Random();
         targetNode = r.nextInt(numCities - 2) + 2;
@@ -40,7 +40,7 @@ public class spGraphModel {
     }
 
     public void setCorrectEdges(List<Integer> correctEdges) {
-        spGraphModel.correctEdges = correctEdges;
+        KSPGraphModel.correctEdges = correctEdges;
     }
 
     public int getNumCities() {
@@ -60,7 +60,7 @@ public class spGraphModel {
     }
 
     public final void setNumCities(int numCities) {
-        spGraphModel.numCities = numCities;
+        KSPGraphModel.numCities = numCities;
     }
 
     public void setMatrix(int[][] matrix) {

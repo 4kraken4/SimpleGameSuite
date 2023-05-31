@@ -1,4 +1,4 @@
-package games.ksp.view;
+package games.mst.view;
 
 import common.controller.UserController;
 import common.events.DatabaseUpdated;
@@ -8,7 +8,7 @@ import common.model.Game;
 import common.model.Score;
 import common.model.User;
 import common.viewmodel.CustomButton;
-import games.ksp.model.spGraphModel;
+import games.mst.model.MSTGraphModel;
 import games.eq.model.EqBoardModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.ImageIcon;
 
-public class SPGraphPanel extends javax.swing.JPanel {
-    
+public class MSTGraphPanel extends javax.swing.JPanel {
+
     private MenuItemSelected mis;
     private DatabaseUpdated du;
     private User user;
@@ -30,13 +30,13 @@ public class SPGraphPanel extends javax.swing.JPanel {
     public void setUser(User user) {
         this.user = user;
     }
-    
+
     public GameWin getWin() {
-        return spGraphView1.getWin();
+        return imcGraphView1.getWin();
     }
 
     public void setWin(GameWin win) {
-        this.spGraphView1.setWin(win);
+        this.imcGraphView1.setWin(win);
     }
 
     public MenuItemSelected getMenuItemSelectedEvent() {
@@ -55,28 +55,28 @@ public class SPGraphPanel extends javax.swing.JPanel {
         this.du = du;
     }
 
-    public SPGraphPanel() {
+    public MSTGraphPanel() {
         initComponents();
         setHeaderButtonIcons();
         setHeaderButtonActions();
         purgeOnWin();
     }
-    
+
     private void setHeaderButtonActions() {
         btnUndo.addActionListener((e) -> {
-            spGraphView1.undo();
+            imcGraphView1.undo();
         });
         btnRedo.addActionListener((e) -> {
-            spGraphView1.redo();
+            imcGraphView1.redo();
         });
         btnHint.addActionListener(e -> {
-//            imcGraphView2.setPathHighlighted(!gameBoard1.isPathHighlighted());
+            // imcGraphView2.setPathHighlighted(!gameBoard1.isPathHighlighted());
         });
         btnClose.addActionListener((e) -> {
             mis.itemSelected(e);
         });
     }
-    
+
     private void setHeaderButtonIcons() {
         List<CustomButton> btns = Arrays.asList(btnUndo, btnRedo, btnHint, btnClose);
         btns.forEach(btn -> {
@@ -116,22 +116,23 @@ public class SPGraphPanel extends javax.swing.JPanel {
             });
         });
     }
-    
+
     private void purgeOnWin() {
         var win = (GameWin) (Object data, Object helperData) -> {
             Score score = new Score(0, 0, data, helperData, LocalDate.now());
-            Game game = new Game(spGraphModel.GAME_ID, "", "", true, score);
+            Game game = new Game(MSTGraphModel.GAME_ID, "", "", true, score);
             user.setGame(game);
             UserController uc = new UserController(user);
             int purgeAnswer = uc.saveAnswer();
             boolean isUpdated = purgeAnswer > 0;
-            du.onDatabseUpdate(EqBoardModel.GAME_ID, isUpdated);
+            du.onDatabseUpdate(MSTGraphModel.GAME_ID, isUpdated);
         };
-        spGraphView1.setWin(win);
+        imcGraphView1.setWin(win);
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
@@ -153,7 +154,7 @@ public class SPGraphPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         btnHint = new common.viewmodel.CustomButton();
         btnClose = new common.viewmodel.CustomButton();
-        spGraphView1 = new games.ksp.view.SPGraphView();
+        imcGraphView1 = new games.mst.view.MSTGraphView();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -298,15 +299,15 @@ public class SPGraphPanel extends javax.swing.JPanel {
         jPanel1.add(jPanel4);
 
         jPanel7.add(jPanel1, java.awt.BorderLayout.NORTH);
-        jPanel7.add(spGraphView1, java.awt.BorderLayout.CENTER);
+        jPanel7.add(imcGraphView1, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 84;
-        gridBagConstraints.ipady = 473;
+        gridBagConstraints.ipady = 508;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         add(jPanel7, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -323,6 +324,7 @@ public class SPGraphPanel extends javax.swing.JPanel {
     private common.viewmodel.CustomButton btnHint;
     private common.viewmodel.CustomButton btnRedo;
     private common.viewmodel.CustomButton btnUndo;
+    private games.mst.view.MSTGraphView imcGraphView1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -337,6 +339,5 @@ public class SPGraphPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private games.ksp.view.SPGraphView spGraphView1;
     // End of variables declaration//GEN-END:variables
 }

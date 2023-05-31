@@ -3,8 +3,8 @@ package common.view;
 import common.model.EightQueens;
 import common.model.HuffmanED;
 import common.model.TicTacToe;
-import games.mst.model.ImcGraphModel;
-import games.ksp.model.spGraphModel;
+import games.mst.model.MSTGraphModel;
+import games.ksp.model.KSPGraphModel;
 import javax.swing.ImageIcon;
 import util.GameSuiteLogger;
 import util.TranslationHandler;
@@ -50,12 +50,12 @@ public final class SidePanel extends javax.swing.JPanel {
                 title = translations.getTranslation("games-data", "TITLE_HUFFMANED");
                 description = translations.getTranslation("games-data", "DESC_HUFFMANED");
             }
-            case ImcGraphModel.GAME_ID -> {
+            case MSTGraphModel.GAME_ID -> {
                 imageIcon = new javax.swing.ImageIcon(getClass().getResource("/common/icons/8-queens.png"));
                 title = translations.getTranslation("games-data", "TITLE_MINIMUMSPANNINGTREE");
                 description = translations.getTranslation("games-data", "DESC_MINIMUMSPANNINGTREE");
             }
-            case spGraphModel.GAME_ID -> {
+            case KSPGraphModel.GAME_ID -> {
                 imageIcon = new javax.swing.ImageIcon(getClass().getResource("/common/icons/8-queens.png"));
                 title = translations.getTranslation("games-data", "TITLE_SHORTESTPATH");
                 description = translations.getTranslation("games-data", "DESC_SHORTESTPATH");

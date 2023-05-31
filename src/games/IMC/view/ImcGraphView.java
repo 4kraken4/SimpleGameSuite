@@ -1,7 +1,7 @@
 package games.IMC.view;
 
 import common.events.GameWin;
-import games.IMC.model.IMCGraphModel;
+import games.IMC.model.ImcGraphModel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,9 +19,9 @@ import java.util.Collections;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-public class IMCGraphView extends javax.swing.JPanel {
+public class ImcGraphView extends javax.swing.JPanel {
 
-    IMCGraphModel model;
+    ImcGraphModel model;
     private boolean viewCorrectAnswer = false;
     private GameWin win;
 
@@ -33,7 +33,7 @@ public class IMCGraphView extends javax.swing.JPanel {
         this.win = win;
     }
 
-    public IMCGraphView() {
+    public ImcGraphView() {
         setBackground(new Color(0, 0, 0, 0));
         setOpaque(false);
         initComponents();
@@ -44,7 +44,7 @@ public class IMCGraphView extends javax.swing.JPanel {
         } catch (IOException e) {
 
         }
-        model = new IMCGraphModel();
+        model = new ImcGraphModel();
         model.setNumCities(5);
         model.generateMatrix();
         model.generateCityPoints();
@@ -200,7 +200,7 @@ public class IMCGraphView extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         model.getCorrectEdges().clear();
-        IMCGraphModel.primMST(model.getMatrix());
+        ImcGraphModel.primMST(model.getMatrix());
         Collections.sort(model.getCorrectEdges());
         Collections.sort(model.getSelectedEdges());
         boolean match = false;
@@ -220,7 +220,7 @@ public class IMCGraphView extends javax.swing.JPanel {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
         model.getCorrectEdges().clear();
         viewCorrectAnswer = !viewCorrectAnswer;
-        IMCGraphModel.primMST(model.getMatrix());
+        ImcGraphModel.primMST(model.getMatrix());
         repaint();
     }// GEN-LAST:event_jButton2ActionPerformed
 

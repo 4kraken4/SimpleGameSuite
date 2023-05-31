@@ -1,7 +1,7 @@
 
 package games.unitTests;
 
-import games.IMC.model.IMCGraphModel;
+import games.IMC.model.ImcGraphModel;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +22,7 @@ public class PrimMSTTest {
                 {0, 5, 3, 0}
         };
        
-        IMCGraphModel model = new IMCGraphModel();
+        ImcGraphModel model = new ImcGraphModel();
         model.primMST(graph);
 
         List<Integer> expectedEdges = new ArrayList<>();

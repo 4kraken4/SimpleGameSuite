@@ -8,7 +8,7 @@ import common.model.Game;
 import common.model.Score;
 import common.model.User;
 import common.viewmodel.CustomButton;
-import games.SP.model.SPGraphModel;
+import games.SP.model.spGraphModel;
 import games.eq.model.EqBoardModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -120,7 +120,7 @@ public class SPGraphPanel extends javax.swing.JPanel {
     private void purgeOnWin() {
         var win = (GameWin) (Object data, Object helperData) -> {
             Score score = new Score(0, 0, data, helperData, LocalDate.now());
-            Game game = new Game(SPGraphModel.GAME_ID, "", "", true, score);
+            Game game = new Game(spGraphModel.GAME_ID, "", "", true, score);
             user.setGame(game);
             UserController uc = new UserController(user);
             int purgeAnswer = uc.saveAnswer();
